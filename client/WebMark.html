@@ -10,8 +10,45 @@
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <!-- Add your site or application content here -->
-    <h1>Welcome to Meteor!</h1>
+    <!-- Top Menu -->
+    <div class="ui blue inverted large top menu desktop-menu">
+      <div class="ui container">
+        <div class="header item">
+          <i class="student icon"></i> Marking App
+        </div>
+        <a class="item">Dashboard</a>
+        <div class="ui dropdown item">
+          Marking Schemes
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item">Common</div>
+            <a class="item">Marking</a>
+            <a class="item">Schemes</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
-		{{> hello}}
+    <div class="ui large inverted blue top menu compacted-menu">
+      <div class="header item">
+            <i class="student icon"></i> Marking App
+        </div>
+      <div class="right menu">
+        <div class="ui simple dropdown item">
+          Dropdown
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item">Dashboard</div>
+            <div class="item">Marking Schemes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Contents -->
+    <div class="ui container">
+
+		{{> insertScheme}}
+
+    </div>
 </body>
