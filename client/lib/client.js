@@ -11,34 +11,64 @@ Schemas = {};
 Template.registerHelper("Schemas", Schemas);
 
 Schemas.Scheme = new SimpleSchema({
-	rubric: {
-		type: [Object],
-		minCount: 1
-	},
-	'rubric.$.mark': {
-		type: Number
-	},
-	'rubric.$.criteria': {
-		type: String,
-		optional: true
-	},
-	comments: {
-		type: [String],
-		optional: true
-	},
-	allowAdjustment:{
-		type: Boolean
-	}
-})
+    name: {
+      type: String,
+      optional: false
+    },
+    description: {
+      type: String,
+      optional: true
+    },
+    aspects: {
+        type: [Object]
+    },
+    'aspects.$.focus': {
+        type: String
+    },
+    'aspects.$.rubric': {
+        type: [Object],
+        minCount: 1
+    },
+    'aspects.$.rubric.$.mark': {
+        type: Number
+    },
+    'aspects.$.rubric.$.criteria': {
+        type: String,
+        optional: true
+    },
+    comments: {
+        type: [String],
+        optional: true
+    },
+    allowAdjustment: {
+        type: Boolean
+    },
+    adjustmentValuePositive: {
+        type: Number,
+        optional: true,
+        min: 0
+    },
+    adjustmentValueNegative: {
+      type: Number,
+      optional: true,
+      max: 0
+    }
+});
+
+Template.insertScheme.helpers({
+    isAdjustmentAllowed: function() {
+        return AutoForm.getFieldValue('allowAdjustment');
+    }
+});
 
 Template.body.events({
-	'click table tr': function(){
+    'click table tr': function(){
 
-	}
+    }
 });
 
 Template.body.onRendered(function() {
-	$('.ui.menu .ui.dropdown').dropdown({
+    $('.ui.menu .ui.dropdown').dropdown({
         on: 'hover'
       });
 });

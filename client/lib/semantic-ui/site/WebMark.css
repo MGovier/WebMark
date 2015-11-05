@@ -1,0 +1,28 @@
+.compacted-menu {
+  margin-top: 0 !important;
+}
+
+@media only screen and (max-width: 400px) {
+  .desktop-menu {
+    display: none !important;
+    height: 0;
+  }
+}
+
+@media (min-width: 400px) {
+  .compacted-menu {
+    display: none !important;
+  }
+}
+
+.adjustment-row {
+	height: 5em;
+}
+
+.adjustment-row .ui.checkbox, .adjustment-row p {
+	padding-top: .6em !important;
+}
+
+.adjustment-row p {
+	text-align: right;
+}
