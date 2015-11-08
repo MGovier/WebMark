@@ -15,9 +15,6 @@
   }
 }
 
-.adjustment-row {
-	height: 5em;
-}
 
 .adjustment-row .ui.checkbox, .adjustment-row p {
 	padding-top: .6em !important;
@@ -25,4 +22,16 @@
 
 .adjustment-row p {
 	text-align: right;
+}
+
+.main.container {
+	padding-bottom: 6em;
+}
+
+.stealth {
+	visibility: hidden !important;
+}
+
+.adjustment-row .input {
+	width: 5em;
 }

@@ -4,17 +4,17 @@
     {{> afQuickField name="name"}}
     {{> afQuickField name="description"}}
 
-    {{> afQuickField name="aspects"}}
+    {{> afQuickField name="aspects" id="aspects"}}
 
     {{> afQuickField name="comments"}}
 
-        <div class="ui padded grid"> 
+        <div class="ui stackable padded grid"> 
           <div class="row adjustment-row"> 
-            <div class="three wide column">
+            <div class="four wide column">
               {{> afQuickField name="allowAdjustment" id="allowAdjustment" value=isAdjustmentAllowed}}
             </div>
             {{#if isAdjustmentAllowed}}
-              <div class="two wide column"> 
+              <div class="four wide column"> 
                 <div class="ui labeled input">
                   <div class="ui label">
                     Max Positive
@@ -22,8 +22,8 @@
                 {{> afFieldInput name="adjustmentValuePositive"}}
                 </div>
               </div>
-              <div class="two wide column"></div>
-              <div class="two wide column">
+
+              <div class="four wide column">
                 <div class="ui labeled input">
                   <div class="ui label">
                     Max Negative
@@ -32,15 +32,19 @@
                 </div>
               </div>
             {{/if}}
-            <div class="three wide right floated column marking-total">
+            <div class="four wide right floated column marking-total">
               <p class="ui medium header">Total Marks: 70</p>
             </div>
           </div>
-        </div>
-        <div class="two large ui buttons">
-         <button type="submit" class="positive ui button">Publish</button>
-           <div class="or"></div>
-         <button type="reset" class="negative ui button">Reset</button>
+          <div class="row">
+            <div class="centered column">
+              <div class="two large ui buttons">
+                <button type="reset" class="ui button">Clear</button>
+                <div class="or"></div>
+                <button type="submit" class="positive ui button">Submit</button>
+              </div>
+            </div>
+          </div>
         </div>
   {{/autoForm}}
 </template>

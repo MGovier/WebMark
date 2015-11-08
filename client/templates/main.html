@@ -1,3 +1,5 @@
+<template name="main">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -21,9 +23,8 @@
           Marking Schemes
           <i class="dropdown icon"></i>
           <div class="menu">
-            <div class="item">Common</div>
-            <a class="item">Marking</a>
-            <a class="item">Schemes</a>
+            <a class="item" href="/">Scheme Design</a>
+            <a class="item" href="/mark">Marking Example</a>
           </div>
         </div>
       </div>
@@ -38,17 +39,42 @@
           Dropdown
           <i class="dropdown icon"></i>
           <div class="menu">
-            <div class="item">Dashboard</div>
-            <div class="item">Marking Schemes</div>
+            <a class="item" href="{{pathFor route='mark'}}">Marking Example</a>
+            <a class="item" href="{{pathFor route='insertScheme'}}">New Scheme</a>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Page Contents -->
-    <div class="ui container">
-
-		{{> insertScheme}}
+    <div class="ui main container">
+    <!-- Router will inject content below -->
+		  {{> yield}}
 
     </div>
+    <div class="ui inverted vertical footer segment">
+      <div class="ui container">
+        <div class="ui stackable inverted divided equal height stackable grid">
+          <div class="three wide column">
+            <h4 class="ui inverted header">About</h4>
+            <div class="ui inverted link list">
+              <a href="#" class="item">Scope</a>
+              <a href="#" class="item">Efficiency Designs</a>
+            </div>
+          </div>
+          <div class="three wide column">
+            <h4 class="ui inverted header">Documentation</h4>
+            <div class="ui inverted link list">
+              <a href="#" class="item">How does it work?</a>
+            </div>
+          </div>
+          <div class="seven wide column">
+            <h4 class="ui inverted header">Footer Header</h4>
+            <p>Space for instruction or information.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 </body>
+
+</template>

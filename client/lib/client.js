@@ -55,34 +55,42 @@ Schemas.Scheme = new SimpleSchema({
     }
 });
 
+Template.main.onRendered(function() {
+  $('.ui.menu .ui.dropdown').dropdown({
+      on: 'hover'
+    });
+});
+
+Template.markScheme.onRendered(function() {
+  $('.ui.checkbox').checkbox();
+
+  $('table tr').click(function(evt) {
+    $(this).find('input[type=radio]').prop('checked', true);
+    var qid = (evt.currentTarget.parentElement.parentElement.parentElement.id),
+    nextQid = 'q' + (parseInt(qid.substring(1,qid.length)) + 1);
+    if($('#' + nextQid).length == 0) {
+      $('html, body').animate({
+        scrollTop: $('#comments-select').offset().top
+      }, 300);
+    } else {
+      $('html, body').animate({
+        scrollTop: $('#' + nextQid).offset().top
+      }, 300);
+    }
+  });
+});
+
+Session.set('adjustmentAllowed', false);
+
 Template.insertScheme.helpers({
-    isAdjustmentAllowed: function() {
-        return AutoForm.getFieldValue('allowAdjustment');
-    }
-});
-
-Template.body.events({
-    'click table tr': function(){
-
-    }
-});
-
-Template.body.onRendered(function() {
-    $('.ui.menu .ui.dropdown').dropdown({
-        on: 'hover'
-      });
-});
-
-Template.hello.helpers({
-  counter: function () {
-    return Session.get('counter');
+  isAdjustmentAllowed: function() {
+      return Session.get('adjustmentAllowed');
   }
 });
 
-Template.hello.events({
-  'click button': function () {
-    // increment the counter when button is clicked
-    Session.set('counter', Session.get('counter') + 1);
+Template.insertScheme.events({
+  'click': function () {
+    Session.set('adjustmentAllowed', AutoForm.getFieldValue('allowAdjustment', 'insertScheme'));
   }
 });
 

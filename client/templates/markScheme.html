@@ -1,0 +1,177 @@
+<template name="markScheme">
+  <div class="ui one column padded grid">
+    <div class="column">
+      <div class="ui breadcrumb">
+        <a class="section">Marking Schemes</a>
+        <i class="right angle icon divider"></i>
+        <a class="section">UNITCODE</a>
+        <i class="right angle icon divider"></i>
+        <div class="active section">UP000000</div>
+      </div>
+      <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Scales</h3>
+      <p>
+        <form class="ui forms" id="q1">
+          <table class="ui celled table">
+            <thead>
+              <tr>
+                <th colspan="2">
+                  This is an attribute that can be marked on a scale, such as the code test coverage.
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Project has complete or near-complete test coverage, and validates edge-cases thoroughly.</td>
+                <td class="left aligned collapsing">
+                  <div class="field">
+                    <div class="ui radio checkbox">
+                      <input type="radio" name="q1" id="q1-3" tabindex="0" class="hidden" required>
+                      <label for="q1-3">3 marks</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Code makes good use of test classes, but does not test all elements completely.</td>
+                <td class="left aligned collapsing">
+                  <div class="field">
+                    <div class="ui radio checkbox">
+                      <input type="radio" name="q1" id="q1-1" tabindex="0" class="hidden">
+                      <label for="q1-1">1 mark</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Tests?</td>
+                <td class="left aligned collapsing">
+                  <div class="field">
+                    <div class="ui radio checkbox">
+                      <input type="radio" name="q1" id="q1-0" tabindex="0" class="hidden">
+                      <label for="q1-0">0 marks</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </p>
+      <p>
+        <form class="ui forms" id="q2">
+          <table class="ui celled table">
+            <thead>
+              <tr>
+                <th colspan="2">
+                  Quality of Documentation
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>A comprehensive and well-written project document. Technology choices well justified. Assumptions clearly documented.</td>
+                <td class="left aligned collapsing">
+                  <div class="field">
+                    <div class="ui radio checkbox">
+                      <input type="radio" name="q2" id="q2-5" tabindex="0" class="hidden" required>
+                      <label for="q2-5">5 marks</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>I'm fairly certain I saw at least one bullet point that looked out of alignment.</td>
+                <td class="left aligned collapsing">
+                  <div class="field">
+                    <div class="ui radio checkbox">
+                      <input type="radio" name="q2" id="q2-4" tabindex="0" class="hidden">
+                      <label for="q2-4">4 marks</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Not bad.</td>
+                <td class="left aligned collapsing">
+                  <div class="field">
+                    <div class="ui radio checkbox">
+                      <input type="radio" name="q2" id="q2-3" tabindex="0" class="hidden">
+                      <label for="q2-3">3 marks</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Average.</td>
+                <td class="left aligned collapsing">
+                  <div class="field">
+                    <div class="ui radio checkbox">
+                      <input type="radio" name="q2" id="q2-2" tabindex="0" class="hidden">
+                      <label for="q2-2">2 marks</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Could be better.</td>
+                <td class="left aligned collapsing">
+                  <div class="field">
+                    <div class="ui radio checkbox">
+                      <input type="radio" name="q2" id="q2-1" tabindex="0" class="hidden">
+                      <label for="q2-1">1 mark</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Documentation missing.</td>
+                <td class="left aligned collapsing">
+                  <div class="field">
+                    <div class="ui radio checkbox">
+                      <input type="radio" name="q2" id="q2-0" tabindex="0" class="hidden">
+                      <label for="q2-0">0 marks</label>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </p>
+      <h3 class="ui horizontal divider header"><i class="list layout icon"></i>Pre-set Comments</h3>
+        <div class="ui form">
+          <div class="inline field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" tabindex="0" class="hidden">
+              <label>Code formatting and in-class documentation makes your code very readable.</label>
+            </div>
+          </div>          
+          <div class="inline field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" tabindex="0" class="hidden">
+              <label>Why would you think 14 nested 'if' statements was a good idea?</label>
+            </div>
+          </div>          
+          <div class="inline field">
+            <div class="ui toggle checkbox">
+              <input type="checkbox" tabindex="0" class="hidden">
+              <label>Consider using inheritance in a different way.</label>
+            </div>
+          </div>
+        </div>
+      <h3 class="ui horizontal divider header"><i class="edit icon"></i>Other Comments</h3>
+        <div class="ui form">
+          <div class="field">
+            <label>Free-flow text</label>
+            <textarea></textarea>
+          </div>
+        </div>
+        <div class="ui divider"></div>
+        <div class="ui fluid buttons">
+          <button class="ui button">Cancel</button>
+          <div class="or"></div>
+          <button class="ui positive button">Submit Marking Report</button>
+        </div>
+    </div>
+  </div>
+</template>
