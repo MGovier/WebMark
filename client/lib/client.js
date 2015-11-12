@@ -88,6 +88,10 @@ Template.insertScheme.helpers({
   }
 });
 
+Template.registerHelper('rubricAspects', function() {
+  return [{},{},{}];
+});
+
 Template.insertScheme.events({
   'click': function () {
     Session.set('adjustmentAllowed', AutoForm.getFieldValue('allowAdjustment', 'insertScheme'));

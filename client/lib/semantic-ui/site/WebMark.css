@@ -2,14 +2,14 @@
   margin-top: 0 !important;
 }
 
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 399px) {
   .desktop-menu {
     display: none !important;
     height: 0;
   }
 }
 
-@media (min-width: 400px) {
+@media only screen and (min-width: 400px) {
   .compacted-menu {
     display: none !important;
   }
@@ -25,11 +25,7 @@
 }
 
 .main.container {
-	padding-bottom: 6em;
-}
-
-.stealth {
-	visibility: hidden !important;
+	padding-bottom: 5em;
 }
 
 .adjustment-row .input {
