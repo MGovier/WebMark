@@ -17,7 +17,7 @@
 
 
 .adjustment-row .ui.checkbox, .adjustment-row p {
-	padding-top: .6em !important;
+	padding-top: .6em;
 }
 
 .adjustment-row p {
@@ -30,4 +30,9 @@
 
 .adjustment-row .input {
 	width: 5em;
+}
+
+.remove-aspect {
+  position: absolute;
+
 }

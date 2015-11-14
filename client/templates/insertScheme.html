@@ -1,50 +1,106 @@
 <template name="insertScheme">
-  <div class="ui large header">New Marking Scheme</div>
-    {{#autoForm schema="Schemas.Scheme" id="insertScheme" type="insert"}}
-    {{> afQuickField name="name"}}
-    {{> afQuickField name="description"}}
-
-    {{> rubricAspects}}
-
-    {{> afQuickField name="comments"}}
-
-        <div class="ui stackable padded grid"> 
-          <div class="row adjustment-row"> 
-            <div class="four wide column">
-              {{> afQuickField name="allowAdjustment" id="allowAdjustment" value=isAdjustmentAllowed}}
-            </div>
-            {{#if isAdjustmentAllowed}}
-              <div class="four wide column"> 
-                <div class="ui labeled input">
-                  <div class="ui label">
-                    Max Positive
-                  </div>
-                {{> afFieldInput name="adjustmentValuePositive"}}
+  <form>
+    <div class="ui large header">New Marking Scheme</div>
+    <div class="ui form">
+    <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>About</h3>
+      <div class="ui stackable four column grid">
+        <div class="six wide column">       
+          <div class="required field">
+            <label for="scheme-name">Scheme Name</label>
+            <input type="text" name="scheme-name" required>
+          </div>
+        </div>
+        <div class="ten wide column">
+          <div class="field">
+            <label for="scheme-desc">Description</label>
+            <input type="text" name="scheme-desc">
+          </div>
+        </div>
+      </div>
+      <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Rubric</h3>
+      {{#each rubricObject}}
+        <table class="ui celled table">
+          <thead>
+            <tr>
+              <th colspan="2">
+                <div class="field">
+                  <label for="scheme-desc">Aspect</label>
+                  <input type="text" name="scheme-desc">
                 </div>
-              </div>
-
-              <div class="four wide column">
-                <div class="ui labeled input">
-                  <div class="ui label">
-                    Max Negative
-                  </div>
-                {{> afFieldInput name="adjustmentValueNegative"}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>          
+                <div class="field">
+                  <label for="scheme-desc">Criteria</label>
+                  <input type="text" name="scheme-desc">
                 </div>
-              </div>
-            {{/if}}
-            <div class="four wide right floated column marking-total">
-              <p class="ui medium header">Total Marks: 70</p>
+              </td>
+              <td class="left aligned collapsing">
+                <div class="field">
+                  <div class="field">
+                    <label for="scheme-desc">Value</label>
+                    <input type="number" name="scheme-desc">
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">          
+                <button class="ui primary button add-criterion"><i class="plus icon"></i>Add Criterion</button>
+                <button class="ui secondary right floated button remove-aspect"><i class="minus icon"></i>Remove Aspect</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        {{/each}}
+
+      <button class="ui primary centered button" id="add-aspect"><i class="plus icon"></i>Add Aspect</button>
+      <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Comments</h3>
+      <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Adjustment</h3>
+      <div class="ui stackable padded grid"> 
+        <div class="row adjustment-row"> 
+          <div class="four wide column">
+            <div class="ui checkbox">
+              <input type="checkbox" tabindex="0" class="hidden" id="adjustment-allowed">
+              <label>Adjustment allowed?</label>
             </div>
           </div>
-          <div class="row">
-            <div class="centered column">
-              <div class="two large ui buttons">
-                <button type="reset" class="ui button">Clear</button>
-                <div class="or"></div>
-                <button type="submit" class="positive ui button">Submit</button>
+          {{#if isAdjustmentAllowed}}
+            <div class="four wide column"> 
+              <div class="ui labeled input">
+                <div class="ui label">
+                  Max Positive
+                </div>
+                <input type="number" placeholder="0" min="0">
               </div>
+            </div>
+
+            <div class="four wide column">
+              <div class="ui labeled input">
+                <div class="ui label">
+                  Max Negative
+                </div>
+              <input type="number" placeholder="0" max="0">
+              </div>
+            </div>
+          {{/if}}
+          <div class="four wide right floated column marking-total">
+            <p class="ui medium header">Total Marks: 70</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="centered column">
+            <div class="two large ui buttons">
+              <button type="reset" class="ui button">Clear</button>
+              <div class="or"></div>
+              <button type="submit" class="positive ui button">Submit</button>
             </div>
           </div>
         </div>
-  {{/autoForm}}
+      </div>
+    </div>
+  </form>
 </template>

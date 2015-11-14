@@ -80,21 +80,41 @@ Template.markScheme.onRendered(function() {
   });
 });
 
-Session.set('adjustmentAllowed', false);
+Template.insertScheme.onRendered(function() {
+  $('.ui.checkbox').checkbox();
+});
+
+Session.setDefault('adjustmentAllowed', false);
+Session.setDefault('rubricObject', [{index:0}]);
 
 Template.insertScheme.helpers({
   isAdjustmentAllowed: function() {
       return Session.get('adjustmentAllowed');
+  },
+  rubricObject: function() {
+    return Session.get('rubricObject');
   }
 });
 
-Template.registerHelper('rubricAspects', function() {
-  return [{},{},{}];
-});
-
 Template.insertScheme.events({
-  'click': function () {
-    Session.set('adjustmentAllowed', AutoForm.getFieldValue('allowAdjustment', 'insertScheme'));
+  'click .checkbox': function (evt) {
+    Session.set('adjustmentAllowed', evt.currentTarget.classList.contains('checked'));
+  },
+  'click #add-criterion': function (evt) {
+    evt.preventDefault();
+    console.log('add row');
+  },
+  'click #add-aspect': function (evt) {
+    evt.preventDefault();
+    var rObj = Session.get('rubricObject');
+    rObj.push({});
+    Session.set('rubricObject', rObj);
+    if (rObj.length > 1) {
+      $('.ui.celled.table').each(function(i, table) {
+        //add remove flags and listeners...
+        //$(table).append('<a class="ui red right corner label remove-aspect"><i class="minus icon"></i></a>');
+      });
+    }
   }
 });
 
