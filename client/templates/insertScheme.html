@@ -2,7 +2,7 @@
   <form>
     <div class="ui large header">New Marking Scheme</div>
     <div class="ui form">
-    <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>About</h3>
+    <h3 class="ui horizontal divider header"><i class="info icon"></i>About</h3>
       <div class="ui stackable four column grid">
         <div class="six wide column">       
           <div class="required field">
@@ -19,47 +19,63 @@
       </div>
       <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Rubric</h3>
       {{#each rubricObject}}
-        <table class="ui celled table">
+        <table class="ui {{randomColour}} celled table">
           <thead>
             <tr>
               <th colspan="2">
                 <div class="field">
                   <label for="scheme-desc">Aspect</label>
-                  <input type="text" name="scheme-desc">
+                  <input type="text" name="scheme-desc" placeholder="Attribute to consider">
                 </div>
               </th>
             </tr>
           </thead>
           <tbody>
+          {{#each this.rows}}
             <tr>
-              <td>          
-                <div class="field">
+              <td class="twelve wide">      
+                <div class="field rubric-array-item">   
                   <label for="scheme-desc">Criteria</label>
-                  <input type="text" name="scheme-desc">
+                  <div class="ui mini red corner label rubric-array-remove">
+                    <i class="minus icon"></i>
+                  </div> 
+                  <input type="text" name="scheme-desc" placeholder="Level of implementation">
                 </div>
               </td>
-              <td class="left aligned collapsing">
+              <td class="left aligned four wide">
                 <div class="field">
                   <div class="field">
                     <label for="scheme-desc">Value</label>
-                    <input type="number" name="scheme-desc">
+                    <input type="number" name="scheme-desc" placeholder="0">
                   </div>
                 </div>
               </td>
             </tr>
+          {{/each}}
             <tr>
-              <td colspan="2">          
-                <button class="ui primary button add-criterion"><i class="plus icon"></i>Add Criterion</button>
-                <button class="ui secondary right floated button remove-aspect"><i class="minus icon"></i>Remove Aspect</button>
+              <td colspan="2">   
+                <div class="ui two column grid">
+                  <div class="row">
+                    <div class="column">
+                      <button class="ui primary button add-criterion" id="a-{{this.uuid}}"><i class="plus icon"></i>Add Criterion</button>
+                    </div>
+                    <div class="column">
+                      <button class="ui secondary right floated button remove-aspect" id="d-{{this.uuid}}"><i class="minus icon"></i>Remove Aspect</button>
+                    </div>
+                  </div>
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
         {{/each}}
 
-      <button class="ui primary centered button" id="add-aspect"><i class="plus icon"></i>Add Aspect</button>
-      <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Comments</h3>
-      <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Adjustment</h3>
+      <button class="ui primary centered button add-aspect"><i class="plus icon"></i>Add Aspect</button>
+      <h3 class="ui horizontal divider header"><i class="list layout icon"></i>Comments</h3>
+      {{#autoForm schema="Schemas.Scheme" id="insertScheme" type="insert"}}
+        {{> afQuickField name="comments"}}
+      {{/autoForm}}
+      <h3 class="ui horizontal divider header"><i class="unlock alternate icon"></i>Adjustment</h3>
       <div class="ui stackable padded grid"> 
         <div class="row adjustment-row"> 
           <div class="four wide column">

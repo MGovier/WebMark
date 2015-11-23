@@ -3,9 +3,6 @@ Meteor.startup(() => {
   $('html').attr('lang', 'en');
 });
 
-// counter starts at 0
-Session.setDefault('counter', 0);
-
 Schemas = {};
 
 Template.registerHelper("Schemas", Schemas);
@@ -55,13 +52,13 @@ Schemas.Scheme = new SimpleSchema({
     }
 });
 
-Template.main.onRendered(function() {
+Template.main.onRendered(() => {
   $('.ui.menu .ui.dropdown').dropdown({
       on: 'hover'
     });
 });
 
-Template.markScheme.onRendered(function() {
+Template.markScheme.onRendered(() => {
   $('.ui.checkbox').checkbox();
 
   $('table tr').click(function(evt) {
@@ -80,12 +77,12 @@ Template.markScheme.onRendered(function() {
   });
 });
 
-Template.insertScheme.onRendered(function() {
+Template.insertScheme.onRendered(() => {
   $('.ui.checkbox').checkbox();
 });
 
 Session.setDefault('adjustmentAllowed', false);
-Session.setDefault('rubricObject', [{index:0}]);
+Session.setDefault('rubricObject', [{uuid:Math.floor((Math.random() * 9999999)), rows:[{uuid:Math.floor((Math.random() * 9999999))}]}]);
 
 Template.insertScheme.helpers({
   isAdjustmentAllowed: function() {
@@ -93,6 +90,10 @@ Template.insertScheme.helpers({
   },
   rubricObject: function() {
     return Session.get('rubricObject');
+  },
+  randomColour: function () {
+    var colours = ['red', 'orange', 'blue', 'green', 'yellow', 'teal', 'violet', 'pink', 'grey'];
+    return colours[this.uuid % colours.length];
   }
 });
 
@@ -100,21 +101,21 @@ Template.insertScheme.events({
   'click .checkbox': function (evt) {
     Session.set('adjustmentAllowed', evt.currentTarget.classList.contains('checked'));
   },
-  'click #add-criterion': function (evt) {
+  'click .add-criterion': function (evt) {
     evt.preventDefault();
-    console.log('add row');
+    var rObjs = Session.get('rubricObject');
+    rObjs.forEach((rubric) => {
+      if (rubric.uuid == evt.currentTarget.id.substring(2)) {
+        rubric['rows'].push({uuid:Math.floor((Math.random() * 9999999))})
+      }
+    });
+    Session.set('rubricObject', rObjs);
   },
-  'click #add-aspect': function (evt) {
+  'click .add-aspect': function (evt) {
     evt.preventDefault();
     var rObj = Session.get('rubricObject');
-    rObj.push({});
+    rObj.push({uuid:Math.floor((Math.random() * 9999999)), rows:[{uuid:Math.floor((Math.random() * 9999999))}]});
     Session.set('rubricObject', rObj);
-    if (rObj.length > 1) {
-      $('.ui.celled.table').each(function(i, table) {
-        //add remove flags and listeners...
-        //$(table).append('<a class="ui red right corner label remove-aspect"><i class="minus icon"></i></a>');
-      });
-    }
   }
 });
 
