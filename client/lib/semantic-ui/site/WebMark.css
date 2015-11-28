@@ -33,4 +33,9 @@
 
 .rubric-array-remove {
   margin-top: 2.6em !important;
+  cursor: pointer;
+}
+
+.rubric-array-remove a {
+  cursor: pointer;
 }

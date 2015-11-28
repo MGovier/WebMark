@@ -19,34 +19,34 @@
       </div>
       <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Rubric</h3>
       {{#each rubricObject}}
-        <table class="ui {{randomColour}} celled table">
+        <table class="ui {{pickColour(@index)}} celled table" data-uuid="{{this.uuid}}">
           <thead>
             <tr>
               <th colspan="2">
                 <div class="field">
-                  <label for="scheme-desc">Aspect</label>
-                  <input type="text" name="scheme-desc" placeholder="Attribute to consider">
+                  <label for="rubric-aspect">Aspect</label>
+                  <input type="text" name="rubric-aspect" placeholder="Attribute to consider" value="{{this.aspect}}">
                 </div>
               </th>
             </tr>
           </thead>
           <tbody>
           {{#each this.rows}}
-            <tr>
+            <tr data-uuid="{{this.uuid}}">
               <td class="twelve wide">      
                 <div class="field rubric-array-item">   
-                  <label for="scheme-desc">Criteria</label>
+                  <label for="criteria">Criteria</label>
                   <div class="ui mini red corner label rubric-array-remove">
                     <i class="minus icon"></i>
                   </div> 
-                  <input type="text" name="scheme-desc" placeholder="Level of implementation">
+                  <input type="text" name="criteria" placeholder="Level of implementation" value="{{this.criteria}}">
                 </div>
               </td>
               <td class="left aligned four wide">
                 <div class="field">
                   <div class="field">
-                    <label for="scheme-desc">Value</label>
-                    <input type="number" name="scheme-desc" placeholder="0">
+                    <label for="criteria-value">Value</label>
+                    <input type="number" name="criteria-value" placeholder="0" value="{{this.mark}}">
                   </div>
                 </div>
               </td>
@@ -57,10 +57,10 @@
                 <div class="ui two column grid">
                   <div class="row">
                     <div class="column">
-                      <button class="ui primary button add-criterion" id="a-{{this.uuid}}"><i class="plus icon"></i>Add Criterion</button>
+                      <button class="ui primary button add-criterion"><i class="plus icon"></i>Add Criterion</button>
                     </div>
                     <div class="column">
-                      <button class="ui secondary right floated button remove-aspect" id="d-{{this.uuid}}"><i class="minus icon"></i>Remove Aspect</button>
+                      <button class="ui secondary right floated button remove-aspect"><i class="minus icon"></i>Remove Aspect</button>
                     </div>
                   </div>
                 </div>
@@ -78,31 +78,22 @@
       <h3 class="ui horizontal divider header"><i class="unlock alternate icon"></i>Adjustment</h3>
       <div class="ui stackable padded grid"> 
         <div class="row adjustment-row"> 
-          <div class="four wide column">
-            <div class="ui checkbox">
-              <input type="checkbox" tabindex="0" class="hidden" id="adjustment-allowed">
-              <label>Adjustment allowed?</label>
+          <div class="four wide column"> 
+            <div class="ui labeled input">
+              <div class="ui label">
+                Max Positive
+              </div>
+              <input type="number" placeholder="0" min="0">
             </div>
           </div>
-          {{#if isAdjustmentAllowed}}
-            <div class="four wide column"> 
-              <div class="ui labeled input">
-                <div class="ui label">
-                  Max Positive
-                </div>
-                <input type="number" placeholder="0" min="0">
+          <div class="four wide column">
+            <div class="ui labeled input">
+              <div class="ui label">
+                Max Negative
               </div>
+            <input type="number" placeholder="0" max="0">
             </div>
-
-            <div class="four wide column">
-              <div class="ui labeled input">
-                <div class="ui label">
-                  Max Negative
-                </div>
-              <input type="number" placeholder="0" max="0">
-              </div>
-            </div>
-          {{/if}}
+          </div>
           <div class="four wide right floated column marking-total">
             <p class="ui medium header">Total Marks: 70</p>
           </div>
