@@ -1,0 +1,19 @@
+<template name="commentBuilder">
+  <div class="ui segment">
+    {{#each comments}}
+    <div class="field comment-item" data-uuid="{{this.uuid}}">
+      <div class="ui mini red corner label comment-remove">
+        <i class="minus icon"></i>
+      </div> 
+      <input type="text" name="comment-input" value="{{this.comment}}" placeholder="A comment which might be used on multiple submissions">
+    </div>
+    {{/each}}
+  </div>
+  <div class="ui two column grid">
+    <div class="row">
+      <div class="column">
+        <button class="ui primary button add-comment"><i class="plus icon"></i>Add Comment</button>
+      </div>
+    </div>
+  </div>
+</template>

@@ -91,13 +91,13 @@ Template.insertScheme.onRendered(() => {
 Session.setDefault('adjustmentAllowed', false);
 Session.setDefault('rubricObject', [{
   uuid: UI._globalHelpers.generateUUID(),
-  rows: [{uuid: 'r' + (UI._globalHelpers.generateUUID())}]
+  rows: [{uuid: UI._globalHelpers.generateUUID()}],
+}]);
+Session.setDefault('comments', [{
+  uuid: UI._globalHelpers.generateUUID()
 }]);
 
-Template.insertScheme.helpers({
-  isAdjustmentAllowed: function () {
-    return Session.get('adjustmentAllowed');
-  },
+Template.rubricBuilder.helpers({
   rubricObject: function () {
     return Session.get('rubricObject');
   },
@@ -108,11 +108,7 @@ Template.insertScheme.helpers({
   }
 });
 
-Template.insertScheme.events({
-  'click .checkbox': function (evt) {
-    Session.set('adjustmentAllowed', 
-      evt.currentTarget.classList.contains('checked'));
-  },
+Template.rubricBuilder.events({
   'click .add-criterion': function (evt) {
     evt.preventDefault();
     let rObjs = Session.get('rubricObject'),
@@ -147,13 +143,59 @@ Template.insertScheme.events({
     });
     Session.set('rubricObject', rObjs);
   },
-  'change input': function (evt) {
+  'click .remove-aspect': function (evt) {
+    evt.preventDefault();
+    let rObjs = Session.get('rubricObject'),
+        id = $(evt.currentTarget).closest('table').attr('data-uuid');
+    rObjs = rObjs.filter((rubric) => {
+      return rubric.uuid != id;
+    });
+    Session.set('rubricObject', rObjs);
+  },
+  'change input': function () {
+    // There HAS to be a better way of binding data to an object.
     let rObjs = Session.get('rubricObject');
     rObjs.forEach((rubric) => {
       let $table = $('table[data-uuid="' + rubric.uuid + '"]');
       rubric.aspect = $table.find('input[name="rubric-aspect"]').val();
-      console.log(rubric.aspect);
+      rubric.rows.forEach((row) => {
+        let $row = $('tr[data-uuid="' + row.uuid + '"]');
+        row.criteria = $row.find('input[name="criteria"]').val();
+        row.criteriaValue = $row.find('input[name="criteria-value"]').val();
+      });
     });
+    Session.set('rubricObject', rObjs);
   }
 });
 
+Template.commentBuilder.helpers({
+  comments: function () {
+    return Session.get('comments');
+  }
+});
+
+Template.commentBuilder.events({
+  'click .comment-remove': function (evt) {
+    evt.preventDefault();
+    console.log(evt);
+    let comments = Session.get('comments'),
+        id = $(evt.currentTarget).closest('.comment-item').attr('data-uuid');
+    comments = comments.filter((com) => {
+      return com.uuid != id;
+    });
+    Session.set('comments', comments);
+  },
+  'click .add-comment': function (evt) {
+    evt.preventDefault();
+    let comments = Session.get('comments');
+    comments.push({uuid: UI._globalHelpers.generateUUID()});
+    Session.set('comments', comments);
+  },
+  'change input': function () {
+    let comments = Session.get('comments');
+    comments.forEach((com) => {
+      com.comment = $('.comment-item[data-uuid="' + com.uuid + '"] input').val();
+    });
+    Session.set('comments', comments);
+  }
+});

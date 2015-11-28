@@ -27,7 +27,7 @@
 	width: 5em;
 }
 
-.rubric-array-item {
+.rubric-array-item, .comment-item {
   position: relative;
 }
 
@@ -36,6 +36,6 @@
   cursor: pointer;
 }
 
-.rubric-array-remove a {
+.rubric-array-remove i, .comment-remove, .comment-remove i {
   cursor: pointer;
 }
