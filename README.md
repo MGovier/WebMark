@@ -18,8 +18,6 @@ TBC
 
 ## Technologies
 - [Meteor](https://www.meteor.com/)
-  - [Autoform](https://atmospherejs.com/aldeed/autoform)
-  - [Autoform Semantic](https://atmospherejs.com/fabienb4/autoform-semantic-ui)
 - [Semantic UI](http://semantic-ui.com/)
 
 ## License

@@ -1,0 +1,80 @@
+<template name="main">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>WebMark</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Top Menu -->
+    <div class="ui blue inverted large top menu desktop-menu">
+      <div class="ui container">
+        <div class="header item">
+          <i class="student icon"></i> WebMark
+        </div>
+        <a class="item">Dashboard</a>
+        <div class="ui dropdown item">
+          Marking Schemes
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <a class="item" href="/">Scheme Design</a>
+            <a class="item" href="/mark">Marking Example</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui large inverted blue top menu compacted-menu">
+      <div class="header item">
+            <i class="student icon"></i> WebMark
+        </div>
+      <div class="right menu">
+        <div class="ui simple dropdown item">
+          Navigate
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <a class="item" href="{{pathFor route='mark'}}">Marking Example</a>
+            <a class="item" href="{{pathFor route='insertScheme'}}">New Scheme</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Contents -->
+    <div class="ui main container">
+    <!-- Router will inject content below -->
+		  {{> yield}}
+
+    </div>
+    <div class="ui inverted vertical footer segment">
+      <div class="ui container">
+        <div class="ui stackable inverted divided equal height stackable grid">
+          <div class="three wide column">
+            <h4 class="ui inverted header">About</h4>
+            <div class="ui inverted link list">
+              <a href="#" class="item">Scope</a>
+              <a href="#" class="item">Efficiency Designs</a>
+            </div>
+          </div>
+          <div class="three wide column">
+            <h4 class="ui inverted header">Documentation</h4>
+            <div class="ui inverted link list">
+              <a href="#" class="item">How does it work?</a>
+            </div>
+          </div>
+          <div class="seven wide column">
+            <h4 class="ui inverted header">Footer Header</h4>
+            <p>Space for instruction or information.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+
+</template>

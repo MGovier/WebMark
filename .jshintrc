@@ -19,7 +19,9 @@
     "Assets": false,
     "process": false,
     "Tinytest": false,
-    "Mongo": false
+    "Mongo": false,
+    "AutoForm": false,
+    "SimpleSchema": false
   },
   
   "bitwise"       : true,     // true: Prohibit bitwise operators (&, |, ^, etc.)
@@ -82,7 +84,7 @@
   "couch"         : false,    // CouchDB
   "devel"         : true,     // Development/debugging (alert, confirm, etc)
   "dojo"          : false,    // Dojo Toolkit
-  "jquery"        : false,    // jQuery
+  "jquery"        : true,    // jQuery
   "mootools"      : false,    // MooTools
   "node"          : false,    // Node.js
   "nonstandard"   : false,    // Widely adopted globals (escape, unescape, etc)

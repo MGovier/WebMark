@@ -1,0 +1,54 @@
+<template name="rubricBuilder">  
+  {{#each rubricObject}}
+    <table class="ui {{pickColour(@index)}} celled table" data-uuid="{{this.uuid}}">
+      <thead>
+        <tr>
+          <th colspan="2">
+            <div class="field">
+              <label for="rubric-aspect">Aspect</label>
+              <input type="text" name="rubric-aspect" placeholder="Attribute to consider" value="{{this.aspect}}">
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+      {{#each this.rows}}
+        <tr data-uuid="{{this.uuid}}">
+          <td class="twelve wide">      
+            <div class="field rubric-array-item">   
+              <label for="criteria">Criteria</label>
+              <div class="ui mini red corner label rubric-array-remove">
+                <i class="minus icon"></i>
+              </div> 
+              <input type="text" name="criteria" placeholder="Level of implementation" value="{{this.criteria}}">
+            </div>
+          </td>
+          <td class="left aligned four wide">
+            <div class="field">
+              <div class="field">
+                <label for="criteria-value">Value</label>
+                <input type="number" name="criteria-value" placeholder="0" value="{{this.criteriaValue}}">
+              </div>
+            </div>
+          </td>
+        </tr>
+      {{/each}}
+        <tr>
+          <td colspan="2">   
+            <div class="ui two column grid">
+              <div class="row">
+                <div class="column">
+                  <button class="ui primary button add-criterion"><i class="plus icon"></i>Add Criterion</button>
+                </div>
+                <div class="column">
+                  <button class="ui secondary right floated button remove-aspect"><i class="minus icon"></i>Remove Aspect</button>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  {{/each}}
+  <button class="ui primary centered button add-aspect"><i class="plus icon"></i>Add Aspect</button>
+</template>
