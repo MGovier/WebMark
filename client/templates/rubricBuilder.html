@@ -1,19 +1,19 @@
 <template name="rubricBuilder">  
-  {{#each rubricObject}}
-    <table class="ui {{pickColour(@index)}} celled table" data-uuid="{{this.uuid}}">
+  {{#each rubric in rubricObject}}
+    <table class="ui {{pickColour(@index)}} celled table" data-uuid="{{rubric.uuid}}">
       <thead>
         <tr>
           <th colspan="2">
             <div class="field">
               <label for="rubric-aspect">Aspect</label>
-              <input type="text" name="rubric-aspect" placeholder="Attribute to consider" value="{{this.aspect}}">
+              <input type="text" name="rubric-aspect" placeholder="Attribute to consider" value="{{rubric.aspect}}">
             </div>
           </th>
         </tr>
       </thead>
       <tbody>
-      {{#each this.rows}}
-        <tr data-uuid="{{this.uuid}}">
+      {{#each rubric.rows}}
+        <tr data-uuid="{{this.uuid}}" class="{{isLast(@index)}}">
           <td class="twelve wide">      
             <div class="field rubric-array-item">   
               <label for="criteria">Criteria</label>
@@ -25,10 +25,8 @@
           </td>
           <td class="left aligned four wide">
             <div class="field">
-              <div class="field">
-                <label for="criteria-value">Value</label>
-                <input type="number" name="criteria-value" placeholder="0" value="{{this.criteriaValue}}">
-              </div>
+              <label for="criteria-value">Value</label>
+              <input type="number" name="criteria-value" placeholder="0" value="{{this.criteriaValue}}">
             </div>
           </td>
         </tr>

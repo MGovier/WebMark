@@ -102,9 +102,23 @@ Template.rubricBuilder.helpers({
     return Session.get('rubricObject');
   },
   pickColour: function (index) {
-    let colours = ['red', 'orange', 'blue', 'green', 'yellow', 
-                    'teal', 'violet', 'pink', 'grey'];
+    let colours = ['red', 'blue', 'orange', 'green', 'yellow', 
+                    'teal', 'violet', 'grey', 'pink'];
     return colours[index % colours.length];
+  },
+  isLast: function (index) {
+    let rObjs = Session.get('rubricObject'),
+        className = '';
+    rObjs.forEach((rubric) => {
+      rubric.rows.forEach((r) => {
+        if (r.uuid == this.uuid) {
+          if (index === rubric.rows.length - 1) {
+            className = 'last-row';
+          }
+        }
+      });
+    });
+    return className;
   }
 });
 
@@ -153,7 +167,6 @@ Template.rubricBuilder.events({
     Session.set('rubricObject', rObjs);
   },
   'change input': function () {
-    // There HAS to be a better way of binding data to an object.
     let rObjs = Session.get('rubricObject');
     rObjs.forEach((rubric) => {
       let $table = $('table[data-uuid="' + rubric.uuid + '"]');
@@ -165,6 +178,12 @@ Template.rubricBuilder.events({
       });
     });
     Session.set('rubricObject', rObjs);
+  },
+  'keydown .last-row input[name="criteria-value"]': function (evt) {
+    if (evt.keyCode === 9 && !evt.shiftKey && $(evt.currentTarget).val() > 0) {
+      $('.add-criterion').trigger('click');
+      setTimeout(function() { $('.last-row').find('input[name="criteria"]').focus(); }, 100);
+    }
   }
 });
 
