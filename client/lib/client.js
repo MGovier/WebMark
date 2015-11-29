@@ -171,13 +171,19 @@ Template.rubricBuilder.events({
 Template.commentBuilder.helpers({
   comments: function () {
     return Session.get('comments');
+  },
+  isLast: function(index) {
+    if (index === Session.get('comments').length - 1) {
+      return 'last-comment';
+    } else {
+      return '';
+    }
   }
 });
 
 Template.commentBuilder.events({
   'click .comment-remove': function (evt) {
     evt.preventDefault();
-    console.log(evt);
     let comments = Session.get('comments'),
         id = $(evt.currentTarget).closest('.comment-item').attr('data-uuid');
     comments = comments.filter((com) => {
@@ -197,5 +203,11 @@ Template.commentBuilder.events({
       com.comment = $('.comment-item[data-uuid="' + com.uuid + '"] input').val();
     });
     Session.set('comments', comments);
+  },
+  'keydown .last-comment': function (evt) {
+    if (evt.keyCode === 9 && !evt.shiftKey && $(evt.currentTarget).find('input').val().length > 0) {
+      $('.add-comment').trigger('click');
+      setTimeout(function() { $('.last-comment input').focus(); }, 100);
+    }
   }
 });
