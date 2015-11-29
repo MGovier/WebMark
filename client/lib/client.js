@@ -97,6 +97,23 @@ Session.setDefault('comments', [{
   uuid: UI._globalHelpers.generateUUID()
 }]);
 
+Template.insertScheme.helpers({
+  totalMarks: function () {
+    let rObjs = Session.get('rubricObject'),
+        totalMarks = 0;
+    rObjs.forEach((rubric) => {
+      let max = 0;
+      rubric.rows.forEach((r) => {
+        if (r.criteriaValue !== undefined && r.criteriaValue > max) {
+          max = r.criteriaValue;
+        } 
+      });
+      totalMarks += max;
+    });
+    return totalMarks;
+  }
+});
+
 Template.rubricBuilder.helpers({
   rubricObject: function () {
     return Session.get('rubricObject');
@@ -174,13 +191,14 @@ Template.rubricBuilder.events({
       rubric.rows.forEach((row) => {
         let $row = $('tr[data-uuid="' + row.uuid + '"]');
         row.criteria = $row.find('input[name="criteria"]').val();
-        row.criteriaValue = $row.find('input[name="criteria-value"]').val();
+        // Parse 0 a if undefined. Use base 10.
+        row.criteriaValue = parseInt($row.find('input[name="criteria-value"]').val() || 0, 10);
       });
     });
     Session.set('rubricObject', rObjs);
   },
   'keydown .last-row input[name="criteria-value"]': function (evt) {
-    if (evt.keyCode === 9 && !evt.shiftKey && $(evt.currentTarget).val() > 0) {
+    if (evt.keyCode === 9 && !evt.shiftKey && $(evt.currentTarget).val()) {
       $('.add-criterion').trigger('click');
       setTimeout(function() { $('.last-row').find('input[name="criteria"]').focus(); }, 100);
     }
