@@ -1,7 +1,7 @@
 <template name="commentBuilder">
   <div class="ui segment">
     {{#each comments}}
-    <div class="field comment-item" data-uuid="{{this.uuid}}">
+    <div class="field comment-item {{isLast(@index)}}" data-uuid="{{this.uuid}}">
       <div class="ui mini red corner label comment-remove">
         <i class="minus icon"></i>
       </div> 
