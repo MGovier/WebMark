@@ -119,8 +119,8 @@ Template.rubricBuilder.helpers({
     return Session.get('rubricObject');
   },
   pickColour: function (index) {
-    let colours = ['blue', 'red', 'orange', 'green', 'yellow', 
-                    'teal', 'violet', 'grey', 'pink'];
+    let colours = ['blue', 'pink', 'orange', 'green', 'yellow', 
+                    'teal', 'violet', 'grey'];
     return colours[index % colours.length];
   },
   isLast: function (index) {
@@ -200,10 +200,35 @@ Template.rubricBuilder.events({
     Session.set('rubricObject', rObjs);
   },
   'keydown .last-row input[name="criteria-value"]': function (evt) {
-    if (evt.keyCode === 9 && !evt.shiftKey && ($(evt.currentTarget).val() || $('.last-row').find('input[name="criteria"]').val().length > 0)) {
-      $('.add-criterion').trigger('click');
-      setTimeout(function() { $('.last-row').find('input[name="criteria"]').focus(); }, 100);
+    let id = $(evt.currentTarget).closest('table').attr('data-uuid'),
+        $table = $('table[data-uuid="' + id + '"]');
+    if (evt.keyCode === 9 && !evt.shiftKey && ($(evt.currentTarget).val() || $table.find('.last-row input[name="criteria"]').val().length > 0)) {
+      $table.find('.add-criterion').trigger('click');
+      setTimeout(function() { $table.find('.last-row input[name="criteria"]').focus(); }, 100);
     }
+  },
+  'click .duplicate-aspect': function (evt) {
+    evt.preventDefault();
+    let rObj = Session.get('rubricObject'),
+        id = $(evt.currentTarget).closest('table').attr('data-uuid');
+    rObj.forEach((rubric) => {
+      if (rubric.uuid == id) {
+        let newRows = [];
+        rubric.rows.forEach((row) => {
+          newRows.push({
+            uuid: UI._globalHelpers.generateUUID(),
+            criteria: row.criteria,
+            criteriaValue: row.criteriaValue
+          });
+        });
+        rObj.push({
+          aspect: rubric.aspect,
+          uuid: UI._globalHelpers.generateUUID(),
+          rows: newRows
+        });
+      }
+    });
+    Session.set('rubricObject', rObj);
   }
 });
 
