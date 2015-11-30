@@ -119,7 +119,7 @@ Template.rubricBuilder.helpers({
     return Session.get('rubricObject');
   },
   pickColour: function (index) {
-    let colours = ['red', 'blue', 'orange', 'green', 'yellow', 
+    let colours = ['blue', 'red', 'orange', 'green', 'yellow', 
                     'teal', 'violet', 'grey', 'pink'];
     return colours[index % colours.length];
   },
