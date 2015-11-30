@@ -1,9 +1,19 @@
+# Travis-CI Config.
+# Source: http://practicalmeteor.com/testing-meteor-packages-command-line-travis-ci/
+# The language specific base vm to use for this repository
 language: node_js
-node_js:
-  - "5.1.0"
-before_install:
-  - "curl -L https://raw.githubusercontent.com/arunoda/travis-ci-laika/master/configure.sh | /bin/sh"
-services:
-  - mongodb
-env:
-  - LAIKA_OPTIONS="-t 5000"
+
+# The node.js version to install
+node_js: "0.10.29"
+
+# All installation prerequisites before running your build / tests go here. 
+install:
+  # Install meteor
+  - "curl https://install.meteor.com | /bin/sh"
+  # Install spacejam
+  - "npm install -g spacejam"
+
+# All build / test commands / scripts go here.
+# For testing meteor packages, that's all that is needed. 
+script:
+  - "spacejam test-packages ./"
