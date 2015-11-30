@@ -1,5 +1,4 @@
 Meteor.startup(() => {
-  AutoForm.setDefaultTemplate('semanticUI');
   $('html').attr('lang', 'en');
 });
 
