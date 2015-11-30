@@ -97,14 +97,45 @@ Session.setDefault('comments', [{
   uuid: UI._globalHelpers.generateUUID()
 }]);
 
+Template.insertScheme.helpers({
+  totalMarks: function () {
+    let rObjs = Session.get('rubricObject'),
+        totalMarks = 0;
+    rObjs.forEach((rubric) => {
+      let max = 0;
+      rubric.rows.forEach((r) => {
+        if (r.criteriaValue !== undefined && r.criteriaValue > max) {
+          max = r.criteriaValue;
+        } 
+      });
+      totalMarks += max;
+    });
+    return totalMarks;
+  }
+});
+
 Template.rubricBuilder.helpers({
   rubricObject: function () {
     return Session.get('rubricObject');
   },
   pickColour: function (index) {
-    let colours = ['red', 'orange', 'blue', 'green', 'yellow', 
-                    'teal', 'violet', 'pink', 'grey'];
+    let colours = ['blue', 'red', 'orange', 'green', 'yellow', 
+                    'teal', 'violet', 'grey', 'pink'];
     return colours[index % colours.length];
+  },
+  isLast: function (index) {
+    let rObjs = Session.get('rubricObject'),
+        className = '';
+    rObjs.forEach((rubric) => {
+      rubric.rows.forEach((r) => {
+        if (r.uuid == this.uuid) {
+          if (index === rubric.rows.length - 1) {
+            className = 'last-row';
+          }
+        }
+      });
+    });
+    return className;
   }
 });
 
@@ -153,7 +184,6 @@ Template.rubricBuilder.events({
     Session.set('rubricObject', rObjs);
   },
   'change input': function () {
-    // There HAS to be a better way of binding data to an object.
     let rObjs = Session.get('rubricObject');
     rObjs.forEach((rubric) => {
       let $table = $('table[data-uuid="' + rubric.uuid + '"]');
@@ -161,10 +191,19 @@ Template.rubricBuilder.events({
       rubric.rows.forEach((row) => {
         let $row = $('tr[data-uuid="' + row.uuid + '"]');
         row.criteria = $row.find('input[name="criteria"]').val();
-        row.criteriaValue = $row.find('input[name="criteria-value"]').val();
+        // Parse if defined. Use base 10.
+        if ($row.find('input[name="criteria-value"]').val() !== undefined) {
+          row.criteriaValue = parseInt($row.find('input[name="criteria-value"]').val(), 10);
+        }       
       });
     });
     Session.set('rubricObject', rObjs);
+  },
+  'keydown .last-row input[name="criteria-value"]': function (evt) {
+    if (evt.keyCode === 9 && !evt.shiftKey && $(evt.currentTarget).val()) {
+      $('.add-criterion').trigger('click');
+      setTimeout(function() { $('.last-row').find('input[name="criteria"]').focus(); }, 100);
+    }
   }
 });
 

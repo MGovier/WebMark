@@ -7,13 +7,13 @@
         <div class="six wide column">       
           <div class="required field">
             <label for="scheme-name">Scheme Name</label>
-            <input type="text" name="scheme-name" required>
+            <input type="text" name="scheme-name" required placeholder="Unique name for this scheme">
           </div>
         </div>
         <div class="ten wide column">
           <div class="field">
             <label for="scheme-desc">Description</label>
-            <input type="text" name="scheme-desc">
+            <textarea rows="1" name="scheme-desc" placeholder="Information about this marking scheme, or advice to a marker"></textarea>
           </div>
         </div>
       </div>
@@ -45,7 +45,7 @@
             </div>
           </div>
           <div class="four wide right floated column marking-total">
-            <p class="ui medium header">Total Marks: 70</p>
+            <p class="ui medium header">Total Marks: {{totalMarks}}</p>
           </div>
         </div>
         <div class="row">

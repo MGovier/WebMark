@@ -15,6 +15,10 @@
   }
 }
 
+.ui.inverted.blue.menu {
+  background-color: #1B4D80 !important;
+}
+
 .adjustment-row p {
 	text-align: right;
 }
@@ -32,10 +36,14 @@
 }
 
 .rubric-array-remove {
-  margin-top: 2.6em !important;
+  margin-top: 2.75em !important;
   cursor: pointer;
 }
 
 .rubric-array-remove i, .comment-remove, .comment-remove i {
   cursor: pointer;
+}
+
+input[name="scheme-name"] {
+  height: 3em;
 }
