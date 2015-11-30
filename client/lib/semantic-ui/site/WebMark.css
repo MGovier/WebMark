@@ -39,3 +39,7 @@
 .rubric-array-remove i, .comment-remove, .comment-remove i {
   cursor: pointer;
 }
+
+input[name="scheme-name"] {
+  height: 2.92em;
+}

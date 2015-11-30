@@ -191,8 +191,10 @@ Template.rubricBuilder.events({
       rubric.rows.forEach((row) => {
         let $row = $('tr[data-uuid="' + row.uuid + '"]');
         row.criteria = $row.find('input[name="criteria"]').val();
-        // Parse 0 a if undefined. Use base 10.
-        row.criteriaValue = parseInt($row.find('input[name="criteria-value"]').val() || 0, 10);
+        // Parse if defined. Use base 10.
+        if ($row.find('input[name="criteria-value"]').val() !== undefined) {
+          row.criteriaValue = parseInt($row.find('input[name="criteria-value"]').val(), 10);
+        }       
       });
     });
     Session.set('rubricObject', rObjs);
