@@ -12,8 +12,3 @@ install:
   - "curl https://install.meteor.com | /bin/sh"
   # Install spacejam
   - "npm install -g spacejam"
-
-# All build / test commands / scripts go here.
-# For testing meteor packages, that's all that is needed. 
-script:
-  - "spacejam test-packages ./"
