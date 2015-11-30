@@ -12,3 +12,7 @@ install:
   - "curl https://install.meteor.com | /bin/sh"
   # Install spacejam
   - "npm install -g spacejam"
+
+# All build / test commands / scripts go here.
+script:
+  - "meteor ./"

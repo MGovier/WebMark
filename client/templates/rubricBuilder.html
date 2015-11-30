@@ -1,9 +1,9 @@
 <template name="rubricBuilder">  
   {{#each rubric in rubricObject}}
-    <table class="ui {{pickColour(@index)}} celled table" data-uuid="{{rubric.uuid}}">
+    <table class="ui {{pickColour(@index)}} table" data-uuid="{{rubric.uuid}}">
       <thead>
         <tr>
-          <th colspan="2">
+          <th colspan="3">
             <div class="field">
               <label for="rubric-aspect">Aspect</label>
               <input type="text" name="rubric-aspect" placeholder="Attribute to consider" value="{{rubric.aspect}}">
@@ -14,25 +14,24 @@
       <tbody>
       {{#each rubric.rows}}
         <tr data-uuid="{{this.uuid}}" class="{{isLast(@index)}}">
+          <td class="collapsing"><i class="chevron right icon"></i></td>
           <td class="twelve wide">      
             <div class="field rubric-array-item">   
-              <label for="criteria">Criteria</label>
               <div class="ui mini red corner label rubric-array-remove">
                 <i class="minus icon"></i>
               </div> 
-              <input type="text" name="criteria" placeholder="Level of implementation" value="{{this.criteria}}">
+              <input type="text" name="criteria" placeholder="Criteria" value="{{this.criteria}}">
             </div>
           </td>
           <td class="left aligned four wide">
             <div class="field">
-              <label for="criteria-value">Value</label>
-              <input type="number" name="criteria-value" placeholder="0" value="{{this.criteriaValue}}">
+              <input type="number" name="criteria-value" placeholder="Mark" value="{{this.criteriaValue}}">
             </div>
           </td>
         </tr>
       {{/each}}
         <tr>
-          <td colspan="2">   
+          <td colspan="3">   
             <div class="ui two column grid">
               <div class="row">
                 <div class="column">

@@ -200,7 +200,7 @@ Template.rubricBuilder.events({
     Session.set('rubricObject', rObjs);
   },
   'keydown .last-row input[name="criteria-value"]': function (evt) {
-    if (evt.keyCode === 9 && !evt.shiftKey && $(evt.currentTarget).val()) {
+    if (evt.keyCode === 9 && !evt.shiftKey && ($(evt.currentTarget).val() || $('.last-row').find('input[name="criteria"]').val().length > 0)) {
       $('.add-criterion').trigger('click');
       setTimeout(function() { $('.last-row').find('input[name="criteria"]').focus(); }, 100);
     }
