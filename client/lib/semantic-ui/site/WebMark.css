@@ -31,6 +31,14 @@
 	width: 5em;
 }
 
+.adjustment-row {
+  padding-bottom: 2em !important;
+}
+
+.adjustment-row .marking-total {
+  margin-top: 0.8em !important;
+}
+
 .rubric-array-item, .comment-item {
   position: relative;
 }
@@ -40,5 +48,5 @@
 }
 
 input[name="scheme-name"] {
-  height: 3.1em;
+  height: 3.01em;
 }
