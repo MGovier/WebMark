@@ -35,15 +35,10 @@
   position: relative;
 }
 
-.rubric-array-remove {
-  margin-top: 2.75em !important;
-  cursor: pointer;
-}
-
-.rubric-array-remove i, .comment-remove, .comment-remove i {
+.rubric-array-remove, .rubric-array-remove i, .comment-remove, .comment-remove i {
   cursor: pointer;
 }
 
 input[name="scheme-name"] {
-  height: 3em;
+  height: 3.1em;
 }
