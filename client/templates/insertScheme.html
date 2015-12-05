@@ -1,5 +1,5 @@
 <template name="insertScheme">
-  <form>
+  <form id="marking-scheme-form">
     <div class="ui large header">New Marking Scheme</div>
     <div class="ui form">
     <h3 class="ui horizontal divider header"><i class="info icon"></i>About</h3>
@@ -33,7 +33,7 @@
               <div class="ui label">
                 Max Positive
               </div>
-              <input type="number" placeholder="0" min="0">
+              <input type="number" name="adjustment-positive" placeholder="0" min="0">
             </div>
           </div>
           <div class="four wide column">
@@ -41,7 +41,7 @@
               <div class="ui label">
                 Max Negative
               </div>
-            <input type="number" placeholder="0" max="0">
+            <input type="number" name="adjustment-negative" placeholder="0" min="0">
             </div>
           </div>
           <div class="four wide right floated column marking-total">
@@ -53,7 +53,7 @@
             <div class="two large ui buttons">
               <button type="reset" class="ui button">Clear</button>
               <div class="or"></div>
-              <button type="submit" class="positive ui button">Submit</button>
+              <button type="submit" class="positive ui button submit-scheme">Submit</button>
             </div>
           </div>
         </div>

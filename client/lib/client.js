@@ -2,60 +2,12 @@ Meteor.startup(() => {
   $('html').attr('lang', 'en');
 });
 
-Schemas = {};
-
-Template.registerHelper('Schemas', Schemas);
-
 Template.registerHelper('generateUUID', function () {
   // Source: User 'broofa' at StackOverflow: https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     var r = crypto.getRandomValues(new Uint8Array(1))[0]%16|0, v = c == 'x' ? r : (r&0x3|0x8);
     return v.toString(16);
   });
-});
-
-Schemas.Scheme = new SimpleSchema({
-    name: {
-      type: String,
-      optional: false
-    },
-    description: {
-      type: String,
-      optional: true
-    },
-    aspects: {
-        type: [Object]
-    },
-    'aspects.$.focus': {
-        type: String
-    },
-    'aspects.$.rubric': {
-        type: [Object],
-        minCount: 1
-    },
-    'aspects.$.rubric.$.mark': {
-        type: Number
-    },
-    'aspects.$.rubric.$.criteria': {
-        type: String,
-        optional: true
-    },
-    comments: {
-        type: [String],
-        optional: true
-    },
-    adjustmentValuePositive: {
-        type: Number,
-        optional: true,
-        min: 0,
-        defaultValue: 0
-    },
-    adjustmentValueNegative: {
-      type: Number,
-      optional: true,
-      max: 0,
-      defaultValue: 0
-    }
 });
 
 Template.main.onRendered(() => {
@@ -110,6 +62,24 @@ Template.insertScheme.helpers({
       totalMarks += max;
     });
     return totalMarks;
+  }
+});
+
+Template.insertScheme.events({
+  'click .submit-scheme': function(evt) {
+    evt.preventDefault();
+    let form = $('#marking-scheme-form')[0];
+// TODO: form.checkValidity()
+    let schemaObject = {
+      'name': $('input[name="scheme-name"]').val(),
+      'description': $('input[name="scheme-desc"]').val(),
+      'createdAt': new Date(),
+      'aspects': Session.get('rubricObject'),
+      'comments': Session.get('comments'),
+      'adjustmentValuePositive': $('input[name="adjustment-positive"]').val(),
+      'adjustmentValueNegative': $('input[name="adjustment-negative"]').val()
+    };
+    Meteor.call('addScheme', schemaObject);
   }
 });
 
