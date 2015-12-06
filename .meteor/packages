@@ -20,3 +20,4 @@ semantic:ui
 flemay:less-autoprefixer
 iron:router
 aldeed:simple-schema
+aldeed:collection2
