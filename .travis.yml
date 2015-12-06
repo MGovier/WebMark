@@ -1,18 +1,12 @@
 # Travis-CI Config.
-# Source: http://practicalmeteor.com/testing-meteor-packages-command-line-travis-ci/
-# The language specific base vm to use for this repository
 language: node_js
 
-# The node.js version to install
 node_js: "5.1.0"
 
-# All installation prerequisites before running your build / tests go here. 
 install:
   # Install meteor
   - "curl https://install.meteor.com | /bin/sh"
-  # Install spacejam
-  - "npm install -g spacejam"
 
-# All build / test commands / scripts go here.
+# For now, just test if we can build. Better tests soon!
 script:
-  - "meteor ./"
+  - "meteor build builds/"
