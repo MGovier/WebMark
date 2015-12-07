@@ -48,16 +48,32 @@
             <p class="ui medium header">Total Marks: {{totalMarks}}</p>
           </div>
         </div>
-        <div class="row">
-          <div class="centered column">
-            <div class="two large ui buttons">
-              <button type="reset" class="ui button">Clear</button>
-              <div class="or"></div>
-              <button type="submit" class="positive ui button submit-scheme">Submit</button>
-            </div>
+      </div>
+      <div class="ui divider"></div>
+      <div class="row">
+        <div class="centered column">
+          <div class="two large ui buttons">
+            <button type="reset" class="ui button">Clear</button>
+            <div class="or"></div>
+            <button type="submit" class="positive ui button submit-scheme">Submit</button>
           </div>
         </div>
       </div>
     </div>
   </form>
+  <div class="ui small basic modal" id="success-modal">
+    <div class="ui icon header"><i class="checkmark icon"></i>Scheme saved!</div>
+    <div class="content">
+      <p>This marking scheme is now accessible at the unique URL: Coming soon!</p>
+      <p>Would you like to get marking right away?</p>
+    </div>
+    <div class="actions">
+      <div class="ui negative cancel inverted button">
+          <i class="remove icon"></i>No, I want to add another scheme
+      </div>
+      <div class="ui positive ok inverted button">
+          <i class="checkmark icon"></i>Yes
+      </div>
+    </div>
+  </div>
 </template>

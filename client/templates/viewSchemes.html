@@ -1,0 +1,26 @@
+<template name="viewSchemes">
+  <div class="ui one column padded grid">
+    <div class="column">
+      <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Available Schemes</h3>
+      <div class="ui middle aligned relaxed divided list">
+        {{#each markingSchemes}}
+          {{> viewSchemesListItem}}
+        {{/each}}       
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="viewSchemesListItem">
+  <div class="item">
+    <div class="right floated content">
+      <a href="{{pathFor route='markScheme'}}"><div class="ui button">Mark</div></a>
+      <div class="ui negative button delete-scheme"><i class="minus icon"></i>Remove</div>
+    </div>
+    <i class="write icon"></i>
+    <div class="content">
+      <a class="header" href="{{pathFor route='markScheme'}}">{{name}} - {{friendlyDate}}</a>
+      <div class="description">{{description}}</div>
+    </div>
+  </div>
+</template>
