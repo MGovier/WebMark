@@ -2,6 +2,8 @@ Meteor.startup(() => {
   $('html').attr('lang', 'en');
 });
 
+Meteor.subscribe('markingSchemes');
+
 Template.registerHelper('generateUUID', function () {
   // Source: User 'broofa' at StackOverflow: https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -18,21 +20,6 @@ Template.main.onRendered(() => {
 
 Template.markScheme.onRendered(() => {
   $('.ui.checkbox').checkbox();
-
-  $('table tr').click(function(evt) {
-    $(this).find('input[type=radio]').prop('checked', true);
-    var qid = (evt.currentTarget.parentElement.parentElement.parentElement.id),
-    nextQid = 'q' + (parseInt(qid.substring(1,qid.length)) + 1);
-    if($('#' + nextQid).length === 0) {
-      $('html, body').animate({
-        scrollTop: $('#comments-select').offset().top
-      }, 300);
-    } else {
-      $('html, body').animate({
-        scrollTop: $('#' + nextQid).offset().top
-      }, 300);
-    }
-  });
 });
 
 Template.insertScheme.onRendered(() => {
@@ -72,14 +59,20 @@ Template.insertScheme.events({
 // TODO: form.checkValidity()
     let schemaObject = {
       'name': $('input[name="scheme-name"]').val(),
-      'description': $('input[name="scheme-desc"]').val(),
+      'description': $('textarea[name="scheme-desc"]').val(),
       'createdAt': new Date(),
       'aspects': Session.get('rubricObject'),
       'comments': Session.get('comments'),
       'adjustmentValuePositive': $('input[name="adjustment-positive"]').val(),
       'adjustmentValueNegative': $('input[name="adjustment-negative"]').val()
     };
-    Meteor.call('addScheme', schemaObject);
+    Meteor.call('addScheme', schemaObject, (error, result) => {
+      if (error) {
+        console.log(error.message, error.details);
+      } else {
+        //set content to option to go scheme or add a new scheme
+      }
+    });
   }
 });
 
@@ -242,5 +235,27 @@ Template.commentBuilder.events({
       $('.add-comment').trigger('click');
       setTimeout(function() { $('.last-comment input').focus(); }, 100);
     }
+  }
+});
+
+Template.viewSchemes.helpers({
+  markingSchemes: function () {
+    return MarkingSchemes.find({}, {sort: {name: 1}});
+  }
+});
+
+Template.viewSchemesListItem.helpers({
+  friendlyDate: function () {
+    return this.createdAt.toLocaleDateString('en-GB');
+  }
+});
+
+Template.viewSchemesListItem.events({
+  'click .delete-scheme': function () {
+    console.log('deleting: ', this._id);
+    Meteor.call('deleteScheme', this._id);
+  },
+  'click .mark-scheme': function () {
+
   }
 });

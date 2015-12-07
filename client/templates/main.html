@@ -19,14 +19,16 @@
           <i class="student icon"></i> WebMark
         </div>
         <a class="item">Dashboard</a>
-        <div class="ui dropdown item">
+        <a class="item" href="{{pathFor route='insertScheme'}}">New Scheme</a>
+        <a class="item" href="{{pathFor route='viewSchemes'}}">View Schemes</a>
+<!--         <div class="ui dropdown item">
           Marking Schemes
           <i class="dropdown icon"></i>
           <div class="menu">
             <a class="item" href="/">Scheme Design</a>
             <a class="item" href="/mark">Marking Example</a>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -39,7 +41,7 @@
           Navigate
           <i class="dropdown icon"></i>
           <div class="menu">
-            <a class="item" href="{{pathFor route='mark'}}">Marking Example</a>
+            <a class="item" href="{{pathFor route='viewSchemes'}}">View Schemes</a>
             <a class="item" href="{{pathFor route='insertScheme'}}">New Scheme</a>
           </div>
         </div>
