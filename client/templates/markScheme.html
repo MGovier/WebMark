@@ -35,19 +35,21 @@
               </tr>
             </thead>
             <tbody>
+              {{#let rowIndex=@index}}
               {{#each asp.rows}}
                 <tr>
                   <td>{{this.criteria}}</td>
                   <td class="left aligned collapsing">
                     <div class="field">
                       <div class="ui radio checkbox">
-                        <input type="radio" tabindex="0" class="hidden" name="checks-{{asp.@index}}" required>
+                        <input type="radio" tabindex="0" class="hidden" name="checks-{{rowIndex}}" required>
                         <label>{{this.criteriaValue}} marks</label>
                       </div>
                     </div>
                   </td>
                 </tr>
              {{/each}}
+             {{/let}}
             </tbody>
           </table>
         {{/each}}

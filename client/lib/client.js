@@ -70,7 +70,16 @@ Template.insertScheme.events({
       if (error) {
         console.log(error.message, error.details);
       } else {
-        //set content to option to go scheme or add a new scheme
+        $('.basic.modal').modal({
+          closable: false,
+          detachable: false,
+          onDeny: function() {
+            form.reset();
+          },
+          onApprove: function() {
+            Router.go('/viewSchemes');
+          }
+        }).modal('show');
       }
     });
   }
