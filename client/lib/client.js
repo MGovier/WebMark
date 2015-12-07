@@ -54,34 +54,35 @@ Template.insertScheme.helpers({
 
 Template.insertScheme.events({
   'click .submit-scheme': function(evt) {
-    evt.preventDefault();
     let form = $('#marking-scheme-form')[0];
-// TODO: form.checkValidity()
-    let schemaObject = {
-      'name': $('input[name="scheme-name"]').val(),
-      'description': $('textarea[name="scheme-desc"]').val(),
-      'createdAt': new Date(),
-      'aspects': Session.get('rubricObject'),
-      'comments': Session.get('comments'),
-      'adjustmentValuePositive': $('input[name="adjustment-positive"]').val(),
-      'adjustmentValueNegative': $('input[name="adjustment-negative"]').val()
-    };
-    Meteor.call('addScheme', schemaObject, (error, result) => {
-      if (error) {
-        console.log(error.message, error.details);
-      } else {
-        $('.basic.modal').modal({
-          closable: false,
-          detachable: false,
-          onDeny: function() {
-            form.reset();
-          },
-          onApprove: function() {
-            Router.go('/viewSchemes');
-          }
-        }).modal('show');
-      }
-    });
+    if (form.checkValidity()) {
+      evt.preventDefault();
+      let schemaObject = {
+        'name': $('input[name="scheme-name"]').val(),
+        'description': $('textarea[name="scheme-desc"]').val(),
+        'createdAt': new Date(),
+        'aspects': Session.get('rubricObject'),
+        'comments': Session.get('comments'),
+        'adjustmentValuePositive': $('input[name="adjustment-positive"]').val(),
+        'adjustmentValueNegative': $('input[name="adjustment-negative"]').val()
+      };
+      Meteor.call('addScheme', schemaObject, (error, result) => {
+        if (error) {
+          console.log(error.message, error.details);
+        } else {
+          $('.basic.modal').modal({
+            closable: false,
+            detachable: false,
+            onDeny: function() {
+              form.reset();
+            },
+            onApprove: function() {
+              Router.go('/viewSchemes');
+            }
+          }).modal('show');
+        }
+      });
+    }
   }
 });
 
@@ -263,8 +264,5 @@ Template.viewSchemesListItem.events({
   'click .delete-scheme': function () {
     console.log('deleting: ', this._id);
     Meteor.call('deleteScheme', this._id);
-  },
-  'click .mark-scheme': function () {
-
   }
 });

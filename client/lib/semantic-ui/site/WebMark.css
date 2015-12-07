@@ -28,7 +28,7 @@
 }
 
 .adjustment-row .input {
-	width: 5em;
+	width: 8em;
 }
 
 .adjustment-row {
@@ -36,7 +36,7 @@
 }
 
 .adjustment-row .marking-total {
-  margin-top: 0.8em !important;
+  margin-top: 0.7em !important;
 }
 
 .rubric-array-item, .comment-item {
@@ -45,6 +45,10 @@
 
 .rubric-array-remove, .rubric-array-remove i, .comment-remove, .comment-remove i {
   cursor: pointer;
+}
+
+.marking-total {
+
 }
 
 input[name="scheme-name"] {

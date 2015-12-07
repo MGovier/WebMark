@@ -65,18 +65,38 @@
             </div> 
           {{/each}}  
         </div>     
-        <h3 class="ui horizontal divider header"><i class="edit icon"></i>Other Comments</h3>
+        <h3 class="ui horizontal divider header"><i class="comment outline icon"></i>Other Comments</h3>
         <div class="ui form">
           <div class="field">
             <label>Free-flow text</label>
             <textarea></textarea>
           </div>
         </div>
+        <h3 class="ui horizontal divider header"><i class="star half empty icon"></i>Adjustment</h3>
+        <div class="ui stackable padded grid">
+          <div class="row adjustment-row">
+            <div class="five wide column">
+              <div class="ui labeled input">
+                <div class="ui label">
+                  Mark Adjustment
+                </div>
+                <input type="number" name="adjustment" placeholder="0" min="{{adjustmentValueNegative}}" max="{adjustmentValuePositive}}">
+              </div>
+            </div>
+            <div class="five wide right floated column">
+              <p class="ui medium header marking-total">Marks: marks/totalmarks</p>
+            </div>
+          </div>
+        </div>
         <div class="ui divider"></div>
-        <div class="ui fluid buttons">
-          <button type="reset" class="ui button">Cancel</button>
-          <div class="or"></div>
-          <button class="ui positive button">Submit Marking Report</button>
+        <div class="row">
+          <div class="column">
+            <div class="ui fluid buttons">
+              <button type="reset" class="ui large button">Cancel</button>
+              <div class="or"></div>
+              <button class="ui positive large button">Submit Marking Report</button>
+            </div>
+          </div>
         </div>
       </form>   
     </div>
