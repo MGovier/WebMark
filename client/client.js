@@ -4,14 +4,6 @@ Meteor.startup(() => {
 
 Meteor.subscribe('markingSchemes');
 
-Template.registerHelper('generateUUID', function () {
-  // Source: User 'broofa' at StackOverflow: https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = crypto.getRandomValues(new Uint8Array(1))[0]%16|0, v = c == 'x' ? r : (r&0x3|0x8);
-    return v.toString(16);
-  });
-});
-
 Template.main.onRendered(() => {
   $('.ui.menu .ui.dropdown').dropdown({
       on: 'hover'
@@ -35,6 +27,8 @@ Session.setDefault('comments', [{
   uuid: UI._globalHelpers.generateUUID()
 }]);
 Session.setDefault('rubricHistory', []);
+Session.setDefault('unitName', UI._globalHelpers.generateFunName());
+Session.setDefault('editingName', false);
 
 Template.insertScheme.helpers({
   totalMarks: function () {
@@ -50,6 +44,12 @@ Template.insertScheme.helpers({
       totalMarks += max;
     });
     return totalMarks;
+  },
+  'unitName': function () {
+    return Session.get('unitName');
+  },
+  'editingName': function () {
+    return Session.get('editingName');
   }
 });
 
@@ -77,6 +77,14 @@ Template.insertScheme.events({
     } else {
       // Semantic validation checks
     }
+  },
+  'click .name-field': function () {
+    Session.set('editingName', true);
+    setTimeout(function() { $('input[name="scheme-name"]').focus(); }, 100);
+  },
+  'blur input[name="scheme-name"]': function () {
+    Session.set('editingName', false);
+    Session.set('unitName', $('input[name="scheme-name"]').val());
   }
 });
 

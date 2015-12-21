@@ -54,3 +54,7 @@
 input[name="scheme-name"] {
   height: 3.01em;
 }
+
+.unit-name {
+  text-transform: capitalize !important;
+}
