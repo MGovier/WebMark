@@ -34,6 +34,7 @@ Session.setDefault('rubricObject', [{
 Session.setDefault('comments', [{
   uuid: UI._globalHelpers.generateUUID()
 }]);
+Session.setDefault('rubricHistory', []);
 
 Template.insertScheme.helpers({
   totalMarks: function () {
@@ -70,18 +71,11 @@ Template.insertScheme.events({
         if (error) {
           console.log(error.message, error.details);
         } else {
-          $('.basic.modal').modal({
-            closable: false,
-            detachable: false,
-            onDeny: function() {
-              form.reset();
-            },
-            onApprove: function() {
-              Router.go('/viewSchemes');
-            }
-          }).modal('show');
+          Router.go('/viewSchemes');
         }
       });
+    } else {
+      // Semantic validation checks
     }
   }
 });
@@ -108,6 +102,9 @@ Template.rubricBuilder.helpers({
       });
     });
     return className;
+  },
+  canUndo: function() {
+    return Session.get('rubricHistory').length > 0;
   }
 });
 
@@ -156,7 +153,10 @@ Template.rubricBuilder.events({
     Session.set('rubricObject', rObjs);
   },
   'change input': function () {
-    let rObjs = Session.get('rubricObject');
+    let rObjs = Session.get('rubricObject'),
+        historyArray = Session.get('rubricHistory');
+    historyArray.push(rObjs);
+    Session.set('rubricHistory', historyArray);
     rObjs.forEach((rubric) => {
       let $table = $('table[data-uuid="' + rubric.uuid + '"]');
       rubric.aspect = $table.find('input[name="rubric-aspect"]').val();
@@ -201,6 +201,12 @@ Template.rubricBuilder.events({
       }
     });
     Session.set('rubricObject', rObj);
+  },
+  'click .undo-rubric-action': function (evt) {
+    evt.preventDefault();
+    let historyArray = Session.get('rubricHistory');
+    Session.set('rubricObject', historyArray.pop());
+    Session.set('rubricHistory', historyArray);
   }
 });
 
