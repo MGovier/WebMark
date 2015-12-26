@@ -71,6 +71,18 @@ Template.insertScheme.events({
         if (error) {
           console.log(error.message, error.details);
         } else {
+          Session.set('adjustmentAllowed', false);
+          Session.set('rubricObject', [{
+            uuid: UI._globalHelpers.generateUUID(),
+            rows: [{uuid: UI._globalHelpers.generateUUID()}],
+          }]);
+          Session.set('comments', [{
+            uuid: UI._globalHelpers.generateUUID()
+          }]);
+          Session.set('rubricHistory', []);
+          Session.set('unitName', UI._globalHelpers.generateFunName());
+          Session.set('editingName', false);
+          form.reset();
           Router.go('/viewSchemes');
         }
       });
@@ -80,7 +92,8 @@ Template.insertScheme.events({
   },
   'click .name-field': function () {
     Session.set('editingName', true);
-    setTimeout(function() { $('input[name="scheme-name"]').focus(); }, 100);
+    setTimeout(function() { $('input[name="scheme-name"]').select(); }, 100);
+
   },
   'blur input[name="scheme-name"]': function () {
     Session.set('editingName', false);
@@ -183,8 +196,17 @@ Template.rubricBuilder.events({
     let id = $(evt.currentTarget).closest('table').attr('data-uuid'),
         $table = $('table[data-uuid="' + id + '"]');
     if (evt.keyCode === 9 && !evt.shiftKey && ($(evt.currentTarget).val() || $table.find('.last-row input[name="criteria"]').val().length > 0)) {
+      evt.preventDefault();
       $table.find('.add-criterion').trigger('click');
       setTimeout(function() { $table.find('.last-row input[name="criteria"]').focus(); }, 100);
+    }
+  },
+  'keydown input': function (evt) {
+    if (evt.keyCode === 13) {
+      evt.preventDefault();
+      // Translate that return into a tab...
+      var e = jQuery.Event('keydown', { keyCode: 9 });
+      $(evt.currentTarget).trigger(e);
     }
   },
   'click .duplicate-aspect': function (evt) {
@@ -256,8 +278,17 @@ Template.commentBuilder.events({
   },
   'keydown .last-comment': function (evt) {
     if (evt.keyCode === 9 && !evt.shiftKey && $(evt.currentTarget).find('input').val().length > 0) {
+      evt.preventDefault();
       $('.add-comment').trigger('click');
       setTimeout(function() { $('.last-comment input').focus(); }, 100);
+    }
+  },
+  'keydown input': function (evt) {
+    if (evt.keyCode === 13) {
+      evt.preventDefault();
+      // Translate that return into a tab...
+      var e = jQuery.Event('keydown', { keyCode: 9 });
+      $(evt.currentTarget).trigger(e);
     }
   }
 });

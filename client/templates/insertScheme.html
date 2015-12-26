@@ -7,11 +7,8 @@
         <div class="six wide column">       
           <div class="required field name-field">
             <label for="scheme-name">Scheme Name</label>
-            {{#if editingName}}
-              <input type="text" name="scheme-name" required placeholder="Unique name for this scheme" value="{{unitName}}">
-            {{else}}
-              <div class="ui large header unit-name">{{unitName}}</div>
-            {{/if}}
+              <input class="{{#unless editingName}} stealth {{/unless}}" type="text" name="scheme-name" required placeholder="Unique name for this scheme" value="{{unitName}}">
+              <div class="ui large header unit-name {{#if editingName}} stealth {{/if}}">{{unitName}}</div>
           </div>
         </div>
         <div class="ten wide column">

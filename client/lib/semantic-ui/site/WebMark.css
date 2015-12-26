@@ -47,8 +47,9 @@
   cursor: pointer;
 }
 
-.marking-total {
-
+.stealth {
+  display: none !important;
+  height: 0 !important;
 }
 
 input[name="scheme-name"] {
@@ -57,4 +58,5 @@ input[name="scheme-name"] {
 
 .unit-name {
   text-transform: capitalize !important;
+  border-bottom: 1px dotted #3f3f3f !important;
 }
