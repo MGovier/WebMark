@@ -29,6 +29,7 @@ Session.setDefault('comments', [{
 Session.setDefault('rubricHistory', []);
 Session.setDefault('unitName', UI._globalHelpers.generateFunName());
 Session.setDefault('editingName', false);
+Session.setDefault('commentHistory', []);
 
 Template.insertScheme.helpers({
   totalMarks: function () {
@@ -82,6 +83,7 @@ Template.insertScheme.events({
           Session.set('rubricHistory', []);
           Session.set('unitName', UI._globalHelpers.generateFunName());
           Session.set('editingName', false);
+          Session.set('commentHistory', []);
           form.reset();
           Router.go('/viewSchemes');
         }
@@ -250,6 +252,9 @@ Template.commentBuilder.helpers({
     } else {
       return '';
     }
+  },
+  canUndo: function() {
+    return Session.get('commentHistory').length > 0;
   }
 });
 
@@ -270,11 +275,14 @@ Template.commentBuilder.events({
     Session.set('comments', comments);
   },
   'change input': function () {
-    let comments = Session.get('comments');
+    let comments = Session.get('comments'),
+        commentArray = Session.get('commentHistory');
     comments.forEach((com) => {
       com.comment = $('.comment-item[data-uuid="' + com.uuid + '"] input').val();
     });
     Session.set('comments', comments);
+    commentArray.push(comments);
+    Session.set('commentHistory', commentArray);
   },
   'keydown .last-comment': function (evt) {
     if (evt.keyCode === 9 && !evt.shiftKey && $(evt.currentTarget).find('input').val().length > 0) {
@@ -290,6 +298,12 @@ Template.commentBuilder.events({
       var e = jQuery.Event('keydown', { keyCode: 9 });
       $(evt.currentTarget).trigger(e);
     }
+  },
+  'click .undo-comment-action': function (evt) {
+    evt.preventDefault();
+    let commentArray = Session.get('commentHistory');
+    Session.set('comments', commentArray.pop());
+    Session.set('commentHistory', commentArray);
   }
 });
 

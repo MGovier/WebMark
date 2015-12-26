@@ -9,10 +9,11 @@
     </div>
     {{/each}}
   </div>
-  <div class="ui two column grid">
+  <div class="ui grid">
     <div class="row">
       <div class="column">
         <button class="ui primary button add-comment"><i class="plus icon"></i>Add Comment</button>
+        <button class="ui {{#unless canUndo}} disabled {{/unless}} button right floated undo-comment-action"><i class="undo icon"></i>Undo</button>
       </div>
     </div>
   </div>
