@@ -30,6 +30,8 @@ Session.setDefault('rubricHistory', []);
 Session.setDefault('unitName', UI._globalHelpers.generateFunName());
 Session.setDefault('editingName', false);
 Session.setDefault('commentHistory', []);
+// Keep track of if rubric or comment field should be undone.
+Session.setDefault('actionHistory', []);
 
 Template.insertScheme.helpers({
   totalMarks: function () {
@@ -84,6 +86,7 @@ Template.insertScheme.events({
           Session.set('unitName', UI._globalHelpers.generateFunName());
           Session.set('editingName', false);
           Session.set('commentHistory', []);
+          Session.set('actionHistory', []);
           form.reset();
           Router.go('/viewSchemes');
         }
@@ -100,6 +103,11 @@ Template.insertScheme.events({
   'blur input[name="scheme-name"]': function () {
     Session.set('editingName', false);
     Session.set('unitName', $('input[name="scheme-name"]').val());
+  },
+  'keydown': function (evt) {
+    // Meta key works for ctrl on windows and cmd on mac.
+    if (evt.keyCode == 90 && evt.metaKey) alert("Ctrl+z");
+    // TODO: UNDO THINGS!
   }
 });
 
@@ -179,7 +187,7 @@ Template.rubricBuilder.events({
     let rObjs = Session.get('rubricObject'),
         historyArray = Session.get('rubricHistory');
     historyArray.push(rObjs);
-    Session.set('rubricHistory', historyArray);
+
     rObjs.forEach((rubric) => {
       let $table = $('table[data-uuid="' + rubric.uuid + '"]');
       rubric.aspect = $table.find('input[name="rubric-aspect"]').val();
@@ -192,6 +200,11 @@ Template.rubricBuilder.events({
         }       
       });
     });
+
+    let actionHistory = Session.get('actionHistory');
+    actionHistory.push('rubric');
+    Session.set('actionHistory', actionHistory);
+    Session.set('rubricHistory', historyArray);
     Session.set('rubricObject', rObjs);
   },
   'keydown .last-row input[name="criteria-value"]': function (evt) {
@@ -207,14 +220,18 @@ Template.rubricBuilder.events({
     if (evt.keyCode === 13) {
       evt.preventDefault();
       // Translate that return into a tab...
-      var e = jQuery.Event('keydown', { keyCode: 9 });
+      let e = jQuery.Event('keydown', { keyCode: 9 });
       $(evt.currentTarget).trigger(e);
     }
   },
   'click .duplicate-aspect': function (evt) {
     evt.preventDefault();
     let rObj = Session.get('rubricObject'),
-        id = $(evt.currentTarget).closest('table').attr('data-uuid');
+        id = $(evt.currentTarget).closest('table').attr('data-uuid'),
+        historyArray = Session.get('rubricHistory');
+    historyArray.push(rObj);
+    Session.set('rubricHistory', historyArray);
+
     rObj.forEach((rubric) => {
       if (rubric.uuid == id) {
         let newRows = [];
@@ -232,6 +249,7 @@ Template.rubricBuilder.events({
         });
       }
     });
+
     Session.set('rubricObject', rObj);
   },
   'click .undo-rubric-action': function (evt) {
@@ -283,6 +301,10 @@ Template.commentBuilder.events({
     Session.set('comments', comments);
     commentArray.push(comments);
     Session.set('commentHistory', commentArray);
+
+    let actionHistory = Session.get('actionHistory');
+    actionHistory.push('comment');
+    Session.set('actionHistory', actionHistory);
   },
   'keydown .last-comment': function (evt) {
     if (evt.keyCode === 9 && !evt.shiftKey && $(evt.currentTarget).find('input').val().length > 0) {
