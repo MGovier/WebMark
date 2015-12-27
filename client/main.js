@@ -4,14 +4,6 @@ Meteor.startup(() => {
 
 Meteor.subscribe('markingSchemes');
 
-Template.registerHelper('generateUUID', function () {
-  // Source: User 'broofa' at StackOverflow: https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = crypto.getRandomValues(new Uint8Array(1))[0]%16|0, v = c == 'x' ? r : (r&0x3|0x8);
-    return v.toString(16);
-  });
-});
-
 Template.main.onRendered(() => {
   $('.ui.menu .ui.dropdown').dropdown({
       on: 'hover'
@@ -34,6 +26,12 @@ Session.setDefault('rubricObject', [{
 Session.setDefault('comments', [{
   uuid: UI._globalHelpers.generateUUID()
 }]);
+Session.setDefault('rubricHistory', []);
+Session.setDefault('unitName', UI._globalHelpers.generateFunName());
+Session.setDefault('editingName', false);
+Session.setDefault('commentHistory', []);
+// Keep track of if rubric or comment field should be undone.
+Session.setDefault('actionHistory', []);
 
 Template.insertScheme.helpers({
   totalMarks: function () {
@@ -49,6 +47,12 @@ Template.insertScheme.helpers({
       totalMarks += max;
     });
     return totalMarks;
+  },
+  'unitName': function () {
+    return Session.get('unitName');
+  },
+  'editingName': function () {
+    return Session.get('editingName');
   }
 });
 
@@ -70,19 +74,52 @@ Template.insertScheme.events({
         if (error) {
           console.log(error.message, error.details);
         } else {
-          $('.basic.modal').modal({
-            closable: false,
-            detachable: false,
-            onDeny: function() {
-              form.reset();
-            },
-            onApprove: function() {
-              Router.go('/viewSchemes');
-            }
-          }).modal('show');
+          Session.set('adjustmentAllowed', false);
+          Session.set('rubricObject', [{
+            uuid: UI._globalHelpers.generateUUID(),
+            rows: [{uuid: UI._globalHelpers.generateUUID()}],
+          }]);
+          Session.set('comments', [{
+            uuid: UI._globalHelpers.generateUUID()
+          }]);
+          Session.set('rubricHistory', []);
+          Session.set('unitName', UI._globalHelpers.generateFunName());
+          Session.set('editingName', false);
+          Session.set('commentHistory', []);
+          Session.set('actionHistory', []);
+          form.reset();
+          Router.go('/viewSchemes');
         }
       });
+    } else {
+      // Semantic validation checks
     }
+  },
+  'click .name-field': function () {
+    Session.set('editingName', true);
+    setTimeout(function() { $('input[name="scheme-name"]').select(); }, 100);
+
+  },
+  'blur input[name="scheme-name"]': function () {
+    Session.set('editingName', false);
+    Session.set('unitName', $('input[name="scheme-name"]').val());
+  },
+  'keydown': function (evt) {
+    // Meta key works for ctrl on windows and cmd on mac.
+    if (evt.keyCode == 90 && evt.metaKey) alert("Ctrl+z");
+    // TODO: UNDO THINGS!
+  },
+  'click .reset-scheme': function (evt) {
+    evt.preventDefault();
+    $('.ui.basic.reset-check.modal')
+      .modal({
+        closable  : false,
+        onApprove : function() {
+          document.getElementById("marking-scheme-form").reset();
+          $('input[name="scheme-name"]').val(Session.get('unitName'));
+        },
+        detachable: false
+      }).modal('show');
   }
 });
 
@@ -108,6 +145,9 @@ Template.rubricBuilder.helpers({
       });
     });
     return className;
+  },
+  canUndo: function() {
+    return Session.get('rubricHistory').length > 0;
   }
 });
 
@@ -156,7 +196,10 @@ Template.rubricBuilder.events({
     Session.set('rubricObject', rObjs);
   },
   'change input': function () {
-    let rObjs = Session.get('rubricObject');
+    let rObjs = Session.get('rubricObject'),
+        historyArray = Session.get('rubricHistory');
+    historyArray.push(rObjs);
+
     rObjs.forEach((rubric) => {
       let $table = $('table[data-uuid="' + rubric.uuid + '"]');
       rubric.aspect = $table.find('input[name="rubric-aspect"]').val();
@@ -169,20 +212,38 @@ Template.rubricBuilder.events({
         }       
       });
     });
+
+    let actionHistory = Session.get('actionHistory');
+    actionHistory.push('rubric');
+    Session.set('actionHistory', actionHistory);
+    Session.set('rubricHistory', historyArray);
     Session.set('rubricObject', rObjs);
   },
   'keydown .last-row input[name="criteria-value"]': function (evt) {
     let id = $(evt.currentTarget).closest('table').attr('data-uuid'),
         $table = $('table[data-uuid="' + id + '"]');
     if (evt.keyCode === 9 && !evt.shiftKey && ($(evt.currentTarget).val() || $table.find('.last-row input[name="criteria"]').val().length > 0)) {
+      evt.preventDefault();
       $table.find('.add-criterion').trigger('click');
       setTimeout(function() { $table.find('.last-row input[name="criteria"]').focus(); }, 100);
+    }
+  },
+  'keydown input': function (evt) {
+    if (evt.keyCode === 13) {
+      evt.preventDefault();
+      // Translate that return into a tab...
+      let e = jQuery.Event('keydown', { keyCode: 9 });
+      $(evt.currentTarget).trigger(e);
     }
   },
   'click .duplicate-aspect': function (evt) {
     evt.preventDefault();
     let rObj = Session.get('rubricObject'),
-        id = $(evt.currentTarget).closest('table').attr('data-uuid');
+        id = $(evt.currentTarget).closest('table').attr('data-uuid'),
+        historyArray = Session.get('rubricHistory');
+    historyArray.push(rObj);
+    Session.set('rubricHistory', historyArray);
+
     rObj.forEach((rubric) => {
       if (rubric.uuid == id) {
         let newRows = [];
@@ -200,7 +261,14 @@ Template.rubricBuilder.events({
         });
       }
     });
+
     Session.set('rubricObject', rObj);
+  },
+  'click .undo-rubric-action': function (evt) {
+    evt.preventDefault();
+    let historyArray = Session.get('rubricHistory');
+    Session.set('rubricObject', historyArray.pop());
+    Session.set('rubricHistory', historyArray);
   }
 });
 
@@ -214,6 +282,9 @@ Template.commentBuilder.helpers({
     } else {
       return '';
     }
+  },
+  canUndo: function() {
+    return Session.get('commentHistory').length > 0;
   }
 });
 
@@ -234,17 +305,39 @@ Template.commentBuilder.events({
     Session.set('comments', comments);
   },
   'change input': function () {
-    let comments = Session.get('comments');
+    let comments = Session.get('comments'),
+        commentArray = Session.get('commentHistory');
     comments.forEach((com) => {
       com.comment = $('.comment-item[data-uuid="' + com.uuid + '"] input').val();
     });
     Session.set('comments', comments);
+    commentArray.push(comments);
+    Session.set('commentHistory', commentArray);
+
+    let actionHistory = Session.get('actionHistory');
+    actionHistory.push('comment');
+    Session.set('actionHistory', actionHistory);
   },
   'keydown .last-comment': function (evt) {
     if (evt.keyCode === 9 && !evt.shiftKey && $(evt.currentTarget).find('input').val().length > 0) {
+      evt.preventDefault();
       $('.add-comment').trigger('click');
       setTimeout(function() { $('.last-comment input').focus(); }, 100);
     }
+  },
+  'keydown input': function (evt) {
+    if (evt.keyCode === 13) {
+      evt.preventDefault();
+      // Translate that return into a tab...
+      var e = jQuery.Event('keydown', { keyCode: 9 });
+      $(evt.currentTarget).trigger(e);
+    }
+  },
+  'click .undo-comment-action': function (evt) {
+    evt.preventDefault();
+    let commentArray = Session.get('commentHistory');
+    Session.set('comments', commentArray.pop());
+    Session.set('commentHistory', commentArray);
   }
 });
 

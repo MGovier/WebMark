@@ -5,15 +5,16 @@
     <h3 class="ui horizontal divider header"><i class="info icon"></i>About</h3>
       <div class="ui stackable four column grid">
         <div class="six wide column">       
-          <div class="required field">
+          <div class="required field name-field">
             <label for="scheme-name">Scheme Name</label>
-            <input type="text" name="scheme-name" required placeholder="Unique name for this scheme">
+              <input class="{{#unless editingName}} stealth {{/unless}}" type="text" name="scheme-name" required placeholder="Unique name for this scheme" value="{{unitName}}">
+              <div class="ui large header unit-name {{#if editingName}} stealth {{/if}}">{{unitName}}</div>
           </div>
         </div>
         <div class="ten wide column">
           <div class="field">
             <label for="scheme-desc">Description</label>
-            <textarea rows="1" name="scheme-desc" placeholder="Information about this marking scheme, or advice to a marker"></textarea>
+            <textarea rows="3" name="scheme-desc" placeholder="Information about this marking scheme, or advice to a marker"></textarea>
           </div>
         </div>
       </div>
@@ -53,7 +54,7 @@
       <div class="row">
         <div class="centered column">
           <div class="two large ui buttons">
-            <button type="reset" class="ui button">Clear</button>
+            <button type="reset" class="ui button reset-scheme">Reset</button>
             <div class="or"></div>
             <button type="submit" class="positive ui button submit-scheme">Submit</button>
           </div>
@@ -61,18 +62,20 @@
       </div>
     </div>
   </form>
-  <div class="ui small basic modal" id="success-modal">
-    <div class="ui icon header"><i class="checkmark icon"></i>Scheme saved!</div>
+  <div class="ui small basic reset-check modal">
+    <div class="ui icon header">
+      <i class="warning circle icon"></i>
+      Reset
+    </div>
     <div class="content">
-      <p>This marking scheme is now accessible at the unique URL: Coming soon!</p>
-      <p>Would you like to get marking right away?</p>
+      <p>Are you sure you want to clear everything on this marking scheme?  You won't be able to undo this action!</p>
     </div>
     <div class="actions">
-      <div class="ui negative cancel inverted button">
-          <i class="remove icon"></i>No, I want to add another scheme
+      <div class="ui green basic cancel inverted button">
+        No, keep it
       </div>
-      <div class="ui positive ok inverted button">
-          <i class="checkmark icon"></i>Yes
+      <div class="ui red ok inverted button">
+        Reset
       </div>
     </div>
   </div>

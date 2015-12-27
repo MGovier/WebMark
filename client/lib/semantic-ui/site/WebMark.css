@@ -47,10 +47,16 @@
   cursor: pointer;
 }
 
-.marking-total {
-
+.stealth {
+  display: none !important;
+  height: 0 !important;
 }
 
 input[name="scheme-name"] {
   height: 3.01em;
+}
+
+.unit-name {
+  text-transform: capitalize !important;
+  border-bottom: 1px dotted #3f3f3f !important;
 }
