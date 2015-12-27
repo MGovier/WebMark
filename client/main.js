@@ -16,6 +16,10 @@ Template.markScheme.onRendered(() => {
 
 Template.insertScheme.onRendered(() => {
   $('.ui.checkbox').checkbox();
+  $.getScript('dragula.min.js', function () {
+    let loaded = new Event('dragulaReady');
+    document.dispatchEvent(loaded);
+  });
 });
 
 Session.setDefault('adjustmentAllowed', false);
