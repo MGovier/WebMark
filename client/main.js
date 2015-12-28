@@ -17,10 +17,18 @@ Template.markScheme.onRendered(() => {
 Template.insertScheme.onRendered(() => {
   $('.ui.checkbox').checkbox();
   $.getScript('dragula.min.js', function () {
-    let loaded = new Event('dragulaReady');
-    document.dispatchEvent(loaded);
+    var drake = dragula({
+      isContainer: function (el) {
+        return el.classList.contains('dragula-container');
+      }
+    });
+    drake.on('dragend', function() {
+      $('.rubric-table input:first').trigger('change');
+    })
   });
 });
+
+
 
 Session.setDefault('adjustmentAllowed', false);
 Session.setDefault('rubricObject', [{
@@ -188,6 +196,7 @@ Template.rubricBuilder.events({
     Session.set('rubricObject', rObjs);
   },
   'change input': function () {
+    console.log('caught a change');
     let rObjs = Session.get('rubricObject'),
         historyArray = Session.get('rubricHistory');
     historyArray.push(rObjs);
