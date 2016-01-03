@@ -11,9 +11,9 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="dragula-container">
       {{#each rubric.rows}}
-        <tr data-uuid="{{this.uuid}}" class="{{isLast(@index)}}">
+        <tr data-uuid="{{this.uuid}}">
           <td class="collapsing"><i class="chevron right icon"></i></td>
           <td class="twelve wide">      
             <div class="field rubric-array-item"> 
@@ -25,29 +25,33 @@
           </td>
           <td class="left aligned four wide">
             <div class="field rubric-array-item">
-              <input type="number" name="criteria-value" placeholder="Mark" value="{{this.criteriaValue}}">
+              <input type="number" name="criteria-value" placeholder="Mark" value="{{this.criteriaValue}}" required>
             </div>
           </td>
         </tr>
       {{/each}}
-        <tr>
-          <td colspan="3">   
-            <div class="ui two column stackable grid">
-              <div class="row">
-                <div class="column">
-                  <button class="ui primary button add-criterion"><i class="plus icon"></i>Add Criterion</button>
-                  <button class="ui button duplicate-aspect"><i class="retweet icon"></i>Duplicate Aspect</button>
-                </div>
-                <div class="column">
-                  <button class="ui negative right floated button remove-aspect"><i class="minus icon"></i>Remove Aspect</button>
-                </div>
-              </div>
-            </div>
-          </td>
-        </tr>
       </tbody>
     </table>
+    <div class="ui two column stackable grid" data-uuid="{{rubric.uuid}}">
+      <div class="row">
+        <div class="column">
+          <button class="ui primary button add-criterion"><i class="plus icon"></i>Add Criterion</button>
+          <button class="ui button duplicate-aspect"><i class="retweet icon"></i>Duplicate Aspect</button>
+        </div>
+        <div class="column">
+          <button class="ui negative right floated button remove-aspect"><i class="minus icon"></i>Remove Aspect</button>
+        </div>
+      </div>
+    </div>
   {{/each}}
-  <button class="ui primary button add-aspect"><i class="plus icon"></i>Add Aspect</button>
-  <button class="ui {{#unless canUndo}} disabled {{/unless}} button right floated undo-rubric-action"><i class="undo icon"></i>Undo</button>
+  <div class="ui two column stackable grid">
+    <div class="row">
+      <div class="column">
+        <button class="ui primary button add-aspect"><i class="plus icon"></i>Add Aspect</button>
+      </div>
+      <div class="column">
+        <button class="ui {{#unless canUndo}} disabled {{/unless}} button right floated undo-rubric-action"><i class="undo icon"></i>Undo</button>
+      </div>
+    </div>
+  </div>
 </template>
