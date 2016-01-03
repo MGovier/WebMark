@@ -16,44 +16,21 @@ Template.markScheme.onRendered(() => {
 
 Template.insertScheme.onRendered(() => {
   $('.ui.checkbox').checkbox();
-  $.getScript('dragula.min.js', function () {
-    var lastItem;
-    drake = dragula({
-      isContainer: function (el) {
-        return el.classList.contains('dragula-container');
-      }
-    });
-    drake.on('drop', function(item, tar, source, sibling) {
-      if (item !== lastItem) {
-        console.log('repeat');
-        lastItem = item;
-        drake.emit('drop', item, tar, source, sibling);
-      } else {
-        console.log('update');
-        $('.rubric-table input:first').trigger('change');
-      } 
-    });
-
-  //     $('.rubric-table input:first').trigger('change');    
-  //     // Check DOM and data consistency, trigger a dragula refresh if out of sync.
-  //     // This made me rethink going into web development.
-  //     let rObjs = Session.get('rubricObject');
-  //     setTimeout(function() { 
-  //         $('.rubric-table').each(function(index, table) {
-  //         console.log('running on table', index);
-  //         $(table).find('tbody tr').each(function (index2, row) {
-  //           console.log('running on row', index2);
-  //           console.log(rObjs[index].rows[index2].uuid, $(row).attr('data-uuid'));
-  //           if (rObjs[index].rows[index2].uuid !== $(row).attr('data-uuid')) {
-  //             console.log('resynchronizing!');
-  //             drake.emit('drop', item, tar, source, sibling);
-  //             return false;
-  //           }
-  //         });
-  //       });
-  //   }, 2000);
-  //   });
+  $('.sortable').sortable({
+    axis: 'x',
+    items: '> tr',
+    helper: fixWidthHelper,
+    stop: function( event, ui ) {
+      $('.rubric-table input:first').trigger('change');
+    }
   });
+  function fixWidthHelper(e, ui) {
+    ui.children().each(function() {
+        $(this).width($(this).width());
+        $(this).height($(this).height());
+    });
+    return ui;
+  }
 });
 
 
