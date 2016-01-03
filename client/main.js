@@ -29,7 +29,7 @@ Template.insertScheme.onRendered(() => {
       Session.set('rubricObject', []);
       Meteor.setTimeout( function () {
         Session.set('rubricObject', rObj);
-      }, 50);
+      }, 80);
     });
   });
 });
@@ -145,23 +145,9 @@ Template.rubricBuilder.helpers({
     return Session.get('rubricObject');
   },
   pickColour: function (index) {
-    let colours = ['blue', 'pink', 'orange', 'green', 'yellow', 
-                    'teal', 'violet', 'grey'];
+    let colours = ['blue', 'orange', 'green', 'yellow', 
+                    'teal', 'violet', 'grey', 'pink'];
     return colours[index % colours.length];
-  },
-  isLast: function (index) {
-    let rObjs = Session.get('rubricObject'),
-        className = '';
-    rObjs.forEach((rubric) => {
-      rubric.rows.forEach((r) => {
-        if (r.uuid == this.uuid) {
-          if (index === rubric.rows.length - 1) {
-            className = 'last-row';
-          }
-        }
-      });
-    });
-    return className;
   },
   canUndo: function() {
     return Session.get('rubricHistory').length > 0;
@@ -206,7 +192,7 @@ Template.rubricBuilder.events({
   'click .remove-aspect': function (evt) {
     evt.preventDefault();
     let rObjs = Session.get('rubricObject'),
-        id = $(evt.currentTarget).closest('table').attr('data-uuid');
+        id = $(evt.currentTarget).closest('div .grid').attr('data-uuid');
     rObjs = rObjs.filter((rubric) => {
       return rubric.uuid != id;
     });
@@ -242,13 +228,19 @@ Template.rubricBuilder.events({
     Session.set('rubricObject', rObjs);
     
   },
-  'keydown .last-row input[name="criteria-value"]': function (evt) {
+  'keydown input[name="criteria-value"]': function (evt) {
     let id = $(evt.currentTarget).closest('table').attr('data-uuid'),
         $table = $('table[data-uuid="' + id + '"]');
-    if (evt.keyCode === 9 && !evt.shiftKey && ($(evt.currentTarget).val() || $table.find('.last-row input[name="criteria"]').val().length > 0)) {
-      evt.preventDefault();
-      $table.find('.add-criterion').trigger('click');
-      setTimeout(function() { $table.find('.last-row input[name="criteria"]').focus(); }, 100);
+        $lastRow = $table.find('tr:last');
+        lastRowId = $lastRow.attr('data-uuid');
+        eventId = $(evt.currentTarget).closest('tr').attr('data-uuid');
+    if (eventId === lastRowId) {
+      if (evt.keyCode === 9 && !evt.shiftKey && ($(evt.currentTarget).val() || $lastRow.find('input[name="criteria"]').val().length > 0)) {
+        evt.preventDefault();
+        console.log($table.closest('.add-criterion'));
+        $('div[data-uuid="' + id +'"]').find('.add-criterion').trigger('click');
+        Meteor.setTimeout(function() { $table.find('tr:last input[name="criteria"]').focus(); }, 100);
+      }
     }
   },
   'keydown input': function (evt) {
@@ -264,8 +256,6 @@ Template.rubricBuilder.events({
     let rObj = Session.get('rubricObject'),
         id = $(evt.currentTarget).closest('div .grid').attr('data-uuid'),
         historyArray = Session.get('rubricHistory');
-    historyArray.push(rObj);
-    Session.set('rubricHistory', historyArray);
 
     rObj.forEach((rubric) => {
       if (rubric.uuid == id) {
@@ -284,7 +274,8 @@ Template.rubricBuilder.events({
         });
       }
     });
-
+    historyArray.push(rObj);
+    Session.set('rubricHistory', historyArray);
     Session.set('rubricObject', rObj);
   },
   'click .undo-rubric-action': function (evt) {
