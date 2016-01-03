@@ -24,35 +24,13 @@ Template.insertScheme.onRendered(() => {
       }
     });
     drake.on('drop', function(item, tar, source, sibling) {
-      if (item !== lastItem) {
-        console.log('repeat');
-        lastItem = item;
-        drake.emit('drop', item, tar, source, sibling);
-      } else {
-        console.log('update');
-        $('.rubric-table input:first').trigger('change');
-      } 
+      $('.rubric-table input:first').trigger('change');
+      let rObj = Session.get('rubricObject');
+      Session.set('rubricObject', []);
+      Meteor.setTimeout( function () {
+        Session.set('rubricObject', rObj);
+      }, 50);
     });
-
-  //     $('.rubric-table input:first').trigger('change');    
-  //     // Check DOM and data consistency, trigger a dragula refresh if out of sync.
-  //     // This made me rethink going into web development.
-  //     let rObjs = Session.get('rubricObject');
-  //     setTimeout(function() { 
-  //         $('.rubric-table').each(function(index, table) {
-  //         console.log('running on table', index);
-  //         $(table).find('tbody tr').each(function (index2, row) {
-  //           console.log('running on row', index2);
-  //           console.log(rObjs[index].rows[index2].uuid, $(row).attr('data-uuid'));
-  //           if (rObjs[index].rows[index2].uuid !== $(row).attr('data-uuid')) {
-  //             console.log('resynchronizing!');
-  //             drake.emit('drop', item, tar, source, sibling);
-  //             return false;
-  //           }
-  //         });
-  //       });
-  //   }, 2000);
-  //   });
   });
 });
 
@@ -262,6 +240,7 @@ Template.rubricBuilder.events({
     Session.set('actionHistory', actionHistory);
     Session.set('rubricHistory', historyArray);
     Session.set('rubricObject', rObjs);
+    
   },
   'keydown .last-row input[name="criteria-value"]': function (evt) {
     let id = $(evt.currentTarget).closest('table').attr('data-uuid'),
