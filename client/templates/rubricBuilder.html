@@ -30,24 +30,28 @@
           </td>
         </tr>
       {{/each}}
-        <tr class="rubric-buttons">
-          <td colspan="3">   
-            <div class="ui two column stackable grid">
-              <div class="row">
-                <div class="column">
-                  <button class="ui primary button add-criterion"><i class="plus icon"></i>Add Criterion</button>
-                  <button class="ui button duplicate-aspect"><i class="retweet icon"></i>Duplicate Aspect</button>
-                </div>
-                <div class="column">
-                  <button class="ui negative right floated button remove-aspect"><i class="minus icon"></i>Remove Aspect</button>
-                </div>
-              </div>
-            </div>
-          </td>
-        </tr>
       </tbody>
     </table>
+    <div class="ui two column stackable grid" data-uuid="{{rubric.uuid}}">
+      <div class="row">
+        <div class="column">
+          <button class="ui primary button add-criterion"><i class="plus icon"></i>Add Criterion</button>
+          <button class="ui button duplicate-aspect"><i class="retweet icon"></i>Duplicate Aspect</button>
+        </div>
+        <div class="column">
+          <button class="ui negative right floated button remove-aspect"><i class="minus icon"></i>Remove Aspect</button>
+        </div>
+      </div>
+    </div>
   {{/each}}
-  <button class="ui primary button add-aspect"><i class="plus icon"></i>Add Aspect</button>
-  <button class="ui {{#unless canUndo}} disabled {{/unless}} button right floated undo-rubric-action"><i class="undo icon"></i>Undo</button>
+  <div class="ui two column stackable grid">
+    <div class="row">
+      <div class="column">
+        <button class="ui primary button add-aspect"><i class="plus icon"></i>Add Aspect</button>
+      </div>
+      <div class="column">
+        <button class="ui {{#unless canUndo}} disabled {{/unless}} button right floated undo-rubric-action"><i class="undo icon"></i>Undo</button>
+      </div>
+    </div>
+  </div>
 </template>

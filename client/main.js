@@ -17,17 +17,44 @@ Template.markScheme.onRendered(() => {
 Template.insertScheme.onRendered(() => {
   $('.ui.checkbox').checkbox();
   $.getScript('dragula.min.js', function () {
-    var drake = dragula({
+    var lastItem;
+    drake = dragula({
       isContainer: function (el) {
         return el.classList.contains('dragula-container');
       }
     });
-    drake.on('dragend', function() {
-      $('.rubric-table input:first').trigger('change');
-    })
+    drake.on('drop', function(item, tar, source, sibling) {
+      if (item !== lastItem) {
+        console.log('repeat');
+        lastItem = item;
+        drake.emit('drop', item, tar, source, sibling);
+      } else {
+        console.log('update');
+        $('.rubric-table input:first').trigger('change');
+      } 
+    });
+
+  //     $('.rubric-table input:first').trigger('change');    
+  //     // Check DOM and data consistency, trigger a dragula refresh if out of sync.
+  //     // This made me rethink going into web development.
+  //     let rObjs = Session.get('rubricObject');
+  //     setTimeout(function() { 
+  //         $('.rubric-table').each(function(index, table) {
+  //         console.log('running on table', index);
+  //         $(table).find('tbody tr').each(function (index2, row) {
+  //           console.log('running on row', index2);
+  //           console.log(rObjs[index].rows[index2].uuid, $(row).attr('data-uuid'));
+  //           if (rObjs[index].rows[index2].uuid !== $(row).attr('data-uuid')) {
+  //             console.log('resynchronizing!');
+  //             drake.emit('drop', item, tar, source, sibling);
+  //             return false;
+  //           }
+  //         });
+  //       });
+  //   }, 2000);
+  //   });
   });
 });
-
 
 
 Session.setDefault('adjustmentAllowed', false);
@@ -155,7 +182,7 @@ Template.rubricBuilder.events({
   'click .add-criterion': function (evt) {
     evt.preventDefault();
     let rObjs = Session.get('rubricObject'),
-        id = $(evt.currentTarget).closest('table').attr('data-uuid');
+        id = $(evt.currentTarget).closest('div .grid').attr('data-uuid');
     rObjs.forEach((rubric) => {
       if (rubric.uuid == id) {
         rubric['rows'].push({uuid: UI._globalHelpers.generateUUID()});
@@ -196,22 +223,26 @@ Template.rubricBuilder.events({
     Session.set('rubricObject', rObjs);
   },
   'change input': function () {
-    console.log('caught a change');
     let rObjs = Session.get('rubricObject'),
         historyArray = Session.get('rubricHistory');
     historyArray.push(rObjs);
 
     rObjs.forEach((rubric) => {
-      let $table = $('table[data-uuid="' + rubric.uuid + '"]');
+      let $table = $('table[data-uuid="' + rubric.uuid + '"]'),
+          $rows = $table.children('tbody').children('tr'),
+          rows = [];
       rubric.aspect = $table.find('input[name="rubric-aspect"]').val();
-      rubric.rows.forEach((row) => {
-        let $row = $('tr[data-uuid="' + row.uuid + '"]');
-        row.criteria = $row.find('input[name="criteria"]').val();
+      $rows.each((index, row) => {
+        let rowObj = {};
+        rowObj.uuid = $(row).attr('data-uuid');
+        rowObj.criteria = $(row).find('input[name="criteria"]').val();
         // Parse if defined. Use base 10.
-        if ($row.find('input[name="criteria-value"]').val() !== undefined) {
-          row.criteriaValue = parseInt($row.find('input[name="criteria-value"]').val(), 10);
-        }       
-      });
+        if ($(row).find('input[name="criteria-value"]').val() !== undefined) {
+          rowObj.criteriaValue = parseInt($(row).find('input[name="criteria-value"]').val(), 10);
+        }
+        rows.push(rowObj);
+      })
+      rubric.rows = rows;
     });
 
     let actionHistory = Session.get('actionHistory');
@@ -240,7 +271,7 @@ Template.rubricBuilder.events({
   'click .duplicate-aspect': function (evt) {
     evt.preventDefault();
     let rObj = Session.get('rubricObject'),
-        id = $(evt.currentTarget).closest('table').attr('data-uuid'),
+        id = $(evt.currentTarget).closest('div .grid').attr('data-uuid'),
         historyArray = Session.get('rubricHistory');
     historyArray.push(rObj);
     Session.set('rubricHistory', historyArray);
