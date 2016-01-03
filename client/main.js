@@ -147,6 +147,18 @@ Template.insertScheme.events({
     // Meta key works for ctrl on windows and cmd on mac.
     if (evt.keyCode == 90 && evt.metaKey) alert("Ctrl+z");
     // TODO: UNDO THINGS!
+  },
+  'click .reset-scheme': function (evt) {
+    evt.preventDefault();
+    $('.ui.basic.reset-check.modal')
+      .modal({
+        closable  : false,
+        onApprove : function() {
+          document.getElementById("marking-scheme-form").reset();
+          $('input[name="scheme-name"]').val(Session.get('unitName'));
+        },
+        detachable: false
+      }).modal('show');
   }
 });
 
