@@ -79,6 +79,7 @@ Template.insertScheme.events({
   'click .submit-scheme': function(evt) {
     let form = $('#marking-scheme-form')[0];
     if (form.checkValidity()) {
+      $('.submit-scheme').removeClass('submit-scheme').addClass('loading');
       evt.preventDefault();
       let schemaObject = {
         'name': $('input[name="scheme-name"]').val(),
@@ -94,6 +95,7 @@ Template.insertScheme.events({
         if (error) {
           console.log(error.message, error.details);
         } else {
+          $('.submit-scheme').removeClass('loading').addClass('submit-scheme');
           Session.set('adjustmentAllowed', false);
           Session.set('rubricObject', [{
             uuid: UI._globalHelpers.generateUUID(),
@@ -240,7 +242,6 @@ Template.rubricBuilder.events({
     if (eventId === lastRowId) {
       if (evt.keyCode === 9 && !evt.shiftKey && ($(evt.currentTarget).val() || $lastRow.find('input[name="criteria"]').val().length > 0)) {
         evt.preventDefault();
-        console.log($table.closest('.add-criterion'));
         $('div[data-uuid="' + id +'"]').find('.add-criterion').trigger('click');
         Meteor.setTimeout(function() { $table.find('tr:last input[name="criteria"]').focus(); }, 100);
       }
@@ -366,7 +367,6 @@ Template.viewSchemesListItem.helpers({
     return moment(this.createdAt).fromNow();
   },
   recent: function () {
-    console.log(moment(this.createdAt).isAfter(moment().startOf('day')));
     return moment(this.createdAt).isAfter(moment().startOf('day'));
   }
 });
