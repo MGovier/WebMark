@@ -79,6 +79,7 @@ Template.insertScheme.events({
   'click .submit-scheme': function(evt) {
     let form = $('#marking-scheme-form')[0];
     if (form.checkValidity()) {
+      $('.submit-scheme').removeClass('submit-scheme').addClass('loading');
       evt.preventDefault();
       let schemaObject = {
         'name': $('input[name="scheme-name"]').val(),
@@ -94,6 +95,7 @@ Template.insertScheme.events({
         if (error) {
           console.log(error.message, error.details);
         } else {
+          $('.submit-scheme').removeClass('loading').addClass('submit-scheme');
           Session.set('adjustmentAllowed', false);
           Session.set('rubricObject', [{
             uuid: UI._globalHelpers.generateUUID(),
