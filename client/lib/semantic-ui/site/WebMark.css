@@ -60,3 +60,7 @@ input[name="scheme-name"] {
   text-transform: capitalize !important;
   border-bottom: 1px dotted #3f3f3f !important;
 }
+
+.loading-frame {
+  height: 10em;
+}

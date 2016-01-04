@@ -2,8 +2,6 @@ Meteor.startup(() => {
   $('html').attr('lang', 'en');
 });
 
-Meteor.subscribe('markingSchemes');
-
 Template.main.onRendered(() => {
   $('.ui.menu .ui.dropdown').dropdown({
       on: 'hover'
@@ -50,21 +48,24 @@ Session.setDefault('commentHistory', []);
 // Keep track of if rubric or comment field should be undone.
 Session.setDefault('actionHistory', []);
 
-Template.insertScheme.helpers({
-  totalMarks: function () {
-    let rObjs = Session.get('rubricObject'),
-        totalMarks = 0;
-    rObjs.forEach((rubric) => {
-      let max = 0;
-      rubric.rows.forEach((r) => {
-        if (r.criteriaValue !== undefined && r.criteriaValue > max) {
-          max = r.criteriaValue;
-        } 
-      });
-      totalMarks += max;
+var totalMarksFunction = function () {
+  let rObjs = Session.get('rubricObject'),
+      totalMarks = 0;
+  rObjs.forEach((rubric) => {
+    let max = 0;
+    rubric.rows.forEach((r) => {
+      if (r.criteriaValue !== undefined && r.criteriaValue > max) {
+        max = r.criteriaValue;
+      } 
     });
-    return totalMarks;
-  },
+    totalMarks += max;
+  });
+  return totalMarks;
+}
+
+Template.insertScheme.helpers({
+  'totalMarks': totalMarksFunction
+  ,
   'unitName': function () {
     return Session.get('unitName');
   },
@@ -72,6 +73,7 @@ Template.insertScheme.helpers({
     return Session.get('editingName');
   }
 });
+
 
 Template.insertScheme.events({
   'click .submit-scheme': function(evt) {
@@ -85,7 +87,8 @@ Template.insertScheme.events({
         'aspects': Session.get('rubricObject'),
         'comments': Session.get('comments'),
         'adjustmentValuePositive': $('input[name="adjustment-positive"]').val(),
-        'adjustmentValueNegative': $('input[name="adjustment-negative"]').val()
+        'adjustmentValueNegative': $('input[name="adjustment-negative"]').val(),
+        'maxMarks': totalMarksFunction()
       };
       Meteor.call('addScheme', schemaObject, (error, result) => {
         if (error) {
@@ -356,20 +359,26 @@ Template.commentBuilder.events({
 });
 
 Template.viewSchemes.helpers({
-  markingSchemes: function () {
-    return MarkingSchemes.find({}, {sort: {name: 1}});
-  }
 });
 
 Template.viewSchemesListItem.helpers({
   friendlyDate: function () {
-    return this.createdAt.toLocaleDateString('en-GB');
+    return moment(this.createdAt).fromNow();
+  },
+  recent: function () {
+    console.log(moment(this.createdAt).isAfter(moment().startOf('day')));
+    return moment(this.createdAt).isAfter(moment().startOf('day'));
   }
 });
 
 Template.viewSchemesListItem.events({
-  'click .delete-scheme': function () {
+  'click .delete-scheme': function (evt) {
+    evt.preventDefault();
     console.log('deleting: ', this._id);
     Meteor.call('deleteScheme', this._id);
+  },
+  'click .edit-scheme': function (evt) {
+    evt.preventDefault();
+    window.alert('Coming soon!');
   }
 });

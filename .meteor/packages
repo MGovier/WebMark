@@ -21,3 +21,5 @@ flemay:less-autoprefixer
 iron:router
 aldeed:simple-schema
 aldeed:collection2
+okgrow:router-autoscroll
+momentjs:moment
