@@ -1,0 +1,46 @@
+<template name="home">
+<div class="ui vertical center aligned padded segment">
+  <div class="ui text container">
+    <h1 class="ui header">
+      WebMark
+      </h1>
+      <h2>Mark assignments with effiency and flexibility</h2>
+      {{#if currentUser}}
+        <div class="ui two column centered relaxed grid">
+          <div class="row">
+            <div class="right aligned column">
+              <div class="ui huge primary button">View your schemes<i class="right arrow icon"></i></div>
+            </div>
+            <div class="ui vertical divider">
+              or
+            </div>
+            <div class="column">
+              <div class="ui huge primary button">Create a new scheme<i class="right arrow icon"></i></div>
+            </div>
+          </div>
+        </div>     
+      {{else}}
+        <div class="ui huge primary button google-log-in">Log-in with Google to get started <i class="right arrow icon"></i></div>
+      {{/if}}
+  </div>
+</div>
+  <div class="ui vertical stripe padded segment">
+    <div class="ui three column stackable relaxed grid container">
+      <div class="row">
+        <div class="column">
+          <h3 class="ui header"><i class="comments outline icon"></i>Desktop and Mobile</h3>
+          <p>Use any device to create and mark assignments, with both keyboard-shortcuts and touch support.</p>
+        </div>
+        <div class="column">
+          <h3 class="ui header"><i class="options icon"></i>Flexibility</h3>
+          <p>Create marking schemes with rubrics, comments and dynamic data fields. Have marks and reports produced automatically. Share marking reports by unique URLs for your markers, no login required.</p>
+        </div>
+        <div class="column">
+          <h3 class="ui header"><i class="github icon"></i>Open Source</h3>
+          <p>See something you could improve? Great! All contributions and suggestions are welcome <a href="https://github.com/MGovier/WebMark">on GitHub</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</template>
