@@ -113,7 +113,12 @@ Template.insertScheme.events({
   },
   'keydown': function (evt) {
     // Meta key works for ctrl on windows and cmd on mac.
-    if (evt.keyCode == 90 && evt.metaKey) alert("Ctrl+z");
+    if (evt.keyCode == 90 && evt.metaKey) {
+      alert("Ctrl+z");
+    } else if (evt.keyCode === 13 && $(evt.currentTarget).attr('name') == "scheme-name") {
+      evt.preventDefault();
+      $('textarea[name="scheme-desc"]').focus();
+    }
     // TODO: UNDO THINGS!
   },
   'click .reset-scheme': function (evt) {

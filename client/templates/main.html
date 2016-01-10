@@ -22,24 +22,17 @@
           <a class="item" href="{{pathFor route='insertScheme'}}">New Scheme</a>
           <a class="item" href="{{pathFor route='viewSchemes'}}">View Schemes</a>
         {{/if}}
-          <div class="right menu">
-            <a class="item sign-in">{{#if currentUser}} Log Out {{else}} Log In {{/if}}</a>
-            <div class="ui flowing popup transition hidden">
-              <div class="ui center aligned grid">
-                <div class="row">
-                  {{> loginButtons}}
-                </div>
+        <div class="right menu">
+          <a class="item sign-in">{{#if currentUser}} Log Out {{else}} Log In {{/if}}</a>
+          <div class="ui flowing popup transition hidden">
+            <div class="ui center aligned grid">
+              <div class="column">
+                <div class="ui header">Manage Login:</div>
+                {{> loginButtons}}
               </div>
             </div>
           </div>
-<!--         <div class="ui dropdown item">
-          Marking Schemes
-          <i class="dropdown icon"></i>
-          <div class="menu">
-            <a class="item" href="/">Scheme Design</a>
-            <a class="item" href="/mark">Marking Example</a>
-          </div>
-        </div> -->
+        </div>
       </div>
     </div>
 
