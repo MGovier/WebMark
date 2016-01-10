@@ -76,3 +76,7 @@ input[name="scheme-name"] {
 #masthead .container {
   padding-top: 5em;
 }
+
+.dragula-container tr {
+  cursor: move;
+}
