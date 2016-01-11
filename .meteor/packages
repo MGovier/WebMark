@@ -23,3 +23,6 @@ aldeed:simple-schema
 aldeed:collection2
 okgrow:router-autoscroll
 momentjs:moment
+accounts-google
+accounts-ui
+appcache

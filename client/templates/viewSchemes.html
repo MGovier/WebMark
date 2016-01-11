@@ -1,12 +1,16 @@
 <template name="viewSchemes">
   <div class="ui one column padded grid">
     <div class="column">
-      <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Available Schemes</h3>
-      <div class="ui four doubling link cards">
-        {{#each markingSchemes}}
-          {{> viewSchemesListItem}}
-        {{/each}}       
-      </div>
+      {{#if markingSchemes.count}}
+        <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Available Schemes</h3>
+        <div class="ui four doubling link cards">
+          {{#each markingSchemes}}
+            {{> viewSchemesListItem}}
+          {{/each}}       
+        </div>
+      {{else}}
+        <h3>No schemes found!</h3>
+      {{/if}}
     </div>
   </div>
 </template>

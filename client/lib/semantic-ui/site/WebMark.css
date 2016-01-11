@@ -64,3 +64,19 @@ input[name="scheme-name"] {
 .loading-frame {
   height: 10em;
 }
+
+.sign-in {
+  border-right: 1px solid #e8e8e8;
+}
+
+#masthead {
+  height: 30em;
+}
+
+#masthead .container {
+  padding-top: 5em;
+}
+
+.dragula-container tr {
+  cursor: move;
+}
