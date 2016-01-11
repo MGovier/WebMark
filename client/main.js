@@ -21,7 +21,16 @@ Template.markScheme.onRendered(() => {
   $('.ui.checkbox').checkbox();
 });
 
-Template.main.events({
+Template.home.events({
+  'click .google-log-in': function () {
+    Meteor.loginWithGoogle();
+  },
+  'click .create-scheme': function () {
+    Router.go('insertScheme');
+  },
+  'click .view-schemes': function () {
+    Router.go('viewSchemes');
+  }
 });
 
 Template.viewSchemes.helpers({

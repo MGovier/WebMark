@@ -1,21 +1,19 @@
 <template name="home">
 <div class="ui vertical center aligned padded segment" id="masthead">
   <div class="ui text container">
-    <h1 class="ui huge header">
-      WebMark
-      </h1>
+    <h1 class="ui huge header">WebMark</h1>
       <h2>Mark assignments with efficiency and flexibility</h2>
       {{#if currentUser}}
         <div class="ui two column centered relaxed grid">
           <div class="row">
             <div class="right aligned column">
-              <div class="ui huge primary button">View your schemes<i class="right arrow icon"></i></div>
+              <div class="ui huge primary button create-scheme">Create a new scheme<i class="right arrow icon"></i></div>
             </div>
             <div class="ui vertical divider">
               or
             </div>
             <div class="column">
-              <div class="ui huge primary button">Create a new scheme<i class="right arrow icon"></i></div>
+              <div class="ui huge primary button view-schemes">View your schemes<i class="right arrow icon"></i></div>
             </div>
           </div>
         </div>     
