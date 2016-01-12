@@ -14,7 +14,7 @@
     "divider": true,
     "dropdown": true,
     "embed": false,
-    "feed": false,
+    "feed": true,
     "flag": true,
     "form": true,
     "grid": true,

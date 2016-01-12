@@ -29,7 +29,7 @@ Template.home.events({
     Router.go('insertScheme');
   },
   'click .view-schemes': function () {
-    Router.go('viewSchemes');
+    Router.go('dashboard');
   }
 });
 

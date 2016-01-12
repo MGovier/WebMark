@@ -18,9 +18,8 @@
           <a href="{{pathFor route='home'}}"><i class="student icon"></i> WebMark</a>
         </div>
         {{#if currentUser}}
-          <a class="item">Dashboard</a>
+          <a class="item" href="{{pathFor route='dashboard'}}">Dashboard</a>
           <a class="item" href="{{pathFor route='insertScheme'}}">New Scheme</a>
-          <a class="item" href="{{pathFor route='viewSchemes'}}">View Schemes</a>
         {{/if}}
         <div class="right menu">
           <a class="item sign-in">{{#if currentUser}} Log Out {{else}} Log In {{/if}}</a>
@@ -38,14 +37,14 @@
 
     <div class="ui large blue top inverted menu compacted-menu">
       <div class="header item">
-            <i class="student icon"></i> WebMark
-        </div>
+        <a href="{{pathFor route='home'}}"><i class="student icon"></i> WebMark</a>
+      </div>
       <div class="right menu">
         <div class="ui simple dropdown item">
           Navigate
           <i class="dropdown icon"></i>
           <div class="menu">
-            <a class="item" href="{{pathFor route='viewSchemes'}}">View Schemes</a>
+            <a class="item" href="{{pathFor route='dashboard'}}">Dashboard</a>
             <a class="item" href="{{pathFor route='insertScheme'}}">New Scheme</a>
           </div>
         </div>
