@@ -95,7 +95,7 @@ Template.insertScheme.events({
           Session.set('commentHistory', []);
           Session.set('actionHistory', []);
           form.reset();
-          Router.go('/viewSchemes');
+          Router.go('dashboard');
         }
       });
     } else {

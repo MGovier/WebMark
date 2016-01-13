@@ -42,7 +42,7 @@
     "sidebar": false,
     "site": true,
     "state": true,
-    "statistic": false,
+    "statistic": true,
     "step": false,
     "sticky": false,
     "tab": false,

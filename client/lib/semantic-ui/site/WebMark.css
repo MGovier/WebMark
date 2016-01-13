@@ -80,3 +80,13 @@ input[name="scheme-name"] {
 .dragula-container tr {
   cursor: move;
 }
+
+.card-delete-button {
+  color: gray;
+  transition: all 0.3s;
+}
+
+.card-delete-button:hover {
+  color: red;
+  font-size: 140%;
+}

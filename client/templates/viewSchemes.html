@@ -3,7 +3,7 @@
     <div class="column">
       {{#if markingSchemes.count}}
         <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Available Schemes</h3>
-        <div class="ui four doubling link cards">
+        <div class="ui four doubling stackable cards">
           {{#each markingSchemes}}
             {{> viewSchemesListItem}}
           {{/each}}       
@@ -13,29 +13,81 @@
       {{/if}}
     </div>
   </div>
+  <div class="ui small basic delete-check modal">
+    <div class="ui icon header">
+      <i class="warning circle icon"></i>
+      Delete Scheme and Marks
+    </div>
+    <div class="content">
+      <p>Are you sure you want to delete this marking scheme? This will permanently remove all its marks.</p>
+    </div>
+    <div class="actions">
+      <div class="ui green basic cancel inverted button">
+        No, keep it
+      </div>
+      <div class="ui red ok inverted button">
+        Delete
+      </div>
+    </div>
+  </div>
 </template>
 
 <template name="viewSchemesListItem">
-  <a class="card" href="{{pathFor route='markScheme'}}">
+  <div class="card">
     <div class="content">
+      <i class="right floated delete icon card-delete-button"></i>
       <div class="header">
         {{name}}
-        {{#if recent}}
-          <i class="right floated star icon"></i>
-        {{/if}}
       </div>
       <div class="meta">
         {{friendlyDate}} - {{maxMarks}} marks
       </div>
       <div class="description">
-        {{description}}
+        <div class="two column grid">
+          {{#if description}}
+            <div class="column">
+              {{trimmedDescription}}
+            </div>
+          {{else}}
+            <div class="ui center aligned column">
+              <div class="ui grey statistic">
+                <div class="value">
+                  {{aspectsAndComments}}
+                </div>
+                <div class="label">
+                  Aspects &amp; Comments
+                </div>
+              </div>
+            </div>
+          {{/if}}
+          <div class="center aligned column">
+            <div class="ui grey statistic">
+              <div class="value">
+                {{markedReports}}
+              </div>
+              <div class="label">
+                Marked
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="extra content">
-      <div class="ui two buttons">
-        <div class="ui basic green button edit-scheme">Edit</div>
-        <div class="ui basic red button delete-scheme">Delete</div>
+      <div class="ui four column center aligned grid">
+        <div class="column">
+          <a href="{{pathFor route='markScheme'}}"><button class="ui basic icon button mark-using-scheme" data-content="Start marking with this scheme"> <i class="pencil icon"></i></button></a>
+        </div>
+        <div class="column">
+          <button class="ui basic icon button copy-scheme-url" data-content="Copy the URL to this scheme" data-clipboard-text="{{urlFor route='markScheme'}}"> <i class="copy icon"></i></button>
+        </div>
+        <div class="column">
+          <button class="ui basic icon button edit-scheme" data-content="Edit this scheme"> <i class="edit icon"></i></button>
+        </div>
+        <div class="column">
+          <button class="ui basic green icon button" data-content="View marks"> <i class="list icon"></i></button>
+        </div>
       </div>
     </div>
-  </a>
+  </div>
 </template>
