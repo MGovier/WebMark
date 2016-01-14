@@ -8,14 +8,33 @@
       </div>
       <h3 class="ui horizontal divider header"><i class="info icon"></i>About</h3>
       <form class="ui forms">
-      <div class="ui stackable two column centered grid form">
-        <div class="row">
-          <div class="column">       
-            <div class="required field">
-              <label for="marker-name">Marker Name</label>
-              <input type="text" name="marker-name" required placeholder="A. Marker">
+        {{#if description}}
+          <div class="ui stackable grid form">
+            <div class="row">
+              <div class="five wide column">       
+                <div class="required field">
+                  <label for="marker-name">Marker Name</label>
+                  <input type="text" name="marker-name" required placeholder="A. Marker" value="{{currentUser.profile.name}}">
+                </div>
+                <div class="required field">
+                  <label for="student-no">Student Number</label>
+                  <input type="text" name="student-no" placeholder="123456">
+                </div>
+              </div>
+              <div class="eleven wide column">
+              <h4>Description</h4>   
+              <p>{{description}}</p>  
+              </div>
             </div>
           </div>
+        {{else}}
+        <div class="ui stackable two column grid form">
+          <div class="column">
+            <div class="required field">
+              <label for="marker-name">Marker Name</label>
+              <input type="text" name="marker-name" required placeholder="A. Marker" value="{{currentUser.profile.name}}">
+            </div>
+          </div>          
           <div class="column">
             <div class="required field">
               <label for="student-no">Student Number</label>
@@ -23,81 +42,82 @@
             </div>
           </div>
         </div>
-      </div>
-      <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Scales</h3>
-        {{#each asp in aspects}}
-          <table class="ui celled table">
-            <thead>
-              <tr>
-                <th colspan="2">
-                  {{asp.aspect}}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {{#let rowIndex=@index}}
-              {{#each asp.rows}}
+        {{/if}}
+        <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Scales</h3>
+          {{#each asp in aspects}}
+            <table class="ui compact selectable celled table">
+              <thead>
                 <tr>
-                  <td>{{this.criteria}}</td>
-                  <td class="left aligned collapsing">
-                    <div class="field">
-                      <div class="ui radio checkbox">
-                        <input type="radio" tabindex="0" class="hidden" name="checks-{{rowIndex}}" required>
-                        <label>{{this.criteriaValue}} marks</label>
-                      </div>
-                    </div>
-                  </td>
+                  <th colspan="2">
+                    {{asp.aspect}}
+                  </th>
                 </tr>
-             {{/each}}
-             {{/let}}
-            </tbody>
-          </table>
-        {{/each}}
-        <h3 class="ui horizontal divider header"><i class="list layout icon"></i>Pre-set Comments</h3>
-        <div class="ui form">
-          {{#each comments}}
-            <div class="inline field">
-              <div class="ui toggle checkbox">
-                <input type="checkbox" tabindex="0" class="hidden">
-                <label>{{this.comment}}</label>
-              </div>
-              <script type="text/javascript">$('.ui.checkbox').checkbox();</script> 
+              </thead>
+              <tbody>
+                {{#let rowIndex=@index}}
+                {{#each asp.rows}}
+                  <tr>
+                    <td class="right aligned collapsing">
+                      <div class="field">
+                        <div class="ui radio checkbox">
+                          <input type="radio" tabindex="0" class="hidden" name="checks-{{rowIndex}}" required>
+                          <label>{{this.criteriaValue}} marks</label>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{this.criteria}}</td>
+                  </tr>
+               {{/each}}
+               {{/let}}
+              </tbody>
+            </table>
+          {{/each}}
+          {{#if comments}}
+            <h3 class="ui horizontal divider header"><i class="list layout icon"></i>Pre-set Comments</h3>
+            <div class="ui form">
+              {{#each comments}}
+                <div class="inline field">
+                  <div class="ui toggle checkbox">
+                    <input type="checkbox" tabindex="0" class="hidden">
+                    <label>{{this.comment}}</label>
+                  </div>
+                </div> 
+              {{/each}}
             </div> 
-          {{/each}}  
-        </div>     
-        <h3 class="ui horizontal divider header"><i class="comment outline icon"></i>Other Comments</h3>
-        <div class="ui form">
-          <div class="field">
-            <label>Free-flow text</label>
-            <textarea></textarea>
+          {{/if}}    
+          <h3 class="ui horizontal divider header"><i class="comment outline icon"></i>Other Comments</h3>
+          <div class="ui form">
+            <div class="field">
+              <label>Free-flow text</label>
+              <textarea></textarea>
+            </div>
           </div>
-        </div>
-        <h3 class="ui horizontal divider header"><i class="star half empty icon"></i>Adjustment</h3>
-        <div class="ui stackable padded grid">
-          <div class="row adjustment-row">
-            <div class="five wide column">
-              <div class="ui labeled input">
-                <div class="ui label">
-                  Mark Adjustment
+          <h3 class="ui horizontal divider header"><i class="star half empty icon"></i>Adjustment</h3>
+          <div class="ui stackable padded grid">
+            <div class="row adjustment-row">
+              <div class="five wide column">
+                <div class="ui labeled input">
+                  <div class="ui label">
+                    Mark Adjustment
+                  </div>
+                  <input type="number" name="adjustment" placeholder="0" min="{{adjustmentValueNegative}}" max="{adjustmentValuePositive}}">
                 </div>
-                <input type="number" name="adjustment" placeholder="0" min="{{adjustmentValueNegative}}" max="{adjustmentValuePositive}}">
+              </div>
+              <div class="five wide right floated column">
+                <p class="ui medium header marking-total">Marks: marks/{{maxMarks}}</p>
               </div>
             </div>
-            <div class="five wide right floated column">
-              <p class="ui medium header marking-total">Marks: marks/{{maxMarks}}</p>
+          </div>
+          <div class="ui divider"></div>
+          <div class="row">
+            <div class="column">
+              <div class="ui fluid buttons">
+                <button type="reset" class="ui large button">Cancel</button>
+                <div class="or"></div>
+                <button class="ui positive large button">Submit Marking Report</button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="ui divider"></div>
-        <div class="row">
-          <div class="column">
-            <div class="ui fluid buttons">
-              <button type="reset" class="ui large button">Cancel</button>
-              <div class="or"></div>
-              <button class="ui positive large button">Submit Marking Report</button>
-            </div>
-          </div>
-        </div>
       </form>   
     </div>
   </div>

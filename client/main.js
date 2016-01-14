@@ -45,6 +45,12 @@ Template.viewSchemes.helpers({
 
 });
 
+Template.dashboard.events({
+  'click .new-scheme': function () {
+    Router.go('insertScheme');
+  }
+});
+
 Template.viewSchemesListItem.helpers({
   friendlyDate: function () {
     return moment(this.createdAt).fromNow();
@@ -88,5 +94,11 @@ Template.viewSchemesListItem.events({
   'click .copy-scheme-url': function (evt) {
     evt.preventDefault();
     $('.ui.popup div.content').text('Copied to clipboard!'); 
+  }
+});
+
+Template.markScheme.events({
+  'click tr': function (evt) {
+    console.log($(evt.currentTarget).find('input').prop('checked', true));
   }
 });
