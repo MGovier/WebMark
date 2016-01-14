@@ -90,3 +90,7 @@ input[name="scheme-name"] {
   color: red;
   font-size: 140%;
 }
+
+tr.highlighted {
+  background: #e8e8e8;
+}

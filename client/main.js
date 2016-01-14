@@ -19,6 +19,11 @@ Template.main.onRendered(() => {
 
 Template.markScheme.onRendered(() => {
   $('.ui.checkbox').checkbox();
+  // If they are logged in, we already know their name - skip to the next box!
+  // Similiarly, if they have already filled this in once, we'll use that again.
+  if (Meteor.userId() || Session.get('markerName')) {
+    $('input[name="student-no"]').focus();
+  }
 });
 
 Template.viewSchemes.onRendered(() => {
@@ -43,6 +48,12 @@ Template.home.events({
 
 Template.viewSchemes.helpers({
 
+});
+
+Template.dashboard.helpers({
+  firstName: function () {
+    return Meteor.user().profile.name.split(' ')[0];
+  }
 });
 
 Template.dashboard.events({
@@ -100,5 +111,11 @@ Template.viewSchemesListItem.events({
 Template.markScheme.events({
   'click tr': function (evt) {
     console.log($(evt.currentTarget).find('input').prop('checked', true));
+  },
+  'focus input[type="radio"]': function (evt) {
+    $(evt.currentTarget).closest('tr').addClass('highlighted');
+  },
+  'focusout input[type="radio"]': function (evt) {
+    $(evt.currentTarget).closest('tr').removeClass('highlighted');
   }
 });

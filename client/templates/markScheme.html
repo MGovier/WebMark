@@ -28,20 +28,22 @@
             </div>
           </div>
         {{else}}
-        <div class="ui stackable two column grid form">
-          <div class="column">
-            <div class="required field">
-              <label for="marker-name">Marker Name</label>
-              <input type="text" name="marker-name" required placeholder="A. Marker" value="{{currentUser.profile.name}}">
-            </div>
-          </div>          
-          <div class="column">
-            <div class="required field">
-              <label for="student-no">Student Number</label>
-              <input type="text" name="student-no" placeholder="123456">
+          <div class="ui stackable two column grid form">
+            <div class="row">
+              <div class="column">
+                <div class="required field">
+                  <label for="marker-name">Marker Name</label>
+                  <input type="text" name="marker-name" required placeholder="A. Marker" value="{{currentUser.profile.name}}">
+                </div>
+              </div>          
+              <div class="column">
+                <div class="required field">
+                  <label for="student-no">Student Number</label>
+                  <input type="text" name="student-no" placeholder="123456">
+                </div>
+              </div>
             </div>
           </div>
-        </div>
         {{/if}}
         <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Scales</h3>
           {{#each asp in aspects}}
