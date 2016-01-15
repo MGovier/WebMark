@@ -36,8 +36,12 @@
             <div class="row">
               <div class="column">
                 <div class="required field">
-                  <label for="marker-name">Marker Name</label>
-                  <input type="text" name="marker-name" required placeholder="A. Marker" value="{{currentUser.profile.name}}">
+                <label for="marker-name">Marker Name</label>
+                  {{#if markerName}}
+                    <input type="text" name="marker-name" required placeholder="A. Marker" value="{{markerName}}">
+                  {{else}}
+                    <input type="text" name="marker-name" required placeholder="A. Marker">
+                  {{/if}}
                 </div>
               </div>          
               <div class="column">

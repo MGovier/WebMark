@@ -1,15 +1,26 @@
-Session.setDefault('aspects', []);
-Session.setDefault('marks', 0);
-Session.setDefault('markerName', false);
+Template.markScheme.onCreated(function() {
+  this.aspects = new ReactiveVar([]);
+  this.marks = new ReactiveVar(0);
+  this.markerName = new ReactiveVar(false);
+});
+
+Template.markScheme.onRendered(() => {
+  $('.ui.checkbox').checkbox();
+  // If they are logged in, we already know their name - skip to the next box!
+  // Similiarly, if they have already filled this in once, we'll use that again.
+  if (Meteor.userId() || Template.instance().markerName.get()) {
+    Meteor.setTimeout(function () {$('input[name="student-no"]').focus(); }, 100);
+  }
+});
 
 var countMarksFunction = function () {
   let total = 0;
-      aspects = Session.get('aspects');
+      aspects = Template.instance().aspects.get();
   aspects.forEach((aspect) => {
     total += aspect.mark;
   });
   adjustment = parseInt($('input[name="adjustment"]').val(), 10) || 0;
-  Session.set('marks', total + adjustment);
+  Template.instance().marks.set(total + adjustment);
 };
 
 var buildCommentsObject = function () {
@@ -23,21 +34,24 @@ var buildCommentsObject = function () {
 Template.markScheme.helpers({
   countMarks: function () {
     countMarksFunction();
-    return Session.get('marks');
+    return Template.instance().marks.get();
   },
   markerName: function () {
     if (Meteor.user()) {
+      console.log('logged in');
       return Meteor.user().profile.name;
-    } else if (Session.get('markerName')) {
-      return Session.get('markerName');
+    } else if (Template.instance().markerName.get()) {
+      console.log('using template', Template.instance().markerName.get());
+      return Template.instance().markerName.get();
     } else {
-      return '';
+      console.log(' i dont know you');
+      return false;
     }
   }
 });
 
 Template.markScheme.events({
-  'click tr': function (evt) {
+  'click tr': function (evt, template) {
     $(evt.currentTarget).find('input').prop('checked', true);
     let aspects = [];
     $('.aspect-table').each(function (index, table) {
@@ -51,7 +65,7 @@ Template.markScheme.events({
           };
       aspects.push(aObj);
     });
-    Session.set('aspects', aspects);
+    template.aspects.set(aspects);
   },
   'change input[name="adjustment"]': function () {
     countMarksFunction();
@@ -62,7 +76,7 @@ Template.markScheme.events({
   'focusout input[type="radio"]': function (evt) {
     $(evt.currentTarget).closest('tr').removeClass('highlighted');
   },
-  'submit form': function (evt) {
+  'submit form': function (evt, template) {
     let form = evt.currentTarget;
     if (form.checkValidity()) {
       evt.preventDefault();
@@ -72,22 +86,23 @@ Template.markScheme.events({
         'studentNo': $('input[name="student-no"]').val(),
         'schemeId': Blaze.getData(form)._id,
         'schemeOwner': Blaze.getData(form).creator,
-        'aspects': Session.get('aspects'),
+        'aspects': template.aspects.get(),
         'presetComments': buildCommentsObject(),
         'freeComment': $('.free-comment-field').val(),
         'adjustment': $('input[name="adjustment"]').val(),
-        'marks': Session.get('marks'),
+        'marks': template.marks.get(),
         'maxMarks': Blaze.getData(form).maxMarks
       };
-      Session.set('markerName', $('input[name="marker-name"]').val());
+      template.markerName.set($('input[name="marker-name"]').val());
       Meteor.call('addMark', markObject, (error, result) => {
         if (error) {
           console.log(error.message, error.details);
         } else {
           $('.submit-marks').removeClass('loading').addClass('submit-marks');
-          Session.set('marks', 0);
-          Session.set('aspects', []);
+          template.marks.set(0);
+          template.marks.set([]);
           form.reset();
+          $('input[name="marker-name"]').val(template.markerName.get());
         }
       });
     } else {

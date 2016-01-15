@@ -17,15 +17,6 @@ Template.main.onRendered(() => {
   });
 });
 
-Template.markScheme.onRendered(() => {
-  $('.ui.checkbox').checkbox();
-  // If they are logged in, we already know their name - skip to the next box!
-  // Similiarly, if they have already filled this in once, we'll use that again.
-  if (Meteor.userId() || Session.get('markerName')) {
-    Meteor.setTimeout(function () {$('input[name="student-no"]').focus(); }, 100);
-  }
-});
-
 Template.viewSchemes.onRendered(() => {
   $('.icon.button').popup({
     inline: false,
