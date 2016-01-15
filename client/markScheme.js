@@ -2,6 +2,7 @@ Template.markScheme.onCreated(function() {
   this.aspects = new ReactiveVar([]);
   this.marks = new ReactiveVar(0);
   this.markerName = new ReactiveVar(false);
+  this.lastStudent = new ReactiveVar('');
 });
 
 Template.markScheme.onRendered(() => {
@@ -38,15 +39,15 @@ Template.markScheme.helpers({
   },
   markerName: function () {
     if (Meteor.user()) {
-      console.log('logged in');
       return Meteor.user().profile.name;
     } else if (Template.instance().markerName.get()) {
-      console.log('using template', Template.instance().markerName.get());
       return Template.instance().markerName.get();
     } else {
-      console.log(' i dont know you');
       return false;
     }
+  },
+  lastStudent: function () {
+    return Template.instance().lastStudent.get();
   }
 });
 
@@ -93,6 +94,7 @@ Template.markScheme.events({
         'marks': template.marks.get(),
         'maxMarks': Blaze.getData(form).maxMarks
       };
+      template.lastStudent.set(markObject.studentNo);
       template.markerName.set($('input[name="marker-name"]').val());
       Meteor.call('addMark', markObject, (error, result) => {
         if (error) {
@@ -103,6 +105,9 @@ Template.markScheme.events({
           template.marks.set([]);
           form.reset();
           $('input[name="marker-name"]').val(template.markerName.get());
+          $('input[name="student-no"]').focus();
+          $('.marks-submitted').transition('pulse');
+          $('body').scrollTop(0);
         }
       });
     } else {
