@@ -94,3 +94,13 @@ input[name="scheme-name"] {
 tr.highlighted {
   background: #e8e8e8;
 }
+
+.pusher {
+  display: flex;
+  min-height: 83vh;
+  flex-direction: column;
+}
+
+.pusher > .footer {
+  flex: 1;
+}

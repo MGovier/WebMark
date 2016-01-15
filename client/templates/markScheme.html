@@ -14,15 +14,19 @@
               <div class="five wide column">       
                 <div class="required field">
                   <label for="marker-name">Marker Name</label>
-                  <input type="text" name="marker-name" required placeholder="A. Marker" value="{{currentUser.profile.name}}">
+                  {{#if markerName}}
+                    <input type="text" name="marker-name" required placeholder="A. Marker" value="{{markerName}}">
+                  {{else}}
+                    <input type="text" name="marker-name" required placeholder="A. Marker">
+                  {{/if}}
                 </div>
                 <div class="required field">
                   <label for="student-no">Student Number</label>
-                  <input type="text" name="student-no" placeholder="123456">
+                  <input type="text" name="student-no" placeholder="Student or Participant, e.g. up123456" required>
                 </div>
               </div>
               <div class="eleven wide column">
-              <h4>Description</h4>   
+              <h5>Description</h5>   
               <p>{{description}}</p>  
               </div>
             </div>
@@ -39,7 +43,7 @@
               <div class="column">
                 <div class="required field">
                   <label for="student-no">Student Number</label>
-                  <input type="text" name="student-no" placeholder="123456">
+                  <input type="text" name="student-no" placeholder="123456" required>
                 </div>
               </div>
             </div>
@@ -47,7 +51,7 @@
         {{/if}}
         <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Scales</h3>
           {{#each asp in aspects}}
-            <table class="ui compact selectable celled table">
+            <table class="ui compact selectable celled table aspect-table">
               <thead>
                 <tr>
                   <th colspan="2">
@@ -56,18 +60,18 @@
                 </tr>
               </thead>
               <tbody>
-                {{#let rowIndex=@index}}
+                {{#let aspectIndex=@index}}
                 {{#each asp.rows}}
                   <tr>
                     <td class="right aligned collapsing">
                       <div class="field">
                         <div class="ui radio checkbox">
-                          <input type="radio" tabindex="0" class="hidden" name="checks-{{rowIndex}}" required>
+                          <input type="radio" tabindex="0" class="hidden" name="checks-{{aspectIndex}}" required>
                           <label>{{this.criteriaValue}} marks</label>
                         </div>
                       </div>
                     </td>
-                    <td>{{this.criteria}}</td>
+                    <td class="criteria">{{this.criteria}}</td>
                   </tr>
                {{/each}}
                {{/let}}
@@ -76,7 +80,7 @@
           {{/each}}
           {{#if comments}}
             <h3 class="ui horizontal divider header"><i class="list layout icon"></i>Pre-set Comments</h3>
-            <div class="ui form">
+            <div class="ui form preset-comments">
               {{#each comments}}
                 <div class="inline field">
                   <div class="ui toggle checkbox">
@@ -91,7 +95,7 @@
           <div class="ui form">
             <div class="field">
               <label>Free-flow text</label>
-              <textarea></textarea>
+              <textarea class="free-comment-field"></textarea>
             </div>
           </div>
           <h3 class="ui horizontal divider header"><i class="star half empty icon"></i>Adjustment</h3>
@@ -102,11 +106,11 @@
                   <div class="ui label">
                     Mark Adjustment
                   </div>
-                  <input type="number" name="adjustment" placeholder="0" min="{{adjustmentValueNegative}}" max="{adjustmentValuePositive}}">
+                  <input type="number" name="adjustment" placeholder="0" min="{{adjustmentValueNegative}}" max="{{adjustmentValuePositive}}">
                 </div>
               </div>
               <div class="five wide right floated column">
-                <p class="ui medium header marking-total">Marks: marks/{{maxMarks}}</p>
+                <p class="ui medium header marking-total">Mark: {{countMarks}}/{{maxMarks}}</p>
               </div>
             </div>
           </div>
@@ -114,7 +118,7 @@
           <div class="row">
             <div class="column">
               <div class="ui fluid buttons">
-                <button class="ui positive large button">Submit Marking Report</button>
+                <button class="ui positive large button submit-marks">Submit Marking Report</button>
               </div>
             </div>
           </div>

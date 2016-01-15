@@ -22,6 +22,7 @@ Session.setDefault('adjustmentAllowed', false);
 Session.setDefault('rubricObject', [{
   uuid: UI._globalHelpers.generateUUID(),
   rows: [{uuid: UI._globalHelpers.generateUUID()}],
+  maxMark: 0
 }]);
 Session.setDefault('comments', [{
   uuid: UI._globalHelpers.generateUUID()
@@ -37,24 +38,17 @@ var totalMarksFunction = function () {
   let rObjs = Session.get('rubricObject'),
       totalMarks = 0;
   rObjs.forEach((rubric) => {
-    let max = 0;
-    rubric.rows.forEach((r) => {
-      if (r.criteriaValue !== undefined && r.criteriaValue > max) {
-        max = r.criteriaValue;
-      } 
-    });
-    totalMarks += max;
+    totalMarks += rubric.maxMark;
   });
   return totalMarks;
-}
+};
 
 Template.insertScheme.helpers({
-  'totalMarks': totalMarksFunction
-  ,
-  'unitName': function () {
+  totalMarks: totalMarksFunction,
+  unitName: function () {
     return Session.get('unitName');
   },
-  'editingName': function () {
+  editingName: function () {
     return Session.get('editingName');
   }
 });
@@ -85,6 +79,7 @@ Template.insertScheme.events({
           Session.set('rubricObject', [{
             uuid: UI._globalHelpers.generateUUID(),
             rows: [{uuid: UI._globalHelpers.generateUUID()}],
+            maxMark: 0
           }]);
           Session.set('comments', [{
             uuid: UI._globalHelpers.generateUUID()
@@ -166,7 +161,8 @@ Template.rubricBuilder.events({
     let rObj = Session.get('rubricObject');
     rObj.push({
       uuid: UI._globalHelpers.generateUUID(),
-      rows: [{uuid: UI._globalHelpers.generateUUID()}]
+      rows: [{uuid: UI._globalHelpers.generateUUID()}],
+      maxMark: 0
     });
     Session.set('rubricObject', rObj);
   },
@@ -177,9 +173,16 @@ Template.rubricBuilder.events({
         tableId = $(evt.currentTarget).closest('table').attr('data-uuid');
     rObjs.forEach((rubric) => {
       if (rubric.uuid == tableId) {
+        let maxMark = 0;
         rubric.rows = rubric.rows.filter((row) => {
           return row.uuid != rowId;
         });
+        rubric.rows.forEach((row) => {
+          if (row.criteriaValue > maxMark) {
+            maxMark = row.criteriaValue;
+          }
+        });
+        rubric.maxMark = maxMark;
       }
     });
     Session.set('rubricObject', rObjs);
@@ -201,7 +204,8 @@ Template.rubricBuilder.events({
     rObjs.forEach((rubric) => {
       let $table = $('table[data-uuid="' + rubric.uuid + '"]'),
           $rows = $table.children('tbody').children('tr'),
-          rows = [];
+          rows = [],
+          maxMark = 0;
       rubric.aspect = $table.find('input[name="rubric-aspect"]').val();
       $rows.each((index, row) => {
         let rowObj = {};
@@ -211,9 +215,13 @@ Template.rubricBuilder.events({
         if ($(row).find('input[name="criteria-value"]').val() !== undefined) {
           rowObj.criteriaValue = parseInt($(row).find('input[name="criteria-value"]').val(), 10);
         }
+        if (rowObj.criteriaValue > maxMark) {
+          maxMark = rowObj.criteriaValue;
+        }
         rows.push(rowObj);
       })
       rubric.rows = rows;
+      rubric.maxMark = maxMark;
     });
 
     let actionHistory = Session.get('actionHistory');
@@ -264,7 +272,8 @@ Template.rubricBuilder.events({
         rObj.push({
           aspect: rubric.aspect,
           uuid: UI._globalHelpers.generateUUID(),
-          rows: newRows
+          rows: newRows,
+          maxMark: rubric.maxMark
         });
       }
     });

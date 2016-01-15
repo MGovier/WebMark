@@ -22,7 +22,7 @@ Template.markScheme.onRendered(() => {
   // If they are logged in, we already know their name - skip to the next box!
   // Similiarly, if they have already filled this in once, we'll use that again.
   if (Meteor.userId() || Session.get('markerName')) {
-    $('input[name="student-no"]').focus();
+    Meteor.setTimeout(function () {$('input[name="student-no"]').focus(); }, 100);
   }
 });
 
@@ -80,8 +80,7 @@ Template.viewSchemesListItem.helpers({
     return this.aspects.length + this.comments.length;
   },
   markedReports: function () {
-    // get the count using this._id
-    return 0;
+    return Marks.find({schemeId: this._id}).count();
   },
 });
 
@@ -105,17 +104,5 @@ Template.viewSchemesListItem.events({
   'click .copy-scheme-url': function (evt) {
     evt.preventDefault();
     $('.ui.popup div.content').text('Copied to clipboard!'); 
-  }
-});
-
-Template.markScheme.events({
-  'click tr': function (evt) {
-    console.log($(evt.currentTarget).find('input').prop('checked', true));
-  },
-  'focus input[type="radio"]': function (evt) {
-    $(evt.currentTarget).closest('tr').addClass('highlighted');
-  },
-  'focusout input[type="radio"]': function (evt) {
-    $(evt.currentTarget).closest('tr').removeClass('highlighted');
   }
 });
