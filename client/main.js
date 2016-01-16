@@ -73,6 +73,11 @@ Template.viewSchemesListItem.helpers({
   markedReports: function () {
     return Marks.find({schemeId: this._id}).count();
   },
+  hashbangURL: function (url, path) {
+    let pathNoSlash = path.substring(1),
+        rootUrl = url.replace(pathNoSlash, '#!');
+    return rootUrl + pathNoSlash;
+  }
 });
 
 Template.viewSchemesListItem.events({

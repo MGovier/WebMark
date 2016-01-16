@@ -79,7 +79,7 @@
           <a href="{{pathFor route='markScheme'}}"><button class="ui basic icon button mark-using-scheme" data-content="Start marking with this scheme"> <i class="pencil icon"></i></button></a>
         </div>
         <div class="column">
-          <button class="ui basic icon button copy-scheme-url" data-content="Copy the URL to this scheme" data-clipboard-text="{{urlFor route='markScheme'}}"> <i class="copy icon"></i></button>
+          <button class="ui basic icon button copy-scheme-url" data-content="Copy the URL to this scheme" data-clipboard-text="{{hashbangURL (urlFor route='markScheme') (pathFor route='markScheme')}}"> <i class="copy icon"></i></button>
         </div>
         <div class="column">
           <button class="ui basic icon button edit-scheme" data-content="Edit this scheme"> <i class="edit icon"></i></button>
