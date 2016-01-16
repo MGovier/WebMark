@@ -108,3 +108,8 @@ tr.highlighted {
 .sortable {
   cursor: pointer !important;
 }
+
+.description-block {
+  height: 5.3em;
+  overflow: hidden;
+}
