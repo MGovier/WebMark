@@ -7,7 +7,7 @@ Template.insertScheme.onRendered(() => {
         return el.classList.contains('dragula-container');
       }
     });
-    drake.on('drop', function(item, tar, source, sibling) {
+    drake.on('dragend', function(item, tar, source, sibling) {
       $('.rubric-table input:first').trigger('change');
       let rObj = Session.get('rubricObject');
       Session.set('rubricObject', []);
@@ -18,21 +18,27 @@ Template.insertScheme.onRendered(() => {
   });
 });
 
-Session.setDefault('adjustmentAllowed', false);
-Session.setDefault('rubricObject', [{
-  uuid: UI._globalHelpers.generateUUID(),
-  rows: [{uuid: UI._globalHelpers.generateUUID()}],
-  maxMark: 0
-}]);
-Session.setDefault('comments', [{
-  uuid: UI._globalHelpers.generateUUID()
-}]);
-Session.setDefault('rubricHistory', []);
-Session.setDefault('unitName', UI._globalHelpers.generateFunName());
-Session.setDefault('editingName', false);
-Session.setDefault('commentHistory', []);
-// Keep track of if rubric or comment field should be undone.
-Session.setDefault('actionHistory', []);
+Template.insertScheme.created = function () {
+  initializeSession();
+};
+
+var initializeSession = function () {
+  Session.set('adjustmentAllowed', false);
+  Session.set('rubricObject', [{
+    uuid: UI._globalHelpers.generateUUID(),
+    rows: [{uuid: UI._globalHelpers.generateUUID()}],
+    maxMark: 0
+  }]);
+  Session.set('comments', [{
+    uuid: UI._globalHelpers.generateUUID()
+  }]);
+  Session.set('rubricHistory', []);
+  Session.set('unitName', UI._globalHelpers.generateFunName());
+  Session.set('editingName', false);
+  Session.set('commentHistory', []);
+  // Keep track of if rubric or comment field should be undone.
+  Session.set('actionHistory', []);
+};
 
 var totalMarksFunction = function () {
   let rObjs = Session.get('rubricObject'),
@@ -75,20 +81,7 @@ Template.insertScheme.events({
           console.log(error.message, error.details);
         } else {
           $('.submit-scheme').removeClass('loading').addClass('submit-scheme');
-          Session.set('adjustmentAllowed', false);
-          Session.set('rubricObject', [{
-            uuid: UI._globalHelpers.generateUUID(),
-            rows: [{uuid: UI._globalHelpers.generateUUID()}],
-            maxMark: 0
-          }]);
-          Session.set('comments', [{
-            uuid: UI._globalHelpers.generateUUID()
-          }]);
-          Session.set('rubricHistory', []);
-          Session.set('unitName', UI._globalHelpers.generateFunName());
-          Session.set('editingName', false);
-          Session.set('commentHistory', []);
-          Session.set('actionHistory', []);
+          initializeSession();
           form.reset();
           Router.go('dashboard');
         }
