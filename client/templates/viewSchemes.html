@@ -9,7 +9,7 @@
           {{/each}}       
         </div>
       {{else}}
-        <h3 class="ui center aligned">No schemes found!</h3>
+        <p class="ui centered">No schemes found! Create a new one and it will appear here to manage and share.</p>
       {{/if}}
     </div>
   </div>
@@ -79,13 +79,13 @@
           <a href="{{pathFor route='markScheme'}}"><button class="ui basic icon button mark-using-scheme" data-content="Start marking with this scheme"> <i class="pencil icon"></i></button></a>
         </div>
         <div class="column">
-          <button class="ui basic icon button copy-scheme-url" data-content="Copy the URL to this scheme" data-clipboard-text="{{urlFor route='markScheme'}}"> <i class="copy icon"></i></button>
+          <button class="ui basic icon button copy-scheme-url" data-content="Copy the URL to this scheme" data-clipboard-text="{{hashbangURL (urlFor route='markScheme') (pathFor route='markScheme')}}"> <i class="copy icon"></i></button>
         </div>
         <div class="column">
           <button class="ui basic icon button edit-scheme" data-content="Edit this scheme"> <i class="edit icon"></i></button>
         </div>
         <div class="column">
-          <button class="ui basic green icon button" data-content="View marks"> <i class="list icon"></i></button>
+          <a href="{{pathFor route='marks'}}"><button class="ui basic green icon button view-marks" data-content="View marks"> <i class="list icon"></i></button></a>
         </div>
       </div>
     </div>

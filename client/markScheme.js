@@ -86,6 +86,7 @@ Template.markScheme.events({
         'marker': $('input[name="marker-name"]').val(),
         'studentNo': $('input[name="student-no"]').val(),
         'schemeId': Blaze.getData(form)._id,
+        'schemeName': Blaze.getData(form).name,
         'schemeOwner': Blaze.getData(form).creator,
         'aspects': template.aspects.get(),
         'presetComments': buildCommentsObject(),
