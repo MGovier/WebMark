@@ -17,8 +17,12 @@ Template.main.onRendered(() => {
   });
 });
 
-Template.markScheme.onRendered(() => {
-  $('.ui.checkbox').checkbox();
+Template.viewSchemes.onRendered(() => {
+  $('.icon.button').popup({
+    inline: false,
+    position: 'top left'
+  });
+  new Clipboard('.copy-scheme-url');
 });
 
 Template.home.events({
@@ -29,11 +33,24 @@ Template.home.events({
     Router.go('insertScheme');
   },
   'click .view-schemes': function () {
-    Router.go('viewSchemes');
+    Router.go('dashboard');
   }
 });
 
 Template.viewSchemes.helpers({
+
+});
+
+Template.dashboard.helpers({
+  firstName: function () {
+    return Meteor.user().profile.name.split(' ')[0];
+  }
+});
+
+Template.dashboard.events({
+  'click .new-scheme': function () {
+    Router.go('insertScheme');
+  }
 });
 
 Template.viewSchemesListItem.helpers({
@@ -42,17 +59,41 @@ Template.viewSchemesListItem.helpers({
   },
   recent: function () {
     return moment(this.createdAt).isAfter(moment().startOf('day'));
-  }
+  },
+  trimmedDescription: function () {
+    if (this.description.length > 80) {
+      return this.description.substring(0, 80) + '...';
+    } else {
+      return this.description;
+    }
+  },
+  aspectsAndComments: function () {
+    return this.aspects.length + this.comments.length;
+  },
+  markedReports: function () {
+    return Marks.find({schemeId: this._id}).count();
+  },
 });
 
 Template.viewSchemesListItem.events({
-  'click .delete-scheme': function (evt) {
+  'click .card-delete-button': function (evt) {
+    let schemeId = this._id;
     evt.preventDefault();
-    console.log('deleting: ', this._id);
-    Meteor.call('deleteScheme', this._id);
+    $('.ui.basic.delete-check.modal')
+      .modal({
+        closable  : false,
+        onApprove : function() {
+          Meteor.call('deleteScheme', schemeId);
+        },
+        detachable: false
+      }).modal('show');    
   },
   'click .edit-scheme': function (evt) {
     evt.preventDefault();
     window.alert('Coming soon!');
+  },
+  'click .copy-scheme-url': function (evt) {
+    evt.preventDefault();
+    $('.ui.popup div.content').text('Copied to clipboard!'); 
   }
 });

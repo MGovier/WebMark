@@ -4,7 +4,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>WebMark</title>
     <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
 </head>
 <body>
     <!--[if lt IE 8]>
@@ -18,9 +18,8 @@
           <a href="{{pathFor route='home'}}"><i class="student icon"></i> WebMark</a>
         </div>
         {{#if currentUser}}
-          <a class="item">Dashboard</a>
+          <a class="item" href="{{pathFor route='dashboard'}}">Dashboard</a>
           <a class="item" href="{{pathFor route='insertScheme'}}">New Scheme</a>
-          <a class="item" href="{{pathFor route='viewSchemes'}}">View Schemes</a>
         {{/if}}
         <div class="right menu">
           <a class="item sign-in">{{#if currentUser}} Log Out {{else}} Log In {{/if}}</a>
@@ -38,22 +37,23 @@
 
     <div class="ui large blue top inverted menu compacted-menu">
       <div class="header item">
-            <i class="student icon"></i> WebMark
-        </div>
+        <a href="{{pathFor route='home'}}"><i class="student icon"></i> WebMark</a>
+      </div>
       <div class="right menu">
         <div class="ui simple dropdown item">
           Navigate
           <i class="dropdown icon"></i>
           <div class="menu">
-            <a class="item" href="{{pathFor route='viewSchemes'}}">View Schemes</a>
+            <a class="item" href="{{pathFor route='dashboard'}}">Dashboard</a>
             <a class="item" href="{{pathFor route='insertScheme'}}">New Scheme</a>
+            <div class="item">{{> loginButtons}}</div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Page Contents -->
-    <div class="ui main container">
+    <div class="ui main container pusher">
     <!-- Router will inject content below -->
 		  {{> yield}}
 
