@@ -20,3 +20,8 @@ Meteor.publish('marks', function (idArg) {
     return Marks.find({schemeOwner: this.userId}); 
   }
 });
+
+Meteor.publish('activities', function () {
+  if (!this.userId) return [];
+  return Activities.find({relevantTo: this.userId}, {limit: 5, sort:{performedAt: -1}});
+});

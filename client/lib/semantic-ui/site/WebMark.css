@@ -104,3 +104,7 @@ tr.highlighted {
 .pusher > .footer {
   flex: 1;
 }
+
+.sortable {
+  cursor: pointer !important;
+}

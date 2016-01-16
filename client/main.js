@@ -13,16 +13,14 @@ Template.main.onRendered(() => {
     delay: {
       show: 100,
       hide: 800
-    },
-    context: '.template-container'
+    }
   });
 });
 
 Template.viewSchemes.onRendered(() => {
   $('.icon.button').popup({
     inline: false,
-    position: 'top left',
-    context: '.template-container'
+    position: 'top left'
   });
   new Clipboard('.copy-scheme-url');
 });
@@ -54,6 +52,20 @@ Template.dashboard.events({
     Router.go('insertScheme');
   }
 });
+
+Template.activityView.helpers({
+  friendlyDate: function (date) {
+    // TODO: Make this live!
+    return moment(date).fromNow();
+  },
+  icon: function (type) {
+    if (type == 'new') {
+      return 'certificate';
+    } else {
+      return 'pencil';
+    }
+  }
+})
 
 Template.viewSchemesListItem.helpers({
   friendlyDate: function () {

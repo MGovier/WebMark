@@ -1,0 +1,23 @@
+<template name="activityView">
+  {{#if activities.count}}
+    <div class="ui feed">
+      {{#each activity in activities}}
+      <div class="event">
+        <div class="label">
+          <i class="{{icon activity.type}} icon"></i>
+        </div>
+        <div class="content">
+          <div class="summary">
+            {{activity.actor}} {{activity.action}}
+            <div class="date">
+              {{friendlyDate activity.performedAt}}
+            </div>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  {{else}}
+  <p> Nothing to report, yet!</p>
+  {{/if}}
+</template>
