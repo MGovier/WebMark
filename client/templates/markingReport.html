@@ -1,0 +1,45 @@
+<template name="markingReport">
+  <h3 class="ui horizontal divider header"><i class="user icon"></i>{{report.studentNo}}'s marks for {{scheme.name}}</h3>
+  <div class="ui two column centered grid">
+    <div class="four column centered row">
+      <div class="center aligned column">
+        <div class="ui statistic">
+          <div class="value">
+            {{report.marks}} / {{report.maxMarks}}
+          </div>
+          <div class="label">
+            Total Marks
+          </div>
+        </div> 
+      </div>
+      <div class="center aligned column">
+        <div class="ui statistic">
+          <div class="value">
+            {{percentage report.marks report.maxMarks}}%
+          </div>
+          <div class="label">
+            Percent
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="ui compact celled table">
+    <thead>
+      <tr>
+        <th>Aspect</th>
+        <th>Result</th>
+        <th>Mark</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each aspect in report.aspects}}
+        <tr>
+          <td>{{aspect.aspect}}</td>
+          <td>{{aspect.selected}}</td>
+          <td class="collapsing">{{aspect.mark}} / {{aspect.maxMark}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</template>

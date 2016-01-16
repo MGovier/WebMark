@@ -1,3 +1,4 @@
 <template name="marks">
-	{{marks}}
+  <h3 class="ui horizontal divider header"><i class="users icon"></i>Marks for {{markingScheme.name}}</h3>
+  {{> reactiveTable settings=settings}}
 </template>

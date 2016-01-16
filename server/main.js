@@ -12,7 +12,11 @@ Meteor.publish('markingSchemes', function (idArg) {
   }
 });
 
-Meteor.publish('marks', function () {
-  if (!this.userId) return [];
-  return Marks.find({schemeOwner: this.userId});
+Meteor.publish('marks', function (idArg) {
+  if (idArg) {
+    return Marks.find({_id: idArg});
+  } else {
+    if (!this.userId) return [];
+    return Marks.find({schemeOwner: this.userId}); 
+  }
 });

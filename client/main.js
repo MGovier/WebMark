@@ -13,14 +13,16 @@ Template.main.onRendered(() => {
     delay: {
       show: 100,
       hide: 800
-    }
+    },
+    context: '.template-container'
   });
 });
 
 Template.viewSchemes.onRendered(() => {
   $('.icon.button').popup({
     inline: false,
-    position: 'top left'
+    position: 'top left',
+    context: '.template-container'
   });
   new Clipboard('.copy-scheme-url');
 });
@@ -100,5 +102,35 @@ Template.viewSchemesListItem.events({
   'click .copy-scheme-url': function (evt) {
     evt.preventDefault();
     $('.ui.popup div.content').text('Copied to clipboard!'); 
+  }
+});
+
+Template.marks.helpers({
+  settings: function () {
+    return {
+      collection: Template.instance().data.marks,
+      rowsPerPage: 40,
+      showFilter: true,
+      class: 'ui table striped selectable',
+      fields: [
+        {key: 'studentNo', label: 'Student No.'},
+        {key: 'marker', label: 'Marked By'},
+        {key: 'createdAt', label: 'Marked At', fn: function (value) { return moment(value).format('llll');}},
+        {key: 'marks', label: 'Mark'},
+        {key: 'percentage', label: 'Percentage', fn: function (value, object) { return Math.round((object.marks / object.maxMarks) * 100);}}
+        ]
+    };
+  }
+});
+
+Template.marks.events({
+  'click .reactive-table tbody tr': function (evt, template) {
+    Router.go('markReport', {_id:this._id, _sid: template.data.markingScheme._id});
+  }
+});
+
+Template.markingReport.helpers({
+  'percentage': function (mark, total) {
+    return Math.round((mark/total) * 100);
   }
 });
