@@ -68,15 +68,12 @@ Template.activityView.helpers({
 })
 
 Template.viewSchemesListItem.helpers({
-  friendlyDate: function () {
-    return moment(this.createdAt).fromNow();
-  },
   recent: function () {
     return moment(this.createdAt).isAfter(moment().startOf('day'));
   },
   trimmedDescription: function () {
-    if (this.description.length > 80) {
-      return this.description.substring(0, 80) + '...';
+    if (this.description.length > 100) {
+      return this.description.substring(0, 100) + '...';
     } else {
       return this.description;
     }
@@ -144,5 +141,12 @@ Template.marks.events({
 Template.markingReport.helpers({
   'percentage': function (mark, total) {
     return Math.round((mark/total) * 100);
+  },
+  'showAdj': function (value) {
+    if (value > 0) {
+      return '+' + value;
+    } else {
+      return value;
+    }
   }
 });

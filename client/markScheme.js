@@ -103,7 +103,7 @@ Template.markScheme.events({
         } else {
           $('.submit-marks').removeClass('loading').addClass('submit-marks');
           template.marks.set(0);
-          template.marks.set([]);
+          template.aspects.set([]);
           form.reset();
           $('input[name="marker-name"]').val(template.markerName.get());
           $('input[name="student-no"]').focus();
