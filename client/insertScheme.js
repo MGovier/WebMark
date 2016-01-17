@@ -76,16 +76,25 @@ Template.insertScheme.events({
         'adjustmentValueNegative': $('input[name="adjustment-negative"]').val(),
         'maxMarks': totalMarksFunction()
       };
-      Meteor.call('addScheme', schemaObject, (error, result) => {
-        if (error) {
-          console.log(error.message, error.details);
-        } else {
-          $('.submit-scheme').removeClass('loading').addClass('submit-scheme');
-          initializeSession();
-          form.reset();
-          Router.go('dashboard');
-        }
-      });
+      // If connected, we can wait for server acceptance. If not, we'll uhh... hope it's fine.
+      if (Meteor.status().connected) {
+        Meteor.call('addScheme', schemaObject, (error, result) => {
+          if (error) {
+            console.log(error.message, error.details);
+          } else {
+            $('.submit-scheme').removeClass('loading').addClass('submit-scheme');
+            initializeSession();
+            form.reset();
+            Router.go('dashboard');
+          }
+        });
+      } else {
+        Meteor.call('addScheme', schemaObject);
+        $('.submit-scheme').removeClass('loading').addClass('submit-scheme');
+        initializeSession();
+        form.reset();
+        Router.go('dashboard');
+      }
     } else {
       // Semantic validation checks
     }

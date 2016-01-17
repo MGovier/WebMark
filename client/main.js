@@ -44,7 +44,10 @@ Template.viewSchemes.helpers({
 Template.dashboard.helpers({
   firstName: function () {
     return Meteor.user().profile.name.split(' ')[0];
-  }
+  },
+  connected: function () {
+    return Meteor.status().connected;
+  } 
 });
 
 Template.dashboard.events({

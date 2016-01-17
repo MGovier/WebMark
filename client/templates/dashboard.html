@@ -10,12 +10,22 @@
       </div>
     </div>
     <div class="column">
+    {{#if connected}}
       <h3 class="ui horizontal divider header"><i class="newspaper icon"></i>Recent Activity</h3>
       <div class="ui center aligned grid">
         <div class="row">
           {{> activityView}}
         </div>
       </div>
+    {{else}}
+      <h3 class="ui horizontal divider header"><i class="unlink icon"></i>Offline Mode</h3>
+      <div class="ui center aligned grid">
+        <div class="row">
+          <p>WebMark can't connect to the server!</p>
+          <p>All your actions will be stored locally and synchronized when we can reconnect.</p> 
+        </div>
+      </div>
+    {{/if}}
     </div>
   </div>
   {{> viewSchemes}}

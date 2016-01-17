@@ -97,20 +97,33 @@ Template.markScheme.events({
       };
       template.lastStudent.set(markObject.studentNo);
       template.markerName.set($('input[name="marker-name"]').val());
-      Meteor.call('addMark', markObject, (error, result) => {
-        if (error) {
-          console.log(error.message, error.details);
-        } else {
-          $('.submit-marks').removeClass('loading').addClass('submit-marks');
-          template.marks.set(0);
-          template.aspects.set([]);
-          form.reset();
-          $('input[name="marker-name"]').val(template.markerName.get());
-          $('input[name="student-no"]').focus();
-          $('.marks-submitted').transition('pulse');
-          $('body').scrollTop(0);
-        }
-      });
+      // If connected, we can wait for server acceptance. If not, we'll uhh... hope it's fine.
+      if (Meteor.status().connected) {
+        Meteor.call('addMark', markObject, (error, result) => {
+          if (error) {
+            console.log(error.message, error.details);
+          } else {
+            $('.submit-marks').removeClass('loading').addClass('submit-marks');
+            template.marks.set(0);
+            template.aspects.set([]);
+            form.reset();
+            $('input[name="marker-name"]').val(template.markerName.get());
+            $('input[name="student-no"]').focus();
+            $('.marks-submitted').transition('pulse');
+            $('body').scrollTop(0);
+          }
+        });
+      } else {
+        Meteor.call('addMark', markObject);
+        $('.submit-marks').removeClass('loading').addClass('submit-marks');
+        template.marks.set(0);
+        template.aspects.set([]);
+        form.reset();
+        $('input[name="marker-name"]').val(template.markerName.get());
+        $('input[name="student-no"]').focus();
+        $('.marks-submitted').transition('pulse');
+        $('body').scrollTop(0);
+      }
     } else {
       // Semantic validation checks
     }
