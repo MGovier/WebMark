@@ -1,4 +1,19 @@
 <template name="marks">
   <h3 class="ui horizontal divider header"><i class="users icon"></i>Marks for {{markingScheme.name}}</h3>
+  <div class="ui grid">
+    <div class="row">
+      <div class="ten wide column">
+        <p>Marks for this scheme are shown below. Sorting can be applied through selecting the headers, or a filter applied.</p>
+      </div>
+      <div class="right aligned six wide column"> 
+        <div class="ui labeled input">
+          <div class="ui label">
+            Filter:
+          </div>
+          <input name="filter-table" id="filter-table" type="text" placeholder="e.g. student number">
+        </div>
+      </div>
+    </div>
+  </div>
   {{> reactiveTable settings=settings}}
 </template>

@@ -33,6 +33,9 @@
     </ul>
   </p>
   <p>{{report.freeComment}}</p>
+  {{#if report.adjustment}}
+    <p>Adjustment applied: {{showAdj report.adjustment}}</p>
+  {{/if}}
   <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Aspects</h3>
   <table class="ui celled compact table">
     <thead>

@@ -37,14 +37,17 @@ Template.home.events({
   }
 });
 
-Template.viewSchemes.helpers({
-
-});
+Template.marks.created = function () {
+  this.filter = new ReactiveTable.Filter('filter-table', []);
+}
 
 Template.dashboard.helpers({
   firstName: function () {
     return Meteor.user().profile.name.split(' ')[0];
-  }
+  },
+  connected: function () {
+    return Meteor.status().connected;
+  } 
 });
 
 Template.dashboard.events({
@@ -68,15 +71,12 @@ Template.activityView.helpers({
 })
 
 Template.viewSchemesListItem.helpers({
-  friendlyDate: function () {
-    return moment(this.createdAt).fromNow();
-  },
   recent: function () {
     return moment(this.createdAt).isAfter(moment().startOf('day'));
   },
   trimmedDescription: function () {
-    if (this.description.length > 80) {
-      return this.description.substring(0, 80) + '...';
+    if (this.description.length > 100) {
+      return this.description.substring(0, 100) + '...';
     } else {
       return this.description;
     }
@@ -122,7 +122,7 @@ Template.marks.helpers({
     return {
       collection: Template.instance().data.marks,
       rowsPerPage: 40,
-      showFilter: true,
+      filters: ['filter-table'],
       class: 'ui table striped selectable',
       fields: [
         {key: 'studentNo', label: 'Student No.'},
@@ -138,11 +138,21 @@ Template.marks.helpers({
 Template.marks.events({
   'click .reactive-table tbody tr': function (evt, template) {
     Router.go('markReport', {_id:this._id, _sid: template.data.markingScheme._id});
+  },
+  'keyup #filter-table': function (evt, template) {
+    template.filter.set($(evt.currentTarget).val())
   }
 });
 
 Template.markingReport.helpers({
   'percentage': function (mark, total) {
     return Math.round((mark/total) * 100);
+  },
+  'showAdj': function (value) {
+    if (value > 0) {
+      return '+' + value;
+    } else {
+      return value;
+    }
   }
 });

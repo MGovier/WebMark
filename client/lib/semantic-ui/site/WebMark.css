@@ -19,24 +19,12 @@
   background-color: #1B4D80 !important;
 }
 
-.adjustment-row p {
-	text-align: right;
-}
-
 .main.container {
 	padding-bottom: 5em;
 }
 
 .adjustment-row .input {
 	width: 8em;
-}
-
-.adjustment-row {
-  padding-bottom: 2em !important;
-}
-
-.adjustment-row .marking-total {
-  margin-top: 0.7em !important;
 }
 
 .rubric-array-item, .comment-item {
@@ -97,7 +85,7 @@ tr.highlighted {
 
 .pusher {
   display: flex;
-  min-height: 83vh;
+  min-height: 84vh;
   flex-direction: column;
 }
 
@@ -105,6 +93,16 @@ tr.highlighted {
   flex: 1;
 }
 
-.sortable {
+.form-control {
+  border-radius: 0.2em;
+  border: 1px solid rgba(34, 36, 38, 0.15); 
+}
+
+.reactive-table, .sortable {
   cursor: pointer !important;
+}
+
+.description-block {
+  height: 5.3em;
+  overflow: hidden;
 }

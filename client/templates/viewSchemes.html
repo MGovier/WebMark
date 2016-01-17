@@ -40,12 +40,12 @@
         {{name}}
       </div>
       <div class="meta">
-        {{friendlyDate}} - {{maxMarks}} marks
+        {{maxMarks}} marks
       </div>
       <div class="description">
         <div class="two column grid">
           {{#if description}}
-            <div class="column">
+            <div class="column description-block">
               {{trimmedDescription}}
             </div>
           {{else}}
@@ -79,13 +79,13 @@
           <a href="{{pathFor route='markScheme'}}"><button class="ui basic icon button mark-using-scheme" data-content="Start marking with this scheme"> <i class="pencil icon"></i></button></a>
         </div>
         <div class="column">
-          <button class="ui basic icon button copy-scheme-url" data-content="Copy the URL to this scheme" data-clipboard-text="{{hashbangURL (urlFor route='markScheme') (pathFor route='markScheme')}}"> <i class="copy icon"></i></button>
+          <button class="ui basic icon button copy-scheme-url" data-content="Copy the URL to this scheme" data-clipboard-text="{{hashbangURL (urlFor route='markScheme') (pathFor route='markScheme')}}"> <i class="paste icon"></i></button>
         </div>
         <div class="column">
           <button class="ui basic icon button edit-scheme" data-content="Edit this scheme"> <i class="edit icon"></i></button>
         </div>
         <div class="column">
-          <a href="{{pathFor route='marks'}}"><button class="ui basic green icon button view-marks" data-content="View marks"> <i class="list icon"></i></button></a>
+          <a href="{{pathFor route='marks'}}"><button class="ui basic icon button view-marks" data-content="View marks"> <i class="list icon"></i></button></a>
         </div>
       </div>
     </div>
