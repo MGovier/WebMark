@@ -37,9 +37,9 @@ Template.home.events({
   }
 });
 
-Template.viewSchemes.helpers({
-
-});
+Template.marks.created = function () {
+  this.filter = new ReactiveTable.Filter('filter-table', []);
+}
 
 Template.dashboard.helpers({
   firstName: function () {
@@ -122,7 +122,7 @@ Template.marks.helpers({
     return {
       collection: Template.instance().data.marks,
       rowsPerPage: 40,
-      showFilter: true,
+      filters: ['filter-table'],
       class: 'ui table striped selectable',
       fields: [
         {key: 'studentNo', label: 'Student No.'},
@@ -138,6 +138,9 @@ Template.marks.helpers({
 Template.marks.events({
   'click .reactive-table tbody tr': function (evt, template) {
     Router.go('markReport', {_id:this._id, _sid: template.data.markingScheme._id});
+  },
+  'keyup #filter-table': function (evt, template) {
+    template.filter.set($(evt.currentTarget).val())
   }
 });
 

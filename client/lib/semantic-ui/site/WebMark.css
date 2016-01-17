@@ -105,7 +105,10 @@ tr.highlighted {
   flex: 1;
 }
 
-.footer 
+.form-control {
+  border-radius: 0.2em;
+  border: 1px solid rgba(34, 36, 38, 0.15); 
+}
 
 .reactive-table, .sortable {
   cursor: pointer !important;
