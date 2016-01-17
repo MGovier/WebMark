@@ -48,6 +48,12 @@ Template.markScheme.helpers({
   },
   lastStudent: function () {
     return Template.instance().lastStudent.get();
+  },
+  adjustable: function () {
+    return (this.adjustmentValuePositive > 0 || this.adjustmentValueNegative < 0);
+  },
+  percentage: function (mark, total) {
+    return Math.round((mark/total) * 100);
   }
 });
 

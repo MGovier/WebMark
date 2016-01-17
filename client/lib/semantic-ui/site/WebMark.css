@@ -19,24 +19,12 @@
   background-color: #1B4D80 !important;
 }
 
-.adjustment-row p {
-	text-align: right;
-}
-
 .main.container {
 	padding-bottom: 5em;
 }
 
 .adjustment-row .input {
 	width: 8em;
-}
-
-.adjustment-row {
-  padding-bottom: 2em !important;
-}
-
-.adjustment-row .marking-total {
-  margin-top: 0.7em !important;
 }
 
 .rubric-array-item, .comment-item {

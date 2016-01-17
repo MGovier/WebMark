@@ -55,8 +55,8 @@
               </div>          
               <div class="column">
                 <div class="required field">
-                  <label for="student-no">Student Number</label>
-                  <input type="text" name="student-no" placeholder="123456" required>
+                  <label for="student-no">Student/Participant ID</label>
+                  <input type="text" name="student-no" placeholder="up123456" required>
                 </div>
               </div>
             </div>
@@ -111,19 +111,43 @@
               <textarea class="free-comment-field"></textarea>
             </div>
           </div>
-          <h3 class="ui horizontal divider header"><i class="star half empty icon"></i>Adjustment</h3>
-          <div class="ui stackable padded grid">
-            <div class="row adjustment-row">
-              <div class="five wide column">
-                <div class="ui labeled input">
+          {{#if adjustable}}
+          <h3 class="ui horizontal divider header"><i class="adjust icon"></i>Adjustment</h3>
+          <div class="ui one column centered padded grid">
+            <div class="one column centered row">
+              <div class="center aligned column">
+                <div class="ui labeled large input">
                   <div class="ui label">
-                    Mark Adjustment
+                    Marks can be adjusted by {{adjustmentValueNegative}} to {{adjustmentValuePositive}}:
                   </div>
                   <input type="number" name="adjustment" placeholder="0" min="{{adjustmentValueNegative}}" max="{{adjustmentValuePositive}}">
                 </div>
               </div>
-              <div class="five wide right floated column">
-                <p class="ui medium header marking-total">Mark: {{countMarks}}/{{maxMarks}}</p>
+            </div>
+          </div>
+          {{/if}}
+          <h3 class="ui horizontal divider header"><i class="star half empty icon"></i>Result</h3>
+          <div class="ui two column centered grid">
+            <div class="three column centered row">
+              <div class="center aligned column">
+                <div class="ui statistic">
+                  <div class="value">
+                    {{countMarks}} / {{maxMarks}}
+                  </div>
+                  <div class="label">
+                    Total Marks
+                  </div>
+                </div> 
+              </div>
+              <div class="center aligned column">
+                <div class="ui statistic">
+                  <div class="value">
+                    {{percentage countMarks maxMarks}}%
+                  </div>
+                  <div class="label">
+                    Percent
+                  </div>
+                </div>
               </div>
             </div>
           </div>
