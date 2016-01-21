@@ -52,9 +52,11 @@ input[name="scheme-name"] {
   height: 3.01em;
 }
 
-.unit-name {
+.scheme-name {
   text-transform: capitalize !important;
   border-bottom: 1px dotted #3f3f3f !important;
+  margin-top: 0.3em !important;
+  margin-bottom: 0.6em !important;
 }
 
 .loading-frame {
@@ -85,7 +87,7 @@ input[name="scheme-name"] {
 
 .card-delete-button:hover {
   color: red;
-  font-size: 160%;
+  font-size: 150%;
   overflow: visible;
 }
 

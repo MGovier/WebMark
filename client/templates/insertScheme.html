@@ -3,17 +3,28 @@
     <div class="ui form">
     <h3 class="ui horizontal divider header"><i class="certificate icon"></i>New Marking Scheme</h3>
       <div class="ui stackable four column grid">
-        <div class="six wide column">       
-          <div class="required field name-field">
-            <label for="scheme-name">Scheme Name</label>
-              <input class="{{#unless editingName}} stealth {{/unless}}" type="text" name="scheme-name" required placeholder="Unique name for this scheme" value="{{unitName}}">
-              <div class="ui large header unit-name {{#if editingName}} stealth {{/if}}">{{unitName}}</div>
+        <div class="six wide column">
+          <div class="row">       
+            <div class="required field name-field">
+              <label for="scheme-name">Scheme Name</label>
+              <input class="{{#unless editingName}} stealth {{/unless}}" type="text" name="scheme-name" required placeholder="Unique name for this scheme" value="{{schemeName}}">
+              <div class="ui large header scheme-name {{#if editingName}} stealth {{/if}}">{{schemeName}}</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="scheme-name">Parent Unit</label>
+              <select class="ui fluid search selection dropdown unit-select" name="scheme-unit">
+                <option value="">UNITCODE</option>
+                <option value="WEBF1">WEBF1</option>
+              </select>
+            </div>
           </div>
         </div>
         <div class="ten wide column">
           <div class="field">
             <label for="scheme-desc">Description</label>
-            <textarea rows="3" name="scheme-desc" placeholder="Information about this marking scheme, or advice to a marker"></textarea>
+            <textarea rows="5" name="scheme-desc" placeholder="Information about this marking scheme, or advice to a marker"></textarea>
           </div>
         </div>
       </div>
