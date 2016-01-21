@@ -58,7 +58,7 @@ input[name="scheme-name"] {
 }
 
 .loading-frame {
-  height: 10em;
+  min-height: 15em;
 }
 
 .sign-in {
@@ -80,11 +80,13 @@ input[name="scheme-name"] {
 .card-delete-button {
   color: gray;
   transition: all 0.3s;
+  cursor: pointer;
 }
 
 .card-delete-button:hover {
   color: red;
-  font-size: 140%;
+  font-size: 160%;
+  overflow: visible;
 }
 
 tr.highlighted {
@@ -93,7 +95,7 @@ tr.highlighted {
 
 .pusher {
   display: flex;
-  min-height: 84vh;
+  min-height: 86vh;
   flex-direction: column;
 }
 
