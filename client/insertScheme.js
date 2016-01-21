@@ -19,10 +19,24 @@ Template.insertScheme.onRendered(() => {
 });
 
 Template.insertScheme.created = function () {
-  initializeSession();
+  Session.setDefault('adjustmentAllowed', false);
+  Session.setDefault('rubricObject', [{
+    uuid: UI._globalHelpers.generateUUID(),
+    rows: [{uuid: UI._globalHelpers.generateUUID()}],
+    maxMark: 0
+  }]);
+  Session.setDefault('comments', [{
+    uuid: UI._globalHelpers.generateUUID()
+  }]);
+  Session.setDefault('rubricHistory', []);
+  Session.setDefault('unitName', UI._globalHelpers.generateFunName());
+  Session.setDefault('editingName', false);
+  Session.setDefault('commentHistory', []);
+  // Keep track of if rubric or comment field should be undone.
+  Session.setDefault('actionHistory', []);
 };
 
-var initializeSession = function () {
+var resetSession = function () {
   Session.set('adjustmentAllowed', false);
   Session.set('rubricObject', [{
     uuid: UI._globalHelpers.generateUUID(),
@@ -83,7 +97,7 @@ Template.insertScheme.events({
             console.log(error.message, error.details);
           } else {
             $('.submit-scheme').removeClass('loading').addClass('submit-scheme');
-            initializeSession();
+            resetSession();
             form.reset();
             Router.go('dashboard');
           }
@@ -91,7 +105,7 @@ Template.insertScheme.events({
       } else {
         Meteor.call('addScheme', schemaObject);
         $('.submit-scheme').removeClass('loading').addClass('submit-scheme');
-        initializeSession();
+        resetSession();
         form.reset();
         Router.go('dashboard');
       }
