@@ -17,6 +17,52 @@ Template.main.onRendered(() => {
   });
 });
 
+Template.home.onRendered(() => {
+  $('.right-perspective-overlay').visibility({
+    once       : false,
+    continuous : true,
+    offset: 500,
+    onPassing  : function(calculations) {
+      if (calculations.percentagePassed < 0.1) {
+        $(this).css('opacity', 0.0);
+      } else {
+        $(this).css('opacity', calculations.percentagePassed);
+      }
+      $(this).css('top', (calculations.percentagePassed * 50));
+    }
+  });
+  $('.left-perspective-overlay').visibility({
+    once       : false,
+    continuous : true,
+    offset: 650,
+    onPassing  : function(calculations) {
+      if (calculations.percentagePassed < 0.1) {
+        $(this).css('opacity', 0.0);
+      } else {
+        $(this).css('opacity', calculations.percentagePassed);
+      }    
+      $(this).css('top', (calculations.percentagePassed * 50));
+    }
+  });
+});
+
+Template.home.created = function() {
+  let intervalA = Meteor.setInterval(function () {
+    $('.right-perspective-overlay').visibility('refresh');
+  }, 20);
+  let intervalB = Meteor.setInterval(function () {
+    $('.left-perspective-overlay').visibility('refresh');
+  }, 20);
+  Session.set('intervalTracker', [intervalA, intervalB]);
+}
+
+Template.home.destroyed = function() {
+  let intervals = Session.get('intervalTracker');
+  intervals.forEach((id) => {
+    Meteor.clearInterval(id);
+  })
+}
+
 Template.viewSchemes.onRendered(() => {
   $('.icon.button').popup({
     inline: false,

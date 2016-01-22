@@ -1,8 +1,10 @@
 Template.insertScheme.onRendered(() => {
   $('.ui.checkbox').checkbox();
-  $.getScript('dragula.min.js', function () {
+  $('.unit-select').dropdown({
+    allowAdditions: true
+  });
     var lastItem;
-    drake = dragula({
+    var drake = dragula({
       isContainer: function (el) {
         return el.classList.contains('dragula-container');
       }
@@ -15,14 +17,28 @@ Template.insertScheme.onRendered(() => {
         Session.set('rubricObject', rObj);
       }, 80);
     });
-  });
+
 });
 
 Template.insertScheme.created = function () {
-  initializeSession();
+  Session.setDefault('adjustmentAllowed', false);
+  Session.setDefault('rubricObject', [{
+    uuid: UI._globalHelpers.generateUUID(),
+    rows: [{uuid: UI._globalHelpers.generateUUID()}],
+    maxMark: 0
+  }]);
+  Session.setDefault('comments', [{
+    uuid: UI._globalHelpers.generateUUID()
+  }]);
+  Session.setDefault('rubricHistory', []);
+  Session.setDefault('schemeName', UI._globalHelpers.generateFunName());
+  Session.setDefault('editingName', false);
+  Session.setDefault('commentHistory', []);
+  // Keep track of if rubric or comment field should be undone.
+  Session.setDefault('actionHistory', []);
 };
 
-var initializeSession = function () {
+var resetSession = function () {
   Session.set('adjustmentAllowed', false);
   Session.set('rubricObject', [{
     uuid: UI._globalHelpers.generateUUID(),
@@ -33,10 +49,9 @@ var initializeSession = function () {
     uuid: UI._globalHelpers.generateUUID()
   }]);
   Session.set('rubricHistory', []);
-  Session.set('unitName', UI._globalHelpers.generateFunName());
+  Session.set('schemeName', UI._globalHelpers.generateFunName());
   Session.set('editingName', false);
   Session.set('commentHistory', []);
-  // Keep track of if rubric or comment field should be undone.
   Session.set('actionHistory', []);
 };
 
@@ -51,8 +66,8 @@ var totalMarksFunction = function () {
 
 Template.insertScheme.helpers({
   totalMarks: totalMarksFunction,
-  unitName: function () {
-    return Session.get('unitName');
+  schemeName: function () {
+    return Session.get('schemeName');
   },
   editingName: function () {
     return Session.get('editingName');
@@ -83,7 +98,7 @@ Template.insertScheme.events({
             console.log(error.message, error.details);
           } else {
             $('.submit-scheme').removeClass('loading').addClass('submit-scheme');
-            initializeSession();
+            resetSession();
             form.reset();
             Router.go('dashboard');
           }
@@ -91,7 +106,7 @@ Template.insertScheme.events({
       } else {
         Meteor.call('addScheme', schemaObject);
         $('.submit-scheme').removeClass('loading').addClass('submit-scheme');
-        initializeSession();
+        resetSession();
         form.reset();
         Router.go('dashboard');
       }
@@ -106,7 +121,7 @@ Template.insertScheme.events({
   },
   'blur input[name="scheme-name"]': function () {
     Session.set('editingName', false);
-    Session.set('unitName', $('input[name="scheme-name"]').val());
+    Session.set('schemeName', $('input[name="scheme-name"]').val());
   },
   'keydown': function (evt) {
     // Meta key works for ctrl on windows and cmd on mac.
@@ -125,7 +140,7 @@ Template.insertScheme.events({
         closable  : false,
         onApprove : function() {
           document.getElementById("marking-scheme-form").reset();
-          $('input[name="scheme-name"]').val(Session.get('unitName'));
+          $('input[name="scheme-name"]').val(Session.get('schemeName'));
         },
         detachable: false
       }).modal('show');
