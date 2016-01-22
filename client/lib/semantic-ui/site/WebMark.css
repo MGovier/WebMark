@@ -7,11 +7,21 @@
     display: none !important;
     height: 0;
   }
+  .really-big {
+    font-size: 2em !important;
+    margin-bottom: -0.3em !important;
+    color: white !important;
+  }
 }
 
 @media only screen and (min-width: 400px) {
   .compacted-menu {
     display: none !important;
+  }
+  .really-big {
+    font-size: 5em !important;
+    margin-bottom: -0.3em !important;
+    color: white !important;
   }
 }
 
@@ -25,10 +35,6 @@
 
 .adjustment-row .marking-total {
   margin-top: 0.7em !important;
-}
-
-.main.container {
-	padding-bottom: 5em;
 }
 
 .adjustment-row .input {
@@ -69,6 +75,44 @@ input[name="scheme-name"] {
 
 #masthead {
   height: 30em;
+  z-index: 10;
+  color: white;
+}
+
+#masthead:after {
+  position: absolute;
+  z-index: -1;
+  width: 200%;
+  height: 120%;
+  left: -50%;
+  top: -5.58em;
+  content: '';
+  background: url(/img/webmark-bg-3-1.png);
+  transform-style: preserve-3d;
+  animation-name: masthead;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+
+  animation-duration: 10s;
+  animation-fill-mode: both;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  transform: perspective(800px) rotateX(30deg);
+}
+
+#border-box .button, #border-box h1{
+  opacity: 1;
+}
+
+@keyframes masthead {
+ 0% {
+    background-position: 0% 0%;
+ }
+ 100% {
+    background-position: 0% -295px;
+ }
+
 }
 
 #masthead .container {
