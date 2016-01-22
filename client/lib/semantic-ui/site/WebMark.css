@@ -118,3 +118,49 @@ tr.highlighted {
   height: 5.3em;
   overflow: hidden;
 }
+
+.right-perspective {
+  transform: perspective(600px) rotateY(-25deg);
+  transform-style: preserve-3d;
+  margin-top: 2em;
+  margin-right: 5em;
+  box-shadow: 5px 8px 6px -8px grey;
+}
+
+.right-perspective-overlay {
+  transform: perspective(600px) rotateY(-25deg);
+  transform-style: preserve-3d;
+  margin-top: 2em;
+  margin-right: 5em;
+  position: absolute !important;
+  z-index: 100;
+  top: 10px;
+  left: -100px;
+  box-shadow: 5px 8px 6px -8px grey;
+  opacity: 0.0;
+  transition: all 1s;
+}
+
+.left-perspective {
+  transform: perspective(600px) rotateY(25deg);
+  transform-style: preserve-3d;
+  margin-top: 2em;
+  margin-left: 0em;
+  margin-bottom: 5em;
+  box-shadow: -5px 8px 6px -8px grey;
+}
+
+.left-perspective-overlay {
+  transform: perspective(600px) rotateY(25deg);
+  transform-style: preserve-3d;
+  margin-top: 2em;
+  margin-left: 0em;
+  margin-bottom: 5em;
+  position: absolute !important;
+  z-index: 100;
+  top: 10px;
+  left: 100px;
+  box-shadow: -5px 8px 6px -8px grey;
+  transition: all 1s;
+  opacity: 0.0;
+}
