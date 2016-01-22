@@ -1,27 +1,25 @@
 <template name="home">
 <div class="ui vertical center aligned padded segment" id="masthead">
-  <div class="ui text container">
-    <div id="border-box">
+  <div class="ui text container white-headers">
     <h1 class="ui header really-big">WebMark</h1>
-      <h2>Mark assignments with efficiency and flexibility</h2>
-      {{#if currentUser}}
-        <div class="ui two column centered relaxed grid">
-          <div class="row">
-            <div class="right aligned column">
-              <div class="ui huge primary button create-scheme">Create a new scheme<i class="right arrow icon"></i></div>
-            </div>
-            <div class="ui vertical divider">
-              or
-            </div>
-            <div class="column">
-              <div class="ui huge primary button view-schemes">View your schemes<i class="right arrow icon"></i></div>
-            </div>
+    <h2>Mark assignments with efficiency and flexibility</h2>
+    {{#if currentUser}}
+      <div class="ui two column centered relaxed grid">
+        <div class="row">
+          <div class="right aligned column">
+            <div class="ui huge primary button create-scheme">Create a new scheme<i class="right arrow icon"></i></div>
           </div>
-        </div>     
-      {{else}}
-        <div class="ui huge primary button google-log-in">Log-in with Google to get started <i class="right arrow icon"></i></div>
-      {{/if}}
-    </div>
+          <div class="ui vertical divider">
+            or
+          </div>
+          <div class="column">
+            <div class="ui huge primary button view-schemes">View your schemes<i class="right arrow icon"></i></div>
+          </div>
+        </div>
+      </div>     
+    {{else}}
+      <div class="ui huge primary button google-log-in">Log-in with Google to get started <i class="right arrow icon"></i></div>
+    {{/if}}
   </div>
 </div>
   <div class="ui vertical stripe padded segment">
@@ -29,9 +27,9 @@
       <div class="row">
         <div class="eight wide column">
           <h3 class="ui header">Author Schemes</h3>
-          <p>Create flexible marking schemes, using criteria-based rubrics, re-usable comments, mark adjustments, and free-flowing text. Avoid repetitive data entry with duplication support, and solve errors with easy drag-and-drop reordering and undo functionality.</p>
+          <p>Create flexible marking schemes using: criteria-based rubrics, re-usable comments, mark adjustments, and free-flowing text. Avoid repetitive data entry with duplication support, and solve errors with easy drag-and-drop reordering and undo functionality.</p>
           <h3 class="ui header">Mark Collaboratively</h3>
-          <p>Marking schemes are designed for efficiency, and are dynamic to your designs. When published, your marking scheme will have a sharable URL to allow anyone to start marking immediately, and you'll see reports as they're completed.</p>
+          <p>Marking schemes are designed for efficiency, and adjust automatically to your design. When published, your marking forms will have a sharable URL that allows anyone to start marking immediately, and you’ll see reports as they’re completed.</p>
         </div>
         <div class="six wide right floated column">
           <img src="img/scheme-designer-min.png" alt="Marking scheme designer interface" class="ui large bordered image right-perspective">
@@ -46,7 +44,7 @@
         </div>
         <div class="eight wide column">
           <h3 class="ui header">View in Real-Time</h3>
-          <p>Through WebSockets, all data is kept synchronized with all users. Marks will be pushed to your scheme's collection live, and any updates to your marking schemes will update the your markers form without interruption.</p>
+          <p>Through WebSockets, all data is kept synchronized with all users. Marks will be pushed to your scheme collection live, and any updates to your marking schemes will update your markers forms without interruption.</p>
           <h3 class="ui header">Share Feedback</h3>
           <p>Export marks as a CSV or JSON file, or export a list of URLs for each student to privately view their own feedback through WebMark.</p>
         </div>

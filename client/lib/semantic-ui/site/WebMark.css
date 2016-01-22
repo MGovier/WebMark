@@ -81,11 +81,11 @@ input[name="scheme-name"] {
 
 #masthead:after {
   position: absolute;
-  z-index: -1;
+  z-index: -10;
   width: 200%;
-  height: 115%;
+  height: 125%;
   left: -50%;
-  top: -5.3em;
+  top: -9.8em;
   content: '';
   background: url(/img/webmark-bg-3-1.png);
   transform-style: preserve-3d;
@@ -97,12 +97,8 @@ input[name="scheme-name"] {
   animation-fill-mode: both;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-
-  transform: perspective(800px) rotateX(30deg);
-}
-
-#border-box .button, #border-box h1{
-  opacity: 1;
+  perspective-origin: 10% 10%;
+  transform: perspective(800px) rotateX(30deg) translateZ(-100px);
 }
 
 @keyframes masthead {
@@ -147,6 +143,12 @@ tr.highlighted {
 
 .pusher > .footer {
   flex: 1;
+}
+
+.white-headers h2 {
+  color: white !important;
+  opacity: 1;
+  z-index: 20;
 }
 
 .form-control {
