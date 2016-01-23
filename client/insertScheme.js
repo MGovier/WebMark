@@ -108,8 +108,9 @@ Template.insertScheme.events({
       if (Meteor.status().connected) {
         Meteor.call('addScheme', schemaObject, (error, result) => {
           if (error) {
-            console.log(error.message, error.details);
+            sAlert.error(error.message, error.details);
           } else {
+            sAlert.success(schemaObject.name + ' added!', {position: 'top-right', onRouteClose: false, offset: 60});
             $('.submit-scheme').removeClass('loading').addClass('submit-scheme');
             resetSession();
             form.reset();
