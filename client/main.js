@@ -104,8 +104,7 @@ Template.dashboard.events({
 
 Template.activityView.helpers({
   friendlyDate: function (date) {
-    // TODO: Make this live!
-    return moment(date).fromNow();
+    return ReactiveFromNow(date);
   },
   icon: function (type) {
     if (type == 'new') {
@@ -137,6 +136,13 @@ Template.viewSchemesListItem.helpers({
     let pathNoSlash = path.substring(1),
         rootUrl = url.replace(pathNoSlash, '#!');
     return rootUrl + pathNoSlash;
+  },
+  showUnitYear: function () {
+    if (this.unitCode && this.unitCode !== 'zzNO_UNIT') {
+      return this.unitCode + ' ' + moment(this.createdAt).format('YYYY');
+    } else {
+      return moment(this.createdAt).format('MMM YYYY');
+    }   
   }
 });
 
