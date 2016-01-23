@@ -25,3 +25,8 @@ Meteor.publish('activities', function () {
   if (!this.userId) return [];
   return Activities.find({relevantTo: this.userId}, {limit: 5, sort:{performedAt: -1}});
 });
+
+Meteor.publish('units', function () {
+  if (!this.userId) return [];
+  return Units.find({creator: this.userId});
+})

@@ -6,15 +6,6 @@
         <i class="right angle icon divider"></i>
         <div class="active section">{{name}}</div>
       </div>
-      <div class="ui positive icon message hidden marks-submitted">
-        <i class="checkmark icon"></i>
-        <div class="content">
-          <div class="header">
-            Marks submitted for {{lastStudent}}!
-          </div>
-          <p>Ready for the next one?</p>
-        </div>
-      </div>
       <h3 class="ui horizontal divider header"><i class="info icon"></i>About</h3>
       <form class="ui forms">
         {{#if description}}
@@ -24,14 +15,14 @@
                 <div class="required field">
                   <label for="marker-name">Marker Name</label>
                   {{#if markerName}}
-                    <input type="text" name="marker-name" required placeholder="A. Marker" value="{{markerName}}">
+                    <input type="text" name="marker-name" required pattern=".*\S+.*" placeholder="A. Marker" value="{{markerName}}">
                   {{else}}
-                    <input type="text" name="marker-name" required placeholder="A. Marker">
+                    <input type="text" name="marker-name" required pattern=".*\S+.*" placeholder="A. Marker">
                   {{/if}}
                 </div>
                 <div class="required field">
                   <label for="student-no">Student Number</label>
-                  <input type="text" name="student-no" placeholder="Student or Participant, e.g. up123456" required>
+                  <input type="text" name="student-no" required pattern=".*\S+.*" placeholder="Student or Participant, e.g. up123456">
                 </div>
               </div>
               <div class="eleven wide column">
@@ -47,16 +38,16 @@
                 <div class="required field">
                 <label for="marker-name">Marker Name</label>
                   {{#if markerName}}
-                    <input type="text" name="marker-name" required placeholder="A. Marker" value="{{markerName}}">
+                    <input type="text" name="marker-name" required pattern=".*\S+.*" placeholder="A. Marker" value="{{markerName}}">
                   {{else}}
-                    <input type="text" name="marker-name" required placeholder="A. Marker">
+                    <input type="text" name="marker-name" required pattern=".*\S+.*" placeholder="A. Marker">
                   {{/if}}
                 </div>
               </div>          
               <div class="column">
                 <div class="required field">
                   <label for="student-no">Student/Participant ID</label>
-                  <input type="text" name="student-no" placeholder="up123456" required>
+                  <input type="text" name="student-no" placeholder="up123456" required pattern=".*\S+.*">
                 </div>
               </div>
             </div>

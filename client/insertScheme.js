@@ -1,23 +1,30 @@
 Template.insertScheme.onRendered(() => {
   $('.ui.checkbox').checkbox();
   $('.unit-select').dropdown({
-    allowAdditions: true
+    allowAdditions: true,
+    maxSelections: false,
+    onChange: (value) => {
+      Session.set('unitCode', value);
+      $('textarea[name="scheme-desc"]').focus();
+    },
   });
-    var lastItem;
-    var drake = dragula({
-      isContainer: function (el) {
-        return el.classList.contains('dragula-container');
-      }
-    });
-    drake.on('dragend', function(item, tar, source, sibling) {
-      $('.rubric-table input:first').trigger('change');
-      let rObj = Session.get('rubricObject');
-      Session.set('rubricObject', []);
-      Meteor.setTimeout( function () {
-        Session.set('rubricObject', rObj);
-      }, 80);
-    });
-
+  var drake = dragula({
+    isContainer: function (el) {
+      return el.classList.contains('dragula-container');
+    }
+  });
+  drake.on('dragend', function(item, tar, source, sibling) {
+    $('.rubric-table input:first').trigger('change');
+    let rObj = Session.get('rubricObject');
+    Session.set('rubricObject', []);
+    Meteor.setTimeout( function () {
+      Session.set('rubricObject', rObj);
+    }, 80);
+  });
+  // If session var is still set, use that for the option value.
+  if (Session.get('unitCode')) {
+    $('.unit-select').dropdown('set selected', Session.get('unitCode'));
+  }
 });
 
 Template.insertScheme.created = function () {
@@ -32,6 +39,7 @@ Template.insertScheme.created = function () {
   }]);
   Session.setDefault('rubricHistory', []);
   Session.setDefault('schemeName', UI._globalHelpers.generateFunName());
+  Session.setDefault('unitCode', '');
   Session.setDefault('editingName', false);
   Session.setDefault('commentHistory', []);
   // Keep track of if rubric or comment field should be undone.
@@ -50,6 +58,7 @@ var resetSession = function () {
   }]);
   Session.set('rubricHistory', []);
   Session.set('schemeName', UI._globalHelpers.generateFunName());
+  Session.set('unitCode', '');
   Session.set('editingName', false);
   Session.set('commentHistory', []);
   Session.set('actionHistory', []);
@@ -71,6 +80,9 @@ Template.insertScheme.helpers({
   },
   editingName: function () {
     return Session.get('editingName');
+  },
+  isThisSelected: function () {
+    return true;
   }
 });
 
@@ -85,6 +97,7 @@ Template.insertScheme.events({
         'name': $('input[name="scheme-name"]').val(),
         'description': $('textarea[name="scheme-desc"]').val(),
         'createdAt': new Date(),
+        'unitCode': Session.get('unitCode'),
         'aspects': Session.get('rubricObject'),
         'comments': Session.get('comments'),
         'adjustmentValuePositive': $('input[name="adjustment-positive"]').val(),
@@ -117,7 +130,6 @@ Template.insertScheme.events({
   'click .name-field': function () {
     Session.set('editingName', true);
     setTimeout(function() { $('input[name="scheme-name"]').select(); }, 100);
-
   },
   'blur input[name="scheme-name"]': function () {
     Session.set('editingName', false);
@@ -128,6 +140,9 @@ Template.insertScheme.events({
     if (evt.keyCode == 90 && evt.metaKey) {
       alert("Ctrl+z");
     } else if (evt.keyCode === 13 && $(evt.currentTarget).attr('name') == "scheme-name") {
+      evt.preventDefault();
+      $('#unit-field input').focus();
+    } else if (evt.keyCode === 13 && $(evt)[0].target == $('input.search:first')[0]) {
       evt.preventDefault();
       $('textarea[name="scheme-desc"]').focus();
     }

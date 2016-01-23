@@ -82,9 +82,9 @@ input[name="scheme-name"] {
 #masthead:after {
   position: absolute;
   z-index: -10;
-  width: 200%;
+  width: 300%;
   height: 125%;
-  left: -50%;
+  left: -100%;
   top: -9.8em;
   content: '';
   background: url(/img/webmark-bg-3-1.png);
@@ -97,7 +97,7 @@ input[name="scheme-name"] {
   animation-fill-mode: both;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-  perspective-origin: 10% 10%;
+  perspective-origin: 50% 50%;
   transform: perspective(800px) rotateX(30deg) translateZ(-100px);
 }
 
@@ -137,7 +137,7 @@ tr.highlighted {
 
 .pusher {
   display: flex;
-  min-height: 86vh;
+  min-height: 94vh;
   flex-direction: column;
 }
 

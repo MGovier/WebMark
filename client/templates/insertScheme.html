@@ -12,11 +12,13 @@
             </div>
           </div>
           <div class="row">
-            <div class="field">
+            <div class="field" id="unit-field">
               <label for="scheme-name">Parent Unit</label>
               <select class="ui fluid search selection dropdown unit-select" name="scheme-unit">
                 <option value="">UNITCODE</option>
-                <option value="WEBF1">WEBF1</option>
+                {{#each unit in units}}
+                  <option value="{{unit}}">{{unit}}</option>
+                {{/each}}
               </select>
             </div>
           </div>

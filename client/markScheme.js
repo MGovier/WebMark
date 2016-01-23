@@ -107,8 +107,9 @@ Template.markScheme.events({
       if (Meteor.status().connected) {
         Meteor.call('addMark', markObject, (error, result) => {
           if (error) {
-            console.log(error.message, error.details);
+            sAlert.error('Error: ' + error.message +'. Please check your submission.');
           } else {
+            sAlert.success('Marks submitted for ' + markObject.studentNo, {position: 'top-right', timeout: 20000, offset: 60});
             $('.submit-marks').removeClass('loading').addClass('submit-marks');
             template.marks.set(0);
             template.aspects.set([]);
@@ -121,6 +122,7 @@ Template.markScheme.events({
         });
       } else {
         Meteor.call('addMark', markObject);
+        sAlert.success('Marks submitted for ' + markObject.studentNo, {position: 'top-right', timeout: 20000, offset: 60});
         $('.submit-marks').removeClass('loading').addClass('submit-marks');
         template.marks.set(0);
         template.aspects.set([]);

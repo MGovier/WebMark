@@ -33,14 +33,14 @@
 </template>
 
 <template name="viewSchemesListItem">
-  <div class="card">
+  <a class="ui card" href="{{pathFor route='marks'}}">
     <div class="content">
       <i class="right floated trash outline icon card-delete-button"></i>
       <div class="header">
         {{name}}
       </div>
       <div class="meta">
-        {{maxMarks}} marks
+        {{showUnitYear}}
       </div>
       <div class="description">
         <div class="two column grid">
@@ -89,5 +89,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </a>
 </template>
