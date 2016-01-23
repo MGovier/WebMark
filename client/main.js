@@ -1,6 +1,11 @@
 Meteor.startup(() => {
   $('html').attr('lang', 'en');
   RouterAutoscroll.marginTop = 50;
+  sAlert.config({
+    position: 'top',
+    effect: 'stackslide',
+    html: true
+  });
 });
 
 Template.main.onRendered(() => {

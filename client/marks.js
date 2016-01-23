@@ -1,6 +1,5 @@
 Template.marks.created = function() {
   this.filter = new ReactiveTable.Filter('filter-table');
-  console.log('filter', this.filter.get());
 };
 
 Template.marks.helpers({
