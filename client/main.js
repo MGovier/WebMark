@@ -1,5 +1,6 @@
 Meteor.startup(() => {
   $('html').attr('lang', 'en');
+  RouterAutoscroll.marginTop = 50;
 });
 
 Template.main.onRendered(() => {
@@ -89,7 +90,11 @@ Template.marks.created = function () {
 
 Template.dashboard.helpers({
   firstName: function () {
-    return Meteor.user().profile.name.split(' ')[0];
+    if (Meteor.userId()) {
+      return Meteor.user().profile.name.split(' ')[0];
+    } else {
+      return '';
+    }
   },
   connected: function () {
     return Meteor.status().connected;
