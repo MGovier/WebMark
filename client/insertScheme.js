@@ -25,6 +25,10 @@ Template.insertScheme.onRendered(() => {
   if (Session.get('unitCode')) {
     $('.unit-select').dropdown('set selected', Session.get('unitCode'));
   }
+  $('.tooltip-buttons button').popup({
+    inline: false,
+    position: 'top left'
+  });
 });
 
 Template.insertScheme.created = function () {
@@ -189,7 +193,7 @@ Template.rubricBuilder.events({
   'click .add-criterion': function (evt) {
     evt.preventDefault();
     let rObjs = Session.get('rubricObject'),
-        id = $(evt.currentTarget).closest('div .grid').attr('data-uuid');
+        id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid');
     rObjs.forEach((rubric) => {
       if (rubric.uuid == id) {
         rubric['rows'].push({uuid: UI._globalHelpers.generateUUID()});
