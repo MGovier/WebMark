@@ -109,7 +109,7 @@ Template.markScheme.events({
           if (error) {
             sAlert.error('Error: ' + error.message +'. Please check your submission.');
           } else {
-            sAlert.success('Marks submitted for ' + markObject.studentNo, {position: 'top-right', timeout: 20000, offset: 60});
+            sAlert.success('Marks submitted for ' + markObject.studentNo, {position: 'top-right', timeout: 3000, offset: 60});
             $('.submit-marks').removeClass('loading').addClass('submit-marks');
             template.marks.set(0);
             template.aspects.set([]);

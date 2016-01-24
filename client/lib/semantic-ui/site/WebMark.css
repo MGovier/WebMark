@@ -211,3 +211,11 @@ tr.highlighted {
   transition: all 1s;
   opacity: 0.0;
 }
+
+.s-alert-success.s-alert-top-right.s-alert-effect-stackslide {
+  width: 30em;
+  background-color: #219854;
+  opacity: 0.9;
+  border-radius: 0.4em;
+  box-shadow: 0px 0px 4px grey;
+}
