@@ -77,6 +77,13 @@ Template.viewSchemes.onRendered(() => {
   new Clipboard('.copy-scheme-url');
 });
 
+Template.navigation.helpers({
+  activeIfTemplate: function (template) {
+    var currentRoute = Router.current();
+    return currentRoute && template === currentRoute.lookupTemplate() ? 'active' : '';
+  }
+});
+
 Template.home.events({
   'click .google-log-in': function () {
     Meteor.loginWithGoogle();

@@ -25,6 +25,10 @@ Template.insertScheme.onRendered(() => {
   if (Session.get('unitCode')) {
     $('.unit-select').dropdown('set selected', Session.get('unitCode'));
   }
+  $('.tooltip-buttons button').popup({
+    inline: false,
+    position: 'top left'
+  });
 });
 
 Template.insertScheme.created = function () {
@@ -108,9 +112,11 @@ Template.insertScheme.events({
       if (Meteor.status().connected) {
         Meteor.call('addScheme', schemaObject, (error, result) => {
           if (error) {
-            console.log(error.message, error.details);
+            sAlert.error(error.message, error.details);
+            $('.scheme-submit-button').removeClass('loading').addClass('submit-scheme');
           } else {
-            $('.submit-scheme').removeClass('loading').addClass('submit-scheme');
+            sAlert.success(schemaObject.name + ' added!', {position: 'top-right', onRouteClose: false, offset: 60});
+            $('.scheme-submit-button').removeClass('loading').addClass('submit-scheme');
             resetSession();
             form.reset();
             Router.go('dashboard');
@@ -126,6 +132,9 @@ Template.insertScheme.events({
     } else {
       // Semantic validation checks
     }
+  },
+  'click .scheme-submit-button .loading': function (evt) {
+    evt.preventDefault();
   },
   'click .name-field': function () {
     Session.set('editingName', true);
@@ -171,8 +180,12 @@ Template.rubricBuilder.helpers({
                     'teal', 'violet', 'grey', 'pink'];
     return colours[index % colours.length];
   },
-  canUndo: function() {
+  canUndo: function () {
     return Session.get('rubricHistory').length > 0;
+  },
+  randomExample: function (index) {
+    let examples = ['code quality', 'level of documentation', 'testing strategy', 'detail of analysis'];
+    return examples[index % examples.length];
   }
 });
 
@@ -180,7 +193,7 @@ Template.rubricBuilder.events({
   'click .add-criterion': function (evt) {
     evt.preventDefault();
     let rObjs = Session.get('rubricObject'),
-        id = $(evt.currentTarget).closest('div .grid').attr('data-uuid');
+        id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid');
     rObjs.forEach((rubric) => {
       if (rubric.uuid == id) {
         rubric['rows'].push({uuid: UI._globalHelpers.generateUUID()});
@@ -222,7 +235,7 @@ Template.rubricBuilder.events({
   'click .remove-aspect': function (evt) {
     evt.preventDefault();
     let rObjs = Session.get('rubricObject'),
-        id = $(evt.currentTarget).closest('div .grid').attr('data-uuid');
+        id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid');
     rObjs = rObjs.filter((rubric) => {
       return rubric.uuid != id;
     });
@@ -288,7 +301,7 @@ Template.rubricBuilder.events({
   'click .duplicate-aspect': function (evt) {
     evt.preventDefault();
     let rObj = Session.get('rubricObject'),
-        id = $(evt.currentTarget).closest('div .grid').attr('data-uuid'),
+        id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid'),
         historyArray = Session.get('rubricHistory');
 
     rObj.forEach((rubric) => {

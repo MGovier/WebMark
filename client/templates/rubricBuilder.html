@@ -3,10 +3,16 @@
     <table class="ui {{pickColour(@index)}} table rubric-table" data-uuid="{{rubric.uuid}}">
       <thead>
         <tr>
-          <th colspan="3">
+          <th colspan="2">
             <div class="required field">
-              <label for="rubric-aspect">Aspect</label>
-              <input type="text" name="rubric-aspect" placeholder="Attribute to consider" value="{{rubric.aspect}}" required>
+              <input type="text" name="rubric-aspect" placeholder="Aspect (e.g. {{randomExample(@index)}})" value="{{rubric.aspect}}" required>
+            </div>
+          </th>
+          <th>
+            <div class="ui fluid icon buttons tooltip-buttons">
+              <button class="ui button add-criterion" data-content="Add a criterion"><i class="plus icon"></i></button>
+              <button class="ui button duplicate-aspect" data-content="Duplicate this aspect"><i class="copy icon"></i></button>
+              <button class="ui negative button remove-aspect" data-content="Delete this aspect"><i class="trash icon"></i></button>
             </div>
           </th>
         </tr>
@@ -32,17 +38,6 @@
       {{/each}}
       </tbody>
     </table>
-    <div class="ui two column stackable grid" data-uuid="{{rubric.uuid}}">
-      <div class="row">
-        <div class="column">
-          <button class="ui primary button add-criterion"><i class="plus icon"></i>Add Criterion</button>
-          <button class="ui button duplicate-aspect"><i class="retweet icon"></i>Duplicate Aspect</button>
-        </div>
-        <div class="column">
-          <button class="ui negative right floated button remove-aspect"><i class="minus icon"></i>Remove Aspect</button>
-        </div>
-      </div>
-    </div>
   {{/each}}
   <div class="ui two column stackable grid">
     <div class="row">
