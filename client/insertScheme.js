@@ -303,7 +303,6 @@ Template.rubricBuilder.events({
     let rObj = Session.get('rubricObject'),
         id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid'),
         historyArray = Session.get('rubricHistory');
-
     rObj.forEach((rubric) => {
       if (rubric.uuid == id) {
         let newRows = [];
