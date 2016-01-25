@@ -8,19 +8,22 @@ Template.insertScheme.onRendered(() => {
       $('textarea[name="scheme-desc"]').focus();
     },
   });
-  var drake = dragula({
-    isContainer: function (el) {
-      return el.classList.contains('dragula-container');
-    }
-  });
-  drake.on('dragend', function(item, tar, source, sibling) {
-    $('.rubric-table input:first').trigger('change');
-    let rObj = Session.get('rubricObject');
-    Session.set('rubricObject', []);
-    Meteor.setTimeout( function () {
-      Session.set('rubricObject', rObj);
-    }, 80);
-  });
+
+  $.getScript('dragula.min.js', function () {
+    var drake = dragula({
+      isContainer: function (el) {
+        return el.classList.contains('dragula-container');
+      }
+    });
+    drake.on('dragend', function(item, tar, source, sibling) {
+      $('.rubric-table input:first').trigger('change');
+      let rObj = Session.get('rubricObject');
+      Session.set('rubricObject', []);
+      Meteor.setTimeout( function () {
+        Session.set('rubricObject', rObj);
+      }, 80);
+    });
+  })
   // If session var is still set, use that for the option value.
   if (Session.get('unitCode')) {
     $('.unit-select').dropdown('set selected', Session.get('unitCode'));
@@ -246,12 +249,15 @@ Template.rubricBuilder.events({
         historyArray = Session.get('rubricHistory');
     historyArray.push(rObjs);
 
-    rObjs.forEach((rubric) => {
-      let $table = $('table[data-uuid="' + rubric.uuid + '"]'),
-          $rows = $table.children('tbody').children('tr'),
+    let rObj = [];
+    $tables = $('.rubric-table');
+    $tables.each((index, table) => {
+      let $rows = $(table).children('tbody').children('tr'),
           rows = [],
-          maxMark = 0;
-      rubric.aspect = $table.find('input[name="rubric-aspect"]').val();
+          maxMark = 0,
+          rubric = {};
+      rubric.aspect = $(table).find('input[name="rubric-aspect"]').val();
+      rubric.uuid = $(table).attr('data-uuid');
       $rows.each((index, row) => {
         let rowObj = {};
         rowObj.uuid = $(row).attr('data-uuid');
@@ -267,25 +273,25 @@ Template.rubricBuilder.events({
       })
       rubric.rows = rows;
       rubric.maxMark = maxMark;
+      rObj.push(rubric);
     });
 
     let actionHistory = Session.get('actionHistory');
     actionHistory.push('rubric');
     Session.set('actionHistory', actionHistory);
     Session.set('rubricHistory', historyArray);
-    Session.set('rubricObject', rObjs);
+    Session.set('rubricObject', rObj);
     
   },
   'keydown input[name="criteria-value"]': function (evt) {
-    let id = $(evt.currentTarget).closest('table').attr('data-uuid'),
-        $table = $('table[data-uuid="' + id + '"]');
-        $lastRow = $table.find('tr:last');
-        lastRowId = $lastRow.attr('data-uuid');
+    let $table = $(evt.currentTarget).closest('table'),
+        $lastRow = $table.find('tr:last'),
+        lastRowId = $lastRow.attr('data-uuid'),
         eventId = $(evt.currentTarget).closest('tr').attr('data-uuid');
     if (eventId === lastRowId) {
       if (evt.keyCode === 9 && !evt.shiftKey && ($(evt.currentTarget).val() || $lastRow.find('input[name="criteria"]').val().length > 0)) {
         evt.preventDefault();
-        $('div[data-uuid="' + id +'"]').find('.add-criterion').trigger('click');
+        $table.find('.add-criterion').trigger('click');
         Meteor.setTimeout(function() { $table.find('tr:last input[name="criteria"]').focus(); }, 100);
       }
     }
