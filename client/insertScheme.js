@@ -18,8 +18,12 @@ Template.insertScheme.onRendered(() => {
     let rObj = Session.get('rubricObject');
     Session.set('rubricObject', []);
     Meteor.setTimeout( function () {
+      if (!rObj) {
+        let historyArray = Session.get('historyArray');
+        Session.set('rubricObject', historyArray[historyArray.length -1]);
+      }
       Session.set('rubricObject', rObj);
-    }, 80);
+    }, 120);
   });
   // If session var is still set, use that for the option value.
   if (Session.get('unitCode')) {
