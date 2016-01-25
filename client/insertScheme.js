@@ -15,10 +15,10 @@ Template.insertScheme.onRendered(() => {
   });
   drake.on('dragend', function(item, tar, source, sibling) {
     $('.rubric-table input:first').trigger('change');
-    let rObj = Session.get('rubricObject');
+    var rObj = Session.get('rubricObject');
     Session.set('rubricObject', []);
     Meteor.setTimeout( function () {
-      if (rObj === undefined || !rObj.length) {
+      if (rObj === undefined || !rObj || !rObj.length) {
         let historyArray = Session.get('historyArray');
         Session.set('rubricObject', historyArray[historyArray.length -1]);
       }
