@@ -285,7 +285,7 @@ Template.rubricBuilder.events({
     if (eventId === lastRowId) {
       if (evt.keyCode === 9 && !evt.shiftKey && ($(evt.currentTarget).val() || $lastRow.find('input[name="criteria"]').val().length > 0)) {
         evt.preventDefault();
-        $('div[data-uuid="' + id +'"]').find('.add-criterion').trigger('click');
+        $table.find('.add-criterion').trigger('click');
         Meteor.setTimeout(function() { $table.find('tr:last input[name="criteria"]').focus(); }, 100);
       }
     }
