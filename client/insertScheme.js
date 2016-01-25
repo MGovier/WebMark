@@ -18,7 +18,7 @@ Template.insertScheme.onRendered(() => {
     let rObj = Session.get('rubricObject');
     Session.set('rubricObject', []);
     Meteor.setTimeout( function () {
-      if (!rObj) {
+      if (!rObj.length) {
         let historyArray = Session.get('historyArray');
         Session.set('rubricObject', historyArray[historyArray.length -1]);
       }
