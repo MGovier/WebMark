@@ -46,7 +46,7 @@
 }
 
 .rubric-array-remove, .rubric-array-remove i, .comment-remove, .comment-remove i {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 .stealth {

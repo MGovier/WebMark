@@ -10,7 +10,6 @@
           </th>
           <th>
             <div class="ui fluid icon buttons tooltip-buttons">
-              <button class="ui button add-criterion" data-content="Add a criterion"><i class="plus icon"></i></button>
               <button class="ui button duplicate-aspect" data-content="Duplicate this aspect"><i class="copy icon"></i></button>
               <button class="ui negative button remove-aspect" data-content="Delete this aspect"><i class="trash icon"></i></button>
             </div>
@@ -37,6 +36,11 @@
         </tr>
       {{/each}}
       </tbody>
+      <tfoot>
+        <td colspan="3">
+          <button class="ui fluid basic small button add-criterion" data-content="Add a criterion"><i class="plus icon"></i>Add row</button>
+        </td>
+      </tfoot>
     </table>
   {{/each}}
   <div class="ui two column grid">

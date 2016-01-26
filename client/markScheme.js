@@ -3,6 +3,7 @@ Template.markScheme.onCreated(function() {
   this.marks = new ReactiveVar(0);
   this.markerName = new ReactiveVar(false);
   this.lastStudent = new ReactiveVar('');
+  this.adjustmentValue = 0;
 });
 
 Template.markScheme.onRendered(() => {
@@ -58,8 +59,12 @@ Template.markScheme.helpers({
 });
 
 Template.markScheme.events({
-  'click tr': function (evt, template) {
+  'click tr:not(.header-row)': function (evt, template) {
     $(evt.currentTarget).find('input').prop('checked', true);
+    $('tr:last input:first').trigger('change');
+    $('body').animate({
+        scrollTop: $(window).scrollTop() + $(evt.currentTarget).closest('table').height()
+    }, 200);
   },
   'change tr input': function (evt, template) {
     let aspects = [];
@@ -78,6 +83,22 @@ Template.markScheme.events({
   },
   'change input[name="adjustment"]': function () {
     countMarksFunction();
+  },
+  'click .adj-plus-button': function (evt) {
+    evt.preventDefault();
+    $number = $('input[name="adjustment"]');
+    if ($number.val() < Blaze.getData(evt.currentTarget).adjustmentValuePositive) {
+      $number.val((parseInt($number.val(),10) || 0) + 1);
+    }
+    $('input[name="adjustment"]').trigger('change');
+  },
+  'click .adj-minus-button': function (evt) {
+    evt.preventDefault();
+    $number = $('input[name="adjustment"]');
+    if ($number.val() > Blaze.getData(evt.currentTarget).adjustmentValueNegative) {
+      $number.val((parseInt($number.val(),10) || 0) - 1);
+    }
+    $('input[name="adjustment"]').trigger('change');
   },
   'focus input[type="radio"]': function (evt) {
     $(evt.currentTarget).closest('tr').addClass('highlighted');
