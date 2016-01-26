@@ -5,7 +5,7 @@
         <tr>
           <th colspan="2">
             <div class="required field">
-              <input type="text" name="rubric-aspect" placeholder="Aspect (e.g. {{randomExample(@index)}})" value="{{rubric.aspect}}" required>
+              <input type="text" name="rubric-aspect" placeholder="Aspect (e.g. {{randomExample(@index)}})" value="{{rubric.aspect}}" required pattern=".*\S+.*">
             </div>
           </th>
           <th>

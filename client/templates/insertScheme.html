@@ -7,7 +7,7 @@
           <div class="row">       
             <div class="required field name-field">
               <label for="scheme-name">Scheme Name</label>
-              <input class="{{#unless editingName}} stealth {{/unless}}" type="text" name="scheme-name" required placeholder="Unique name for this scheme" value="{{schemeName}}">
+              <input class="{{#unless editingName}} stealth {{/unless}}" type="text" name="scheme-name" required pattern=".*\S+.*" placeholder="Unique name for this scheme" value="{{schemeName}}">
               <div class="ui large header scheme-name {{#if editingName}} stealth {{/if}}">{{schemeName}}</div>
             </div>
           </div>
