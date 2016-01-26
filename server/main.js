@@ -1,5 +1,10 @@
 Meteor.startup(function () {
-    // code to run on server at startup
+    BrowserPolicy.content.disallowInlineScripts();
+    BrowserPolicy.content.disallowEval();
+    BrowserPolicy.content.allowInlineStyles();
+    BrowserPolicy.content.allowFontDataUrl();
+    BrowserPolicy.content.allowOriginForAll('https://fonts.googleapis.com/');
+    BrowserPolicy.content.allowFontOrigin('https://fonts.gstatic.com/');
  });
 
 Meteor.publish('markingSchemes', function (idArg) {
