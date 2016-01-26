@@ -57,7 +57,7 @@
           {{#each asp in aspects}}
             <table class="ui compact selectable celled table aspect-table">
               <thead>
-                <tr>
+                <tr class="header-row">
                   <th colspan="2">
                     {{asp.aspect}}
                   </th>
@@ -107,11 +107,17 @@
           <div class="ui one column centered padded grid">
             <div class="one column centered row">
               <div class="center aligned column">
-                <div class="ui labeled large input">
+                <div class="ui labeled large action input">
                   <div class="ui label">
-                    Marks can be adjusted by {{adjustmentValueNegative}} to {{adjustmentValuePositive}}:
+                    Adjust by {{adjustmentValueNegative}} to {{adjustmentValuePositive}}:
                   </div>
-                  <input type="number" name="adjustment" placeholder="0" min="{{adjustmentValueNegative}}" max="{{adjustmentValuePositive}}">
+                  <input type="number" name="adjustment" value="{{adjustmentValue}}" placeholder="0" min="{{adjustmentValueNegative}}" max="{{adjustmentValuePositive}}">
+                  <button class="ui icon button adj-minus-button">
+                    <i class="minus icon"></i>
+                  </button>
+                  <button class="ui icon button adj-plus-button">
+                    <i class="plus icon"></i>
+                  </button>
                 </div>
               </div>
             </div>

@@ -46,7 +46,7 @@
 }
 
 .rubric-array-remove, .rubric-array-remove i, .comment-remove, .comment-remove i {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 .stealth {
@@ -109,7 +109,6 @@ input[name="scheme-name"] {
  100% {
     background-position: 0% -295px;
  }
-
 }
 
 #masthead .container {
@@ -138,7 +137,7 @@ tr.highlighted {
 
 .pusher {
   display: flex;
-  min-height: 94vh;
+  min-height: 92vh;
   flex-direction: column;
 }
 
