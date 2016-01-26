@@ -1,7 +1,7 @@
 <template name="navigation">  
   <div class="ui blue large top inverted menu desktop-menu">
     <div class="ui container">
-      <div class="header item">
+      <div class="header {{activeIfTemplate 'home'}} item">
         <a href="{{pathFor route='home'}}"><i class="student icon"></i> WebMark</a>
       </div>
       {{#if currentUser}}
