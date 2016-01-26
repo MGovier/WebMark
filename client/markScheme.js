@@ -3,6 +3,7 @@ Template.markScheme.onCreated(function() {
   this.marks = new ReactiveVar(0);
   this.markerName = new ReactiveVar(false);
   this.lastStudent = new ReactiveVar('');
+  this.adjustmentValue = 0;
 });
 
 Template.markScheme.onRendered(() => {
@@ -58,24 +59,46 @@ Template.markScheme.helpers({
 });
 
 Template.markScheme.events({
-  'click tr': function (evt, template) {
+  'click tr:not(.header-row)': function (evt, template) {
     $(evt.currentTarget).find('input').prop('checked', true);
+    $('tr:last input:first').trigger('change');
+    $('body').animate({
+        scrollTop: $(window).scrollTop() + $(evt.currentTarget).closest('table').height()
+    }, 200);
+  },
+  'change tr input': function (evt, template) {
     let aspects = [];
     $('.aspect-table').each(function (index, table) {
       let bData = Blaze.getData(table),
-          aObj = {
-            aspect: bData.aspects[index].aspect,
-            selected: $(table).find('input[type="radio"]:checked').closest('tr').children('td.criteria').text(),
-            // Slice 'marks' off the end... Shouldn't be using the DOM for this data!
-            mark: parseInt($(table).find('input[type="radio"]:checked').siblings('label').text().slice(0, -6), 10) || 0,
-            maxMark: bData.aspects[index].maxMark
-          };
+        aObj = {
+          aspect: bData.aspects[index].aspect,
+          selected: $(table).find('input[type="radio"]:checked').closest('tr').children('td.criteria').text(),
+          // Slice 'marks' off the end... Shouldn't be using the DOM for this data!
+          mark: parseInt($(table).find('input[type="radio"]:checked').siblings('label').text().slice(0, -6), 10) || 0,
+          maxMark: bData.aspects[index].maxMark
+        };
       aspects.push(aObj);
     });
     template.aspects.set(aspects);
   },
   'change input[name="adjustment"]': function () {
     countMarksFunction();
+  },
+  'click .adj-plus-button': function (evt) {
+    evt.preventDefault();
+    $number = $('input[name="adjustment"]');
+    if ($number.val() < Blaze.getData(evt.currentTarget).adjustmentValuePositive) {
+      $number.val((parseInt($number.val(),10) || 0) + 1);
+    }
+    $('input[name="adjustment"]').trigger('change');
+  },
+  'click .adj-minus-button': function (evt) {
+    evt.preventDefault();
+    $number = $('input[name="adjustment"]');
+    if ($number.val() > Blaze.getData(evt.currentTarget).adjustmentValueNegative) {
+      $number.val((parseInt($number.val(),10) || 0) - 1);
+    }
+    $('input[name="adjustment"]').trigger('change');
   },
   'focus input[type="radio"]': function (evt) {
     $(evt.currentTarget).closest('tr').addClass('highlighted');
@@ -104,34 +127,20 @@ Template.markScheme.events({
       template.lastStudent.set(markObject.studentNo);
       template.markerName.set($('input[name="marker-name"]').val());
       // If connected, we can wait for server acceptance. If not, we'll uhh... hope it's fine.
-      if (Meteor.status().connected) {
-        Meteor.call('addMark', markObject, (error, result) => {
-          if (error) {
-            sAlert.error('Error: ' + error.message +'. Please check your submission.');
-          } else {
-            sAlert.success('Marks submitted for ' + markObject.studentNo, {position: 'top-right', timeout: 3000, offset: 60});
-            $('.submit-marks').removeClass('loading').addClass('submit-marks');
-            template.marks.set(0);
-            template.aspects.set([]);
-            form.reset();
-            $('input[name="marker-name"]').val(template.markerName.get());
-            $('input[name="student-no"]').focus();
-            $('.marks-submitted').transition('pulse');
-            $('body').scrollTop(0);
-          }
-        });
-      } else {
-        Meteor.call('addMark', markObject);
-        sAlert.success('Marks submitted for ' + markObject.studentNo, {position: 'top-right', timeout: 20000, offset: 60});
-        $('.submit-marks').removeClass('loading').addClass('submit-marks');
-        template.marks.set(0);
-        template.aspects.set([]);
-        form.reset();
-        $('input[name="marker-name"]').val(template.markerName.get());
-        $('input[name="student-no"]').focus();
-        $('.marks-submitted').transition('pulse');
-        $('body').scrollTop(0);
-      }
+      Meteor.call('addMark', markObject, (error) => {
+        if (error) {
+          sAlert.error('Error: ' + error.message +'. Please check your submission.');
+        } 
+      });
+      sAlert.success('Marks submitted for ' + markObject.studentNo, {position: 'top-right', timeout: 3000, offset: 60});
+      $('.submit-marks').removeClass('loading').addClass('submit-marks');
+      template.marks.set(0);
+      template.aspects.set([]);
+      form.reset();
+      $('input[name="marker-name"]').val(template.markerName.get());
+      $('input[name="student-no"]').focus();
+      $('.marks-submitted').transition('pulse');
+      $('body').scrollTop(0);
     } else {
       // Semantic validation checks
     }

@@ -112,26 +112,17 @@ Template.insertScheme.events({
         'maxMarks': totalMarksFunction()
       };
       // If connected, we can wait for server acceptance. If not, we'll uhh... hope it's fine.
-      if (Meteor.status().connected) {
-        Meteor.call('addScheme', schemaObject, (error, result) => {
-          if (error) {
-            sAlert.error(error.message, error.details);
-            $('.scheme-submit-button').removeClass('loading').addClass('submit-scheme');
-          } else {
-            sAlert.success(schemaObject.name + ' added!', {position: 'top-right', onRouteClose: false, offset: 60});
-            $('.scheme-submit-button').removeClass('loading').addClass('submit-scheme');
-            resetSession();
-            form.reset();
-            Router.go('dashboard');
-          }
-        });
-      } else {
-        Meteor.call('addScheme', schemaObject);
-        $('.submit-scheme').removeClass('loading').addClass('submit-scheme');
-        resetSession();
-        form.reset();
-        Router.go('dashboard');
-      }
+      Meteor.call('addScheme', schemaObject, (error) => {
+        if (error) {
+          sAlert.error(error.message, error.details);
+          $('.scheme-submit-button').removeClass('loading').addClass('submit-scheme');
+        }
+      });
+      sAlert.success(schemaObject.name + ' added!', {position: 'top-right', onRouteClose: false, offset: 60});
+      $('.scheme-submit-button').removeClass('loading').addClass('submit-scheme');
+      resetSession();
+      form.reset();
+      Router.go('dashboard');
     } else {
       // Semantic validation checks
     }
