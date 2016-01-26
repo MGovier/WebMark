@@ -8,22 +8,19 @@ Template.insertScheme.onRendered(() => {
       $('textarea[name="scheme-desc"]').focus();
     },
   });
-
-  $.getScript('dragula.min.js', function () {
-    var drake = dragula({
-      isContainer: function (el) {
-        return el.classList.contains('dragula-container');
-      }
-    });
-    drake.on('dragend', function(item, tar, source, sibling) {
-      $('.rubric-table input:first').trigger('change');
-      let rObj = Session.get('rubricObject');
-      Session.set('rubricObject', []);
-      Meteor.setTimeout( function () {
-        Session.set('rubricObject', rObj);
-      }, 80);
-    });
-  })
+  var drake = dragula({
+    isContainer: function (el) {
+      return el.classList.contains('dragula-container');
+    }
+  });
+  drake.on('dragend', function(item, tar, source, sibling) {
+    $('.rubric-table input:first').trigger('change');
+    let rObj = Session.get('rubricObject');
+    Session.set('rubricObject', []);
+    Meteor.setTimeout( function () {
+      Session.set('rubricObject', rObj);
+    }, 80);
+  });
   // If session var is still set, use that for the option value.
   if (Session.get('unitCode')) {
     $('.unit-select').dropdown('set selected', Session.get('unitCode'));
