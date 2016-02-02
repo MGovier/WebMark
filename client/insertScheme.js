@@ -9,15 +9,15 @@ Template.insertScheme.onRendered(() => {
     },
   });
   var drake = dragula({
-    isContainer: function (el) {
+    isContainer: function(el) {
       return el.classList.contains('dragula-container');
     }
   });
-  drake.on('dragend', function(item, tar, source, sibling) {
+  drake.on('dragend', function() {
     $('.rubric-table input:first').trigger('change');
     let rObj = Session.get('rubricObject');
     Session.set('rubricObject', []);
-    Meteor.setTimeout( function () {
+    Meteor.setTimeout(function() {
       Session.set('rubricObject', rObj);
     }, 80);
   });
@@ -31,11 +31,13 @@ Template.insertScheme.onRendered(() => {
   });
 });
 
-Template.insertScheme.created = function () {
+Template.insertScheme.created = function() {
   Session.setDefault('adjustmentAllowed', false);
   Session.setDefault('rubricObject', [{
     uuid: UI._globalHelpers.generateUUID(),
-    rows: [{uuid: UI._globalHelpers.generateUUID()}],
+    rows: [{
+      uuid: UI._globalHelpers.generateUUID()
+    }],
     maxMark: 0
   }]);
   Session.setDefault('comments', [{
@@ -50,11 +52,13 @@ Template.insertScheme.created = function () {
   Session.setDefault('actionHistory', []);
 };
 
-var resetSession = function () {
+var resetSession = function() {
   Session.set('adjustmentAllowed', false);
   Session.set('rubricObject', [{
     uuid: UI._globalHelpers.generateUUID(),
-    rows: [{uuid: UI._globalHelpers.generateUUID()}],
+    rows: [{
+      uuid: UI._globalHelpers.generateUUID()
+    }],
     maxMark: 0
   }]);
   Session.set('comments', [{
@@ -68,9 +72,9 @@ var resetSession = function () {
   Session.set('actionHistory', []);
 };
 
-var totalMarksFunction = function () {
+var totalMarksFunction = function() {
   let rObjs = Session.get('rubricObject'),
-      totalMarks = 0;
+    totalMarks = 0;
   rObjs.forEach((rubric) => {
     totalMarks += rubric.maxMark;
   });
@@ -79,13 +83,13 @@ var totalMarksFunction = function () {
 
 Template.insertScheme.helpers({
   totalMarks: totalMarksFunction,
-  schemeName: function () {
+  schemeName: function() {
     return Session.get('schemeName');
   },
-  editingName: function () {
+  editingName: function() {
     return Session.get('editingName');
   },
-  isThisSelected: function () {
+  isThisSelected: function() {
     return true;
   }
 });
@@ -108,15 +112,23 @@ Template.insertScheme.events({
         'adjustmentValueNegative': $('input[name="adjustment-negative"]').val(),
         'maxMarks': totalMarksFunction()
       };
-      // If connected, we can wait for server acceptance. If not, we'll uhh... hope it's fine.
+
       Meteor.call('addScheme', schemaObject, (error) => {
         if (error) {
           sAlert.error(error.message, error.details);
-          $('.scheme-submit-button').removeClass('loading').addClass('submit-scheme');
+          $('.scheme-submit-button').removeClass('loading')
+            .addClass('submit-scheme');
         }
       });
-      sAlert.success(schemaObject.name + ' added!', {position: 'top-right', onRouteClose: false, offset: 60});
-      $('.scheme-submit-button').removeClass('loading').addClass('submit-scheme');
+
+      sAlert.success(schemaObject.name + ' added!', {
+        position: 'top-right',
+        onRouteClose: false,
+        offset: 60
+      });
+
+      $('.scheme-submit-button').removeClass('loading')
+        .addClass('submit-scheme');
       resetSession();
       form.reset();
       Router.go('dashboard');
@@ -124,36 +136,40 @@ Template.insertScheme.events({
       // Semantic validation checks
     }
   },
-  'click .scheme-submit-button .loading': function (evt) {
+  'click .scheme-submit-button .loading': function(evt) {
     evt.preventDefault();
   },
-  'click .name-field': function () {
+  'click .name-field': function() {
     Session.set('editingName', true);
-    setTimeout(function() { $('input[name="scheme-name"]').select(); }, 100);
+    setTimeout(function() {
+      $('input[name="scheme-name"]').select();
+    }, 100);
   },
-  'blur input[name="scheme-name"]': function () {
+  'blur input[name="scheme-name"]': function() {
     Session.set('editingName', false);
     Session.set('schemeName', $('input[name="scheme-name"]').val());
   },
-  'keydown': function (evt) {
+  'keydown': function(evt) {
     // Meta key works for ctrl on windows and cmd on mac.
-    if (evt.keyCode == 90 && evt.metaKey) {
+    if (evt.keyCode === 90 && evt.metaKey) {
       alert("Ctrl+z");
-    } else if (evt.keyCode === 13 && $(evt.currentTarget).attr('name') == "scheme-name") {
-      evt.preventDefault();
-      $('#unit-field input').focus();
-    } else if (evt.keyCode === 13 && $(evt)[0].target == $('input.search:first')[0]) {
-      evt.preventDefault();
-      $('textarea[name="scheme-desc"]').focus();
+    } else if (evt.keyCode === 13 &&
+        $(evt.currentTarget).attr('name') === "scheme-name") {
+          evt.preventDefault();
+          $('#unit-field input').focus();
+    } else if (evt.keyCode === 13 &&
+        $(evt)[0].target === $('input.search:first')[0]) {
+          evt.preventDefault();
+          $('textarea[name="scheme-desc"]').focus();
     }
     // TODO: UNDO THINGS!
   },
-  'click .reset-scheme': function (evt) {
+  'click .reset-scheme': function(evt) {
     evt.preventDefault();
     $('.ui.basic.reset-check.modal')
       .modal({
-        closable  : false,
-        onApprove : function() {
+        closable: false,
+        onApprove: function() {
           document.getElementById("marking-scheme-form").reset();
           $('input[name="scheme-name"]').val(Session.get('schemeName'));
         },
@@ -163,55 +179,61 @@ Template.insertScheme.events({
 });
 
 Template.rubricBuilder.helpers({
-  rubricObject: function () {
+  rubricObject: function() {
     return Session.get('rubricObject');
   },
-  pickColour: function (index) {
-    let colours = ['blue', 'orange', 'green', 'yellow', 
-                    'teal', 'violet', 'grey', 'pink'];
+  pickColour: function(index) {
+    let colours = ['blue', 'orange', 'green', 'yellow',
+      'teal', 'violet', 'grey', 'pink'
+    ];
     return colours[index % colours.length];
   },
-  canUndo: function () {
+  canUndo: function() {
     return Session.get('rubricHistory').length > 0;
   },
-  randomExample: function (index) {
-    let examples = ['code quality', 'level of documentation', 'testing strategy', 'detail of analysis'];
+  randomExample: function(index) {
+    let examples = ['code quality', 'level of documentation',
+      'testing strategy', 'detail of analysis'];
     return examples[index % examples.length];
   }
 });
 
 Template.rubricBuilder.events({
-  'click .add-criterion': function (evt) {
+  'click .add-criterion': function(evt) {
     evt.preventDefault();
     let rObjs = Session.get('rubricObject'),
-        id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid');
+      id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid');
     rObjs.forEach((rubric) => {
-      if (rubric.uuid == id) {
-        rubric['rows'].push({uuid: UI._globalHelpers.generateUUID()});
+      if (rubric.uuid === id) {
+        rubric.rows.push({
+          uuid: UI._globalHelpers.generateUUID()
+        });
       }
     });
     Session.set('rubricObject', rObjs);
   },
-  'click .add-aspect': function (evt) {
+  'click .add-aspect': function(evt) {
     evt.preventDefault();
     let rObj = Session.get('rubricObject');
     rObj.push({
       uuid: UI._globalHelpers.generateUUID(),
-      rows: [{uuid: UI._globalHelpers.generateUUID()}],
+      rows: [{
+        uuid: UI._globalHelpers.generateUUID()
+      }],
       maxMark: 0
     });
     Session.set('rubricObject', rObj);
   },
-  'click .rubric-array-remove': function (evt) {
+  'click .rubric-array-remove': function(evt) {
     evt.preventDefault();
     let rObjs = Session.get('rubricObject'),
-        rowId = $(evt.currentTarget).closest('tr').attr('data-uuid'),
-        tableId = $(evt.currentTarget).closest('table').attr('data-uuid');
+      rowId = $(evt.currentTarget).closest('tr').attr('data-uuid'),
+      tableId = $(evt.currentTarget).closest('table').attr('data-uuid');
     rObjs.forEach((rubric) => {
-      if (rubric.uuid == tableId) {
+      if (rubric.uuid === tableId) {
         let maxMark = 0;
         rubric.rows = rubric.rows.filter((row) => {
-          return row.uuid != rowId;
+          return row.uuid !== rowId;
         });
         rubric.rows.forEach((row) => {
           if (row.criteriaValue > maxMark) {
@@ -223,27 +245,27 @@ Template.rubricBuilder.events({
     });
     Session.set('rubricObject', rObjs);
   },
-  'click .remove-aspect': function (evt) {
+  'click .remove-aspect': function(evt) {
     evt.preventDefault();
     let rObjs = Session.get('rubricObject'),
-        id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid');
+      id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid');
     rObjs = rObjs.filter((rubric) => {
-      return rubric.uuid != id;
+      return rubric.uuid !== id;
     });
     Session.set('rubricObject', rObjs);
   },
-  'change input': function () {
+  'change input': function() {
     let rObjs = Session.get('rubricObject'),
-        historyArray = Session.get('rubricHistory');
+      historyArray = Session.get('rubricHistory');
     historyArray.push(rObjs);
 
-    let rObj = [];
-    $tables = $('.rubric-table');
+    let rObj = [],
+      $tables = $('.rubric-table');
     $tables.each((index, table) => {
       let $rows = $(table).children('tbody').children('tr'),
-          rows = [],
-          maxMark = 0,
-          rubric = {};
+        rows = [],
+        maxMark = 0,
+        rubric = {};
       rubric.aspect = $(table).find('input[name="rubric-aspect"]').val();
       rubric.uuid = $(table).attr('data-uuid');
       $rows.each((index, row) => {
@@ -252,13 +274,14 @@ Template.rubricBuilder.events({
         rowObj.criteria = $(row).find('input[name="criteria"]').val();
         // Parse if defined. Use base 10.
         if ($(row).find('input[name="criteria-value"]').val() !== undefined) {
-          rowObj.criteriaValue = parseInt($(row).find('input[name="criteria-value"]').val(), 10);
+          rowObj.criteriaValue = parseInt($(row)
+            .find('input[name="criteria-value"]').val(), 10);
         }
         if (rowObj.criteriaValue > maxMark) {
           maxMark = rowObj.criteriaValue;
         }
         rows.push(rowObj);
-      })
+      });
       rubric.rows = rows;
       rubric.maxMark = maxMark;
       rObj.push(rubric);
@@ -269,36 +292,42 @@ Template.rubricBuilder.events({
     Session.set('actionHistory', actionHistory);
     Session.set('rubricHistory', historyArray);
     Session.set('rubricObject', rObj);
-    
+
   },
-  'keydown input[name="criteria-value"]': function (evt) {
+  'keydown input[name="criteria-value"]': function(evt) {
     let $table = $(evt.currentTarget).closest('table'),
-        $lastRow = $table.find('tr:last'),
-        lastRowId = $lastRow.attr('data-uuid'),
-        eventId = $(evt.currentTarget).closest('tr').attr('data-uuid');
+      $lastRow = $table.find('tr:last'),
+      lastRowId = $lastRow.attr('data-uuid'),
+      eventId = $(evt.currentTarget).closest('tr').attr('data-uuid');
     if (eventId === lastRowId) {
-      if (evt.keyCode === 9 && !evt.shiftKey && ($(evt.currentTarget).val() || $lastRow.find('input[name="criteria"]').val().length > 0)) {
-        evt.preventDefault();
-        $table.find('.add-criterion').trigger('click');
-        Meteor.setTimeout(function() { $table.find('tr:last input[name="criteria"]').focus(); }, 100);
+      if (evt.keyCode === 9 && !evt.shiftKey &&
+          ($(evt.currentTarget).val() ||
+          $lastRow.find('input[name="criteria"]').val().length > 0)) {
+            evt.preventDefault();
+            $table.find('.add-criterion').trigger('click');
+            Meteor.setTimeout(function() {
+              $table.find('tr:last input[name="criteria"]').focus();
+            }, 100);
       }
     }
   },
-  'keydown input': function (evt) {
+  'keydown input': function(evt) {
     if (evt.keyCode === 13) {
       evt.preventDefault();
       // Translate that return into a tab...
-      let e = jQuery.Event('keydown', { keyCode: 9 });
+      let e = jQuery.Event('keydown', {
+        keyCode: 9
+      });
       $(evt.currentTarget).trigger(e);
     }
   },
-  'click .duplicate-aspect': function (evt) {
+  'click .duplicate-aspect': function(evt) {
     evt.preventDefault();
     let rObj = Session.get('rubricObject'),
-        id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid'),
-        historyArray = Session.get('rubricHistory');
+      id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid'),
+      historyArray = Session.get('rubricHistory');
     rObj.forEach((rubric) => {
-      if (rubric.uuid == id) {
+      if (rubric.uuid === id) {
         let newRows = [];
         rubric.rows.forEach((row) => {
           newRows.push({
@@ -319,7 +348,7 @@ Template.rubricBuilder.events({
     Session.set('rubricHistory', historyArray);
     Session.set('rubricObject', rObj);
   },
-  'click .undo-rubric-action': function (evt) {
+  'click .undo-rubric-action': function(evt) {
     evt.preventDefault();
     let historyArray = Session.get('rubricHistory');
     Session.set('rubricObject', historyArray.pop());
@@ -328,7 +357,7 @@ Template.rubricBuilder.events({
 });
 
 Template.commentBuilder.helpers({
-  comments: function () {
+  comments: function() {
     return Session.get('comments');
   },
   isLast: function(index) {
@@ -344,26 +373,29 @@ Template.commentBuilder.helpers({
 });
 
 Template.commentBuilder.events({
-  'click .comment-remove': function (evt) {
+  'click .comment-remove': function(evt) {
     evt.preventDefault();
     let comments = Session.get('comments'),
-        id = $(evt.currentTarget).closest('.comment-item').attr('data-uuid');
+      id = $(evt.currentTarget).closest('.comment-item').attr('data-uuid');
     comments = comments.filter((com) => {
-      return com.uuid != id;
+      return com.uuid !== id;
     });
     Session.set('comments', comments);
   },
-  'click .add-comment': function (evt) {
+  'click .add-comment': function(evt) {
     evt.preventDefault();
     let comments = Session.get('comments');
-    comments.push({uuid: UI._globalHelpers.generateUUID()});
+    comments.push({
+      uuid: UI._globalHelpers.generateUUID()
+    });
     Session.set('comments', comments);
   },
-  'change input': function () {
+  'change input': function() {
     let comments = Session.get('comments'),
-        commentArray = Session.get('commentHistory');
+      commentArray = Session.get('commentHistory');
     comments.forEach((com) => {
-      com.comment = $('.comment-item[data-uuid="' + com.uuid + '"] input').val();
+      com.comment = $('.comment-item[data-uuid="' + com.uuid + '"] input')
+        .val();
     });
     Session.set('comments', comments);
     commentArray.push(comments);
@@ -373,22 +405,27 @@ Template.commentBuilder.events({
     actionHistory.push('comment');
     Session.set('actionHistory', actionHistory);
   },
-  'keydown .last-comment': function (evt) {
-    if (evt.keyCode === 9 && !evt.shiftKey && $(evt.currentTarget).find('input').val().length > 0) {
-      evt.preventDefault();
-      $('.add-comment').trigger('click');
-      setTimeout(function() { $('.last-comment input').focus(); }, 100);
+  'keydown .last-comment': function(evt) {
+    if (evt.keyCode === 9 && !evt.shiftKey &&
+        $(evt.currentTarget).find('input').val().length > 0) {
+          evt.preventDefault();
+          $('.add-comment').trigger('click');
+          setTimeout(function() {
+            $('.last-comment input').focus();
+          }, 100);
     }
   },
-  'keydown input': function (evt) {
+  'keydown input': function(evt) {
     if (evt.keyCode === 13) {
       evt.preventDefault();
       // Translate that return into a tab...
-      var e = jQuery.Event('keydown', { keyCode: 9 });
+      var e = jQuery.Event('keydown', {
+        keyCode: 9
+      });
       $(evt.currentTarget).trigger(e);
     }
   },
-  'click .undo-comment-action': function (evt) {
+  'click .undo-comment-action': function(evt) {
     evt.preventDefault();
     let commentArray = Session.get('commentHistory');
     Session.set('comments', commentArray.pop());

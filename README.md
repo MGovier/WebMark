@@ -11,7 +11,7 @@ A Meteor powered Web Application to enable efficient and flexible marking of ass
 ## About
 Final year project for BSc Computer Science by Merlin Govier (UP663652) at the University of Portsmouth.
 
-Based on requirements learned through meeting experienced lecturers and analysing current tools.
+Based on requirements learned through meeting experienced lecturers and analyzing current tools.
 
 ## Installation
 TBC

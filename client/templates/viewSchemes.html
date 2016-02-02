@@ -2,11 +2,11 @@
   <div class="ui one column padded grid">
     <div class="column">
       <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Available Schemes</h3>
-      {{#if markingSchemes.count}}    
+      {{#if markingSchemes.count}}
         <div class="ui four doubling stackable cards">
           {{#each markingSchemes}}
             {{> viewSchemesListItem}}
-          {{/each}}       
+          {{/each}}
         </div>
       {{else}}
         <p class="ui centered">No schemes found! Create a new one and it will appear here to manage and share.</p>

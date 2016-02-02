@@ -1,10 +1,10 @@
 <template name="insertScheme">
   <form id="marking-scheme-form">
     <div class="ui form">
-    <h3 class="ui horizontal divider header"><i class="certificate icon"></i>New Marking Scheme</h3>
+      <h3 class="ui horizontal divider header"><i class="certificate icon"></i>New Marking Scheme</h3>
       <div class="ui stackable four column grid">
         <div class="six wide column">
-          <div class="row">       
+          <div class="row">
             <div class="required field name-field">
               <label for="scheme-name">Scheme Name</label>
               <input class="{{#unless editingName}} stealth {{/unless}}" type="text" name="scheme-name" required pattern=".*\S+.*" placeholder="Unique name for this scheme" value="{{schemeName}}">
@@ -39,9 +39,9 @@
       {{> commentBuilder}}
 
       <h3 class="ui horizontal divider header"><i class="unlock alternate icon"></i>Adjustment</h3>
-      <div class="ui stackable padded grid"> 
-        <div class="row adjustment-row"> 
-          <div class="four wide column"> 
+      <div class="ui stackable padded grid">
+        <div class="row adjustment-row">
+          <div class="four wide column">
             <div class="ui labeled input">
               <div class="ui label">
                 Max Positive
