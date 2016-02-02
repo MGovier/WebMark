@@ -1,7 +1,7 @@
 <template name="activityView">
   {{#if activities.count}}
-    <div class="ui feed">
-      {{#each activity in activities}}
+  <div class="ui feed">
+    {{#each activity in activities}}
       <div class="event">
         <div class="label">
           <i class="{{icon activity.type}} icon"></i>
@@ -15,9 +15,9 @@
           </div>
         </div>
       </div>
-      {{/each}}
-    </div>
+    {{/each}}
+  </div>
   {{else}}
-  <p> Nothing to report, yet!</p>
+    <p> Nothing to report, yet!</p>
   {{/if}}
 </template>

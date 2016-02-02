@@ -10,7 +10,7 @@
           <div class="label">
             Total Marks
           </div>
-        </div> 
+        </div>
       </div>
       <div class="center aligned column">
         <div class="ui statistic">
@@ -28,7 +28,7 @@
   <p>
     <ul>
     {{#each comment in report.presetComments}}
-    <li>{{comment}}</li>
+      <li>{{comment}}</li>
     {{/each}}
     </ul>
   </p>
@@ -50,7 +50,7 @@
         <tr>
           <td class="collapsing">{{aspect.aspect}}</td>
           <td class="collapsing">{{aspect.mark}} / {{aspect.maxMark}}</td>
-          <td>{{aspect.selected}}</td>      
+          <td>{{aspect.selected}}</td>
         </tr>
       {{/each}}
     </tbody>
