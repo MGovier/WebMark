@@ -23,7 +23,7 @@ TBC
 ## Project Structure
 
 Directory | Purpose                           |
-----------|-----------------------------------|
+----------|-----------------------------------|---------
 lib/      | Client and server shared functions, such as application routes and data schemas. |
 public/   | Files to serve directly to client, such as favicon.ico or robots.txt. |
 server/   | Code to only execute on the server only. Never exposed to the client. This would hold security configurations. |   
