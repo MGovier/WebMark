@@ -43,13 +43,10 @@ Template.insertScheme.created = function() {
   Session.setDefault('comments', [{
     uuid: UI._globalHelpers.generateUUID()
   }]);
-  Session.setDefault('rubricHistory', []);
   Session.setDefault('schemeName', UI._globalHelpers.generateFunName());
   Session.setDefault('unitCode', '');
   Session.setDefault('editingName', false);
   Session.setDefault('commentHistory', []);
-  // Keep track of if rubric or comment field should be undone.
-  Session.setDefault('actionHistory', []);
 };
 
 var resetSession = function() {
@@ -64,12 +61,10 @@ var resetSession = function() {
   Session.set('comments', [{
     uuid: UI._globalHelpers.generateUUID()
   }]);
-  Session.set('rubricHistory', []);
   Session.set('schemeName', UI._globalHelpers.generateFunName());
   Session.set('unitCode', '');
   Session.set('editingName', false);
   Session.set('commentHistory', []);
-  Session.set('actionHistory', []);
 };
 
 var totalMarksFunction = function() {
@@ -176,7 +171,7 @@ Template.rubricBuilder.helpers({
     return examples[index % examples.length];
   },
   randomCriterion: function (index) {
-    let criteria = ['partially implemented', 'excellent', 'inconsistent',
+    let criteria = ['unfinished', 'excellent', 'inconsistent',
       'only meets basic requirements', 'shows originality'];
     return criteria[index % criteria.length];
   }
@@ -270,13 +265,7 @@ Template.rubricBuilder.events({
       rubric.maxMark = maxMark;
       rObj.push(rubric);
     });
-
-    let actionHistory = Session.get('actionHistory');
-    actionHistory.push('rubric');
-    Session.set('actionHistory', actionHistory);
-    Session.set('rubricHistory', historyArray);
     Session.set('rubricObject', rObj);
-
   },
   'keydown input[name="criteria-value"]': function(evt) {
     let $table = $(evt.currentTarget).closest('table'),
@@ -308,8 +297,7 @@ Template.rubricBuilder.events({
   'click .duplicate-aspect': function(evt) {
     evt.preventDefault();
     let rObj = Session.get('rubricObject'),
-      id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid'),
-      historyArray = Session.get('rubricHistory');
+      id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid');
     rObj.forEach((rubric) => {
       if (rubric.uuid === id) {
         let newRows = [];
@@ -328,15 +316,7 @@ Template.rubricBuilder.events({
         });
       }
     });
-    historyArray.push(rObj);
-    Session.set('rubricHistory', historyArray);
     Session.set('rubricObject', rObj);
-  },
-  'click .undo-rubric-action': function(evt) {
-    evt.preventDefault();
-    let historyArray = Session.get('rubricHistory');
-    Session.set('rubricObject', historyArray.pop());
-    Session.set('rubricHistory', historyArray);
   }
 });
 
@@ -385,9 +365,6 @@ Template.commentBuilder.events({
     commentArray.push(comments);
     Session.set('commentHistory', commentArray);
 
-    let actionHistory = Session.get('actionHistory');
-    actionHistory.push('comment');
-    Session.set('actionHistory', actionHistory);
   },
   'keydown .last-comment': function(evt) {
     if (evt.keyCode === 9 && !evt.shiftKey &&
