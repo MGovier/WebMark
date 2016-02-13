@@ -35,7 +35,8 @@
   width: 8em;
 }
 .add-aspect {
-  margin-top: 4em !important;
+  margin-top: 3em !important;
+  margin-bottom: 3em !important;
 }
 .rubric-array-item, .comment-item {
   position: relative;
