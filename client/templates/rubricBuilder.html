@@ -1,6 +1,6 @@
-<template name="rubricBuilder">  
+<template name="rubricBuilder">
   {{#each rubric in rubricObject}}
-    <table class="ui {{pickColour(@index)}} table rubric-table" data-uuid="{{rubric.uuid}}">
+    <table class="ui blue compact table rubric-table" data-uuid="{{rubric.uuid}}">
       <thead>
         <tr>
           <th colspan="2">
@@ -10,8 +10,8 @@
           </th>
           <th>
             <div class="ui fluid icon buttons tooltip-buttons">
-              <button class="ui button duplicate-aspect" data-content="Duplicate this aspect"><i class="copy icon"></i></button>
-              <button class="ui negative button remove-aspect" data-content="Delete this aspect"><i class="trash icon"></i></button>
+              <button class="ui basic blue button duplicate-aspect" data-content="Duplicate this aspect"><i class="copy icon"></i></button>
+              <button class="ui basic red button remove-aspect" data-content="Delete this aspect"><i class="trash icon"></i></button>
             </div>
           </th>
         </tr>
@@ -20,12 +20,12 @@
       {{#each rubric.rows}}
         <tr data-uuid="{{this.uuid}}">
           <td class="collapsing"><i class="chevron right icon"></i></td>
-          <td class="twelve wide">      
-            <div class="field rubric-array-item"> 
+          <td class="twelve wide">
+            <div class="field rubric-array-item">
               <div class="ui mini red corner label rubric-array-remove">
                 <i class="minus icon"></i>
-              </div>   
-              <input type="text" name="criteria" placeholder="Criteria" value="{{this.criteria}}">
+              </div>
+              <input type="text" name="criteria" placeholder="Criterion (e.g. {{randomCriterion(@index)}})" value="{{this.criteria}}">
             </div>
           </td>
           <td class="left aligned four wide">

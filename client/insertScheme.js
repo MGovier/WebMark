@@ -151,30 +151,15 @@ Template.insertScheme.events({
   },
   'keydown': function(evt) {
     // Meta key works for ctrl on windows and cmd on mac.
-    if (evt.keyCode === 90 && evt.metaKey) {
-      alert("Ctrl+z");
+    if (evt.keyCode === 13 &&
+      $(evt.currentTarget).attr('name') === "scheme-name") {
+        evt.preventDefault();
+        $('#unit-field input').focus();
     } else if (evt.keyCode === 13 &&
-        $(evt.currentTarget).attr('name') === "scheme-name") {
-          evt.preventDefault();
-          $('#unit-field input').focus();
-    } else if (evt.keyCode === 13 &&
-        $(evt)[0].target === $('input.search:first')[0]) {
-          evt.preventDefault();
-          $('textarea[name="scheme-desc"]').focus();
+      $(evt)[0].target === $('input.search:first')[0]) {
+        evt.preventDefault();
+        $('textarea[name="scheme-desc"]').focus();
     }
-    // TODO: UNDO THINGS!
-  },
-  'click .reset-scheme': function(evt) {
-    evt.preventDefault();
-    $('.ui.basic.reset-check.modal')
-      .modal({
-        closable: false,
-        onApprove: function() {
-          document.getElementById("marking-scheme-form").reset();
-          $('input[name="scheme-name"]').val(Session.get('schemeName'));
-        },
-        detachable: false
-      }).modal('show');
   }
 });
 
@@ -182,19 +167,18 @@ Template.rubricBuilder.helpers({
   rubricObject: function() {
     return Session.get('rubricObject');
   },
-  pickColour: function(index) {
-    let colours = ['blue', 'orange', 'green', 'yellow',
-      'teal', 'violet', 'grey', 'pink'
-    ];
-    return colours[index % colours.length];
-  },
   canUndo: function() {
     return Session.get('rubricHistory').length > 0;
   },
   randomExample: function(index) {
-    let examples = ['code quality', 'level of documentation',
-      'testing strategy', 'detail of analysis'];
+    let examples = ['writing quality', 'level of documentation',
+      'testing strategy', 'detail of analysis', 'referencing'];
     return examples[index % examples.length];
+  },
+  randomCriterion: function (index) {
+    let criteria = ['partially implemented', 'excellent', 'inconsistent',
+      'only meets basic requirements', 'shows originality'];
+    return criteria[index % criteria.length];
   }
 });
 
