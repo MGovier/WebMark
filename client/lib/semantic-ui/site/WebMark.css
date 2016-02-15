@@ -34,6 +34,10 @@
 .adjustment-row .input {
   width: 8em;
 }
+.add-aspect {
+  margin-top: 3em !important;
+  margin-bottom: 3em !important;
+}
 .rubric-array-item, .comment-item {
   position: relative;
 }
@@ -55,9 +59,6 @@ input[name="scheme-name"] {
 }
 .loading-frame {
   min-height: 15em;
-}
-.sign-in {
-  border-right: 1px solid #e8e8e8;
 }
 #masthead {
   height: 30em;
@@ -83,7 +84,9 @@ input[name="scheme-name"] {
   animation-fill-mode: both;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+  transform-origin: 50% 50%;
   perspective-origin: 50% 50%;
+  transform: translate3d(0, 0, 0);
   transform: perspective(800px) rotateX(30deg) translateZ(-100px);
 }
 @keyframes masthead {

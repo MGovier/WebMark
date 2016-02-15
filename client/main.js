@@ -70,7 +70,7 @@ Template.home.destroyed = function() {
 };
 
 Template.viewSchemes.onRendered(() => {
-  $('.icon.button').popup({
+  $('.basic.button').popup({
     inline: false,
     position: 'top left'
   });
