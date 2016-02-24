@@ -35,6 +35,29 @@ Template.marks.helpers({
   }
 });
 
+function generateJSON (template) {
+  let output = {
+    'schemeName': template.data.markingScheme.name,
+    'schemeCreator': Meteor.user().profile.name,
+    'exportTime': new Date(),
+    'reportCount': template.data.marks.count(),
+    'reports': [],
+    'maxMarks': template.data.markingScheme.maxMarks
+  },
+  addMark = function (report) {
+    output.reports.push({
+      'marker': report.marker,
+      'studentNo': report.studentNo,
+      'marks': report.marks,
+      'aspects': report.aspects,
+      'presetComments': report.presetComments,
+      'comment': report.freeComment
+    });
+  };
+  template.data.marks.forEach(addMark);
+  return output;
+}
+
 Template.marks.events({
   'click .reactive-table tbody tr': function(evt, template) {
     Router.go('markReport', {
@@ -44,6 +67,16 @@ Template.marks.events({
   },
   'keyup #filter-table': function(evt, template) {
     template.filter.set($(evt.currentTarget).val());
+  },
+  'click .generate-json': function(evt, template) {
+    let output = generateJSON(template);
+    $('.export-output').text(JSON.stringify(output, null, '  '));
+    $('.download-data').attr('href', "data:text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(generateJSON(template), null, '  ')));
+    $('.download-data').removeClass('stealth');
+  },
+  'click .generate-csv': function(evt, template) {
+    window.alert('coming soon!');
   }
 });
 

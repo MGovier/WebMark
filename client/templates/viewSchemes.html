@@ -1,7 +1,7 @@
 <template name="viewSchemes">
+  <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Available Schemes</h3>
   <div class="ui one column padded grid">
     <div class="column">
-      <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Available Schemes</h3>
       {{#if markingSchemes.count}}
         <div class="ui four doubling stackable cards">
           {{#each markingSchemes}}
@@ -76,13 +76,13 @@
     <div class="extra content">
       <div class="ui three column center aligned grid">
         <div class="column">
-          <a href="{{pathFor route='markScheme'}}"><button class="ui basic button mark-using-scheme" data-content="Start marking with this scheme">Mark</button></a>
+          <a href="{{pathFor route='markScheme'}}"><button class="ui basic small button mark-using-scheme" data-content="Start marking with this scheme">Mark</button></a>
         </div>
-        <div class="column">
-          <button class="ui basic button copy-scheme-url" data-content="Copy the URL to this scheme" data-clipboard-text="{{hashbangURL (urlFor route='markScheme') (pathFor route='markScheme')}}">Link</button>
+        <div class="center floated column">
+          <button class="ui basic small button copy-scheme-url" data-content="Copy the URL to this scheme" data-clipboard-text="{{hashbangURL (urlFor route='markScheme') (pathFor route='markScheme')}}">Link</button>
         </div>
-        <div class="column">
-          <button class="ui basic button edit-scheme" data-content="Edit this scheme">Edit</button>
+        <div class="left floated column">
+          <button class="ui basic small button edit-scheme" data-content="Edit this scheme">Edit</button>
         </div>
       </div>
     </div>

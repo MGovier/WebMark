@@ -24,32 +24,8 @@ Template.main.onRendered(() => {
 });
 
 Template.home.onRendered(() => {
-  $('.right-perspective-overlay').visibility({
-    once: false,
-    continuous: true,
-    offset: 500,
-    onPassing: function(calculations) {
-      if (calculations.percentagePassed < 0.1) {
-        $(this).css('opacity', 0.0);
-      } else {
-        $(this).css('opacity', calculations.percentagePassed);
-      }
-      $(this).css('top', (calculations.percentagePassed * 50));
-    }
-  });
-  $('.left-perspective-overlay').visibility({
-    once: false,
-    continuous: true,
-    offset: 650,
-    onPassing: function(calculations) {
-      if (calculations.percentagePassed < 0.1) {
-        $(this).css('opacity', 0.0);
-      } else {
-        $(this).css('opacity', calculations.percentagePassed);
-      }
-      $(this).css('top', (calculations.percentagePassed * 50));
-    }
-  });
+  $('.right-perspective-overlay').transition('slide right in');
+  $('.left-perspective-overlay').transition('slide left in');
 });
 
 Template.home.created = function() {
