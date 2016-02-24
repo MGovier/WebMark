@@ -11,6 +11,9 @@ Template.insertScheme.onRendered(() => {
   var drake = dragula({
     isContainer: function(el) {
       return el.classList.contains('dragula-container');
+    },
+    invalid: function(el) {
+      return el.nodeName === 'INPUT';
     }
   });
   drake.on('dragend', function() {
@@ -29,6 +32,7 @@ Template.insertScheme.onRendered(() => {
     inline: false,
     position: 'top left'
   });
+  $('.name-field').trigger('click');
 });
 
 Template.insertScheme.created = function() {
@@ -88,7 +92,6 @@ Template.insertScheme.helpers({
     return true;
   }
 });
-
 
 Template.insertScheme.events({
   'click .submit-scheme': function(evt) {
@@ -234,10 +237,6 @@ Template.rubricBuilder.events({
     Session.set('rubricObject', rObjs);
   },
   'change input': function() {
-    let rObjs = Session.get('rubricObject'),
-      historyArray = Session.get('rubricHistory');
-    historyArray.push(rObjs);
-
     let rObj = [],
       $tables = $('.rubric-table');
     $tables.each((index, table) => {
