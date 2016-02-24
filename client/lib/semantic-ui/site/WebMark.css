@@ -154,10 +154,9 @@ tr.highlighted {
   margin-right: 5em;
   position: absolute !important;
   z-index: 100;
-  top: 10px;
-  left: -100px;
+  top: 60px;
+  left: -70px;
   box-shadow: 5px 8px 6px -8px grey;
-  opacity: 0.0;
   transition: all 1s;
 }
 .left-perspective {
@@ -176,11 +175,10 @@ tr.highlighted {
   margin-bottom: 5em;
   position: absolute !important;
   z-index: 100;
-  top: 10px;
-  left: 100px;
+  top: 70px;
+  left: 320px;
   box-shadow: -5px 8px 6px -8px grey;
   transition: all 1s;
-  opacity: 0.0;
 }
 .s-alert-success.s-alert-top-right.s-alert-effect-stackslide {
   width: 30em;
