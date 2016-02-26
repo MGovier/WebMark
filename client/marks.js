@@ -105,6 +105,7 @@ Template.marks.events({
       encodeURIComponent(JSON.stringify(output, null, '  ')));
     $('.download-data').attr('download',
       template.data.markingScheme.name + '.json');
+    $('.output-view').removeClass('stealth');
     $('.download-data').removeClass('stealth');
   },
   'click .generate-csv': function(evt, template) {
@@ -114,6 +115,7 @@ Template.marks.events({
       encodeURIComponent(output));
     $('.download-data').attr('download',
       template.data.markingScheme.name + '.csv');
+    $('.output-view').removeClass('stealth');
     $('.download-data').removeClass('stealth');
   }
 });
