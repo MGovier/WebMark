@@ -11,6 +11,10 @@
     margin-bottom: -0.3em !important;
     color: white !important;
   }
+  .hide-on-mobile {
+    display: none !important;
+    height: 0 !important;
+  }
 }
 @media only screen and (min-width: 421px) {
   .compacted-menu {
@@ -141,26 +145,26 @@ tr.highlighted {
   overflow: hidden;
 }
 .right-perspective {
-  transform: perspective(600px) rotateY(-25deg);
+  transform: perspective(600px) rotateY(-15deg);
   transform-style: preserve-3d;
   margin-top: 2em;
   margin-right: 5em;
   box-shadow: 5px 8px 6px -8px grey;
 }
 .right-perspective-overlay {
-  transform: perspective(600px) rotateY(-25deg);
+  transform: perspective(600px) rotateY(-15deg);
   transform-style: preserve-3d;
   margin-top: 2em;
   margin-right: 5em;
   position: absolute !important;
   z-index: 100;
-  top: 60px;
-  left: -70px;
+  top: 18%;
+  left: -22%;
   box-shadow: 5px 8px 6px -8px grey;
   transition: all 1s;
 }
 .left-perspective {
-  transform: perspective(600px) rotateY(25deg);
+  transform: perspective(600px) rotateY(15deg);
   transform-style: preserve-3d;
   margin-top: 2em;
   margin-left: 0em;
@@ -168,15 +172,15 @@ tr.highlighted {
   box-shadow: -5px 8px 6px -8px grey;
 }
 .left-perspective-overlay {
-  transform: perspective(600px) rotateY(25deg);
+  transform: perspective(600px) rotateY(15deg);
   transform-style: preserve-3d;
   margin-top: 2em;
   margin-left: 0em;
   margin-bottom: 5em;
   position: absolute !important;
   z-index: 100;
-  top: 70px;
-  left: 320px;
+  top: 18%;
+  left: 80%;
   box-shadow: -5px 8px 6px -8px grey;
   transition: all 1s;
 }

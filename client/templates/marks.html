@@ -1,6 +1,6 @@
 <template name="marks">
   <h3 class="ui horizontal divider header"><i class="users icon"></i>Marks for {{markingScheme.name}}</h3>
-  <div class="ui grid">
+  <div class="ui stackable grid">
     <div class="row">
       <div class="ten wide column">
         <p>Marks for this scheme are shown below. Select a row to view a more detailed report.</p>
@@ -17,20 +17,26 @@
   </div>
   {{> reactiveTable settings=settings}}
   <h3 class="ui horizontal divider header"><i class="share icon"></i>Export</h3>
-  <div class="ui grid">
+  <div class="ui stackable grid">
     <div class="row">
-      <button class="ui button generate-json">Generate JSON</button>
-      <button class="ui button generate-csv">Generate CSV</button>
-      <button class="ui button generate-links">Create Student-Specific Links</button>
+      <div class="four wide column">
+        <button class="ui fluid button generate-json">Generate JSON</button>
+      </div>
+      <div class="four wide column">
+        <button class="ui fluid button generate-csv">Generate CSV</button>
+      </div>
+      <div class="four wide column">
+        <button class="ui fluid button generate-links">Create Student-Specific Links</button>
+      </div>
     </div>
     <div class="ui row form">
-      <div class="sixteen wide field">
+      <div class="sixteen wide field output-view stealth">
         <label>Output</label>
         <textarea rows="8" readonly class="export-output"></textarea>
       </div>
     </div>
     <div class="row">
-      <a download="{{markingScheme.name}}.json" class="ui fluid positive button download-data stealth">Download</a>
+      <a class="ui fluid positive button download-data stealth">Download</a>
     </div>
   </div>
 </template>

@@ -51,9 +51,39 @@ function generateJSON (template) {
       'marks': report.marks,
       'aspects': report.aspects,
       'presetComments': report.presetComments,
-      'comment': report.freeComment
+      'comment': report.freeComment,
+      'adjustment': report.adjustment
     });
   };
+  template.data.marks.forEach(addMark);
+  return output;
+}
+
+function generateCSV (template) {
+  // header first
+  let output = 'Student No,Marker,Marks,Max Marks,Preset Comments,Comment';
+  template.data.markingScheme.aspects.forEach((aspect) => {
+    output += ',"' + aspect.aspect + ' Level","' + aspect.aspect + ' Mark","' +
+      aspect.aspect + ' Max Mark"';
+  });
+  output += ',Adjustment\n';
+
+  let addMark = function (report) {
+    output += '"' + report.studentNo + '"';
+    output += ',"' + report.marker + '"';
+    output += ',' + report.marks;
+    output += ',' + report.maxMarks;
+    output += ',"' + report.presetComments + '"';
+    output += ',"' + report.freeComment + '"';
+    report.aspects.forEach((aspect) => {
+      output += ',"' + aspect.selected + '"';
+      output += ',' + aspect.mark;
+      output += ',' + aspect.maxMark;
+    });
+    output += ',' + (report.adjustment || 0);
+    output += '\n';
+  };
+
   template.data.marks.forEach(addMark);
   return output;
 }
@@ -72,11 +102,21 @@ Template.marks.events({
     let output = generateJSON(template);
     $('.export-output').text(JSON.stringify(output, null, '  '));
     $('.download-data').attr('href', "data:text/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(generateJSON(template), null, '  ')));
+      encodeURIComponent(JSON.stringify(output, null, '  ')));
+    $('.download-data').attr('download',
+      template.data.markingScheme.name + '.json');
+    $('.output-view').removeClass('stealth');
     $('.download-data').removeClass('stealth');
   },
   'click .generate-csv': function(evt, template) {
-    window.alert('coming soon!');
+    let output = generateCSV(template);
+    $('.export-output').text(output);
+    $('.download-data').attr('href', "data:text/csv;charset=utf-8," +
+      encodeURIComponent(output));
+    $('.download-data').attr('download',
+      template.data.markingScheme.name + '.csv');
+    $('.output-view').removeClass('stealth');
+    $('.download-data').removeClass('stealth');
   }
 });
 
