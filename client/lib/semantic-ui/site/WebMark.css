@@ -162,6 +162,7 @@ tr.highlighted {
   left: -22%;
   box-shadow: 5px 8px 6px -8px grey;
   transition: all 1s;
+  max-width: 35% !important;
 }
 .left-perspective {
   transform: perspective(600px) rotateY(15deg);
@@ -180,9 +181,10 @@ tr.highlighted {
   position: absolute !important;
   z-index: 100;
   top: 18%;
-  left: 80%;
+  left: 82%;
   box-shadow: -5px 8px 6px -8px grey;
   transition: all 1s;
+  max-width: 35% !important;
 }
 .s-alert-success.s-alert-top-right.s-alert-effect-stackslide {
   width: 30em;
