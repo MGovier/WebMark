@@ -97,32 +97,21 @@ Template.marks.events({
   },
   'keyup #filter-table': function(evt, template) {
     template.filter.set($(evt.currentTarget).val());
-  },
-  'click .generate-json': function(evt, template) {
-    let output = generateJSON(template);
-    $('.export-output').text(JSON.stringify(output, null, '  '));
-    $('.download-data').attr('href', "data:text/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(output, null, '  ')));
-    $('.download-data').attr('download',
-      template.data.markingScheme.name + '.json');
-    $('.output-view').removeClass('stealth');
-    $('.download-data').removeClass('stealth');
-  },
-  'click .generate-csv': function(evt, template) {
-    let output = generateCSV(template);
-    $('.export-output').text(output);
-    $('.download-data').attr('href', "data:text/csv;charset=utf-8," +
-      encodeURIComponent(output));
-    $('.download-data').attr('download',
-      template.data.markingScheme.name + '.csv');
-    $('.output-view').removeClass('stealth');
-    $('.download-data').removeClass('stealth');
   }
 });
 
 Template.marks.helpers({
   filterVar: function() {
     return Template.instance().filter.get();
+  },
+  jsonData: function() {
+    return "data:text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(
+        generateJSON(Template.instance(), null, '  ')));
+  },
+  csvData: function() {
+    return "data:text/csv;charset=utf-8," +
+      encodeURIComponent(generateCSV(Template.instance()));
   }
 });
 

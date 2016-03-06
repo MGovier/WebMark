@@ -20,23 +20,14 @@
   <div class="ui stackable grid">
     <div class="row">
       <div class="four wide column">
-        <button class="ui fluid button generate-json">Generate JSON</button>
+        <a class="ui fluid button download-json" href="{{jsonData}}" download="{{markingScheme.name}}.json">Download JSON (Web)</a>
       </div>
       <div class="four wide column">
-        <button class="ui fluid button generate-csv">Generate CSV</button>
+        <a class="ui fluid button download-csv" href="{{csvData}}" download="{{markingScheme.name}}.csv">Download CSV (Spreadsheet)</a>
       </div>
       <div class="four wide column">
         <button class="ui fluid button generate-links">Create Student-Specific Links</button>
       </div>
-    </div>
-    <div class="ui row form">
-      <div class="sixteen wide field output-view stealth">
-        <label>Output</label>
-        <textarea rows="8" readonly class="export-output"></textarea>
-      </div>
-    </div>
-    <div class="row">
-      <a class="ui fluid positive button download-data stealth">Download</a>
     </div>
   </div>
 </template>
