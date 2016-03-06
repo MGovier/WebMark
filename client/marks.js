@@ -30,6 +30,15 @@ Template.marks.helpers({
         fn: function(value, object) {
           return Math.round((object.marks / object.maxMarks) * 100);
         }
+      }, {
+        key: 'select',
+        label: 'Select',
+        fn: function (value, object, key) {
+          return new Spacebars.SafeString('<div class="ui checkbox">' +
+              '<input type="checkbox" name="check">' +
+              '<label></label>' +
+            '</div>');
+        }
       }]
     };
   }
@@ -90,10 +99,16 @@ function generateCSV (template) {
 
 Template.marks.events({
   'click .reactive-table tbody tr': function(evt, template) {
-    Router.go('markReport', {
-      _id: this._id,
-      _sid: template.data.markingScheme._id
-    });
+    if (evt.target.className !== 'select' && evt.target.nodeName !== 'INPUT') {
+      Router.go('markReport', {
+        _id: this._id,
+        _sid: template.data.markingScheme._id
+      });
+    }
+  },
+  'click .checkbox': function () {
+    event.stopPropagation();
+
   },
   'keyup #filter-table': function(evt, template) {
     template.filter.set($(evt.currentTarget).val());

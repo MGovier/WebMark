@@ -41,7 +41,8 @@
     "UI": false,
     "BrowserPolicy": false,
     "Ground": false,
-    "Schemas": false
+    "Schemas": false,
+    "Spacebars": false
   },
   "bitwise": true,
     // true: Prohibit bitwise operators (&, |, ^, etc.)
