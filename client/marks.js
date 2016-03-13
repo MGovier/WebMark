@@ -2,6 +2,57 @@ Template.marks.created = function() {
   this.filter = new ReactiveTable.Filter('filter-table');
 };
 
+Template.marks.onRendered(() => {
+  this.graph = Tracker.autorun(function(){
+    if (Marks.find().count() > 0) {
+      var markArray = Marks.find().fetch(),
+          maxMarks = markArray[0].maxMarks,
+          interval = maxMarks / 6,
+          labels = [],
+          series = [];
+      for (var i = 0; i < 6; i++) {
+        var lowerInterval = interval * i,
+            upperInterval = (interval * (i + 1)) - (i === 5 ? 0 : 1),
+            count = 0;
+        var label = `${lowerInterval} - ${upperInterval}`;
+        labels.push(label);
+        for (var m = 0; m < markArray.length; m++) {
+          if (markArray[m].marks >= lowerInterval &&
+              markArray[m].marks <= upperInterval) {
+            count++;
+          }
+        }
+        series.push((count / markArray.length) * 100);
+      }
+      var data = {
+        labels,
+        series
+      };
+      var options = {
+        axisY: {
+          onlyInteger: true,
+          offset: 20
+        },
+        distributeSeries: true
+      };
+
+      new Chartist.Bar('.ct-chart', data, options).on('draw', function(data) {
+        if(data.type === 'bar') {
+          data.element.attr({
+            style: 'stroke-width: 20px'
+          });
+        }
+      });
+    }
+  });
+});
+
+Template.marks.onDestroyed(() => {
+  if (this.graph) {
+    this.graph.stop();
+  }
+});
+
 Template.marks.helpers({
   settings: function() {
     return {
@@ -17,16 +68,16 @@ Template.marks.helpers({
         label: 'Marked By'
       }, {
         key: 'createdAt',
-        label: 'Marked At',
+        label: 'Marked On',
         fn: function(value) {
-          return moment(value).format('llll');
+          return moment(value).format('D/M/YYYY');
         }
       }, {
         key: 'marks',
         label: 'Mark'
       }, {
         key: 'percentage',
-        label: 'Percentage',
+        label: '%',
         fn: function(value, object) {
           return Math.round((object.marks / object.maxMarks) * 100);
         }

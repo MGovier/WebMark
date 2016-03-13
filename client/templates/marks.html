@@ -14,10 +14,16 @@
         </div>
       </div>
     </div>
-  </div>
-  {{> reactiveTable settings=settings}}
-  <h3 class="ui horizontal divider header"><i class="share icon"></i>Export</h3>
-  <div class="ui stackable grid">
+    <div class="row">
+      <div class="ten wide column">
+      {{> reactiveTable settings=settings}}
+      </div>
+      <div class="six wide column">
+        <div class="ct-chart ct-perfect-fourth marks-graph">
+        </div>
+      </div>
+    </div>
+    <h3 class="ui horizontal divider header"><i class="share icon"></i>Export</h3>
     <div class="row">
       <div class="four wide column">
         <a class="ui fluid button download-json" href="{{jsonData}}" download="{{markingScheme.name}}.json">Download JSON (Web)</a>

@@ -42,7 +42,9 @@
     "BrowserPolicy": false,
     "Ground": false,
     "Schemas": false,
-    "Spacebars": false
+    "Spacebars": false,
+    "Tracker": false,
+    "Chartist": false
   },
   "bitwise": true,
     // true: Prohibit bitwise operators (&, |, ^, etc.)

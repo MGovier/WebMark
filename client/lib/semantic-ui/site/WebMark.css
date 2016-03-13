@@ -193,3 +193,9 @@ tr.highlighted {
   border-radius: 0.4em;
   box-shadow: 0px 0px 4px grey;
 }
+
+.marks-graph {
+  height: 110%;
+  padding-top: 3em;
+  margin-top: 3em;
+}
