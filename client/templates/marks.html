@@ -1,38 +1,70 @@
 <template name="marks">
   <h3 class="ui horizontal divider header"><i class="users icon"></i>Marks for {{markingScheme.name}}</h3>
-  <div class="ui stackable grid">
-    <div class="row">
-      <div class="ten wide column">
-        <p>Marks for this scheme are shown below. Select a row to view a more detailed report.</p>
-      </div>
-      <div class="right aligned six wide column">
-        <div class="ui labeled input">
-          <div class="ui label">
-            Filter:
+  {{#if marksExist}}
+    <div class="ui stackable grid">
+      <div class="row">
+        <div class="ten wide column">
+          <p>Marks for this scheme are shown below. Select a row to view a more detailed report. This page will be updated automatically.</p>
+        </div>
+        <div class="right aligned six wide column">
+          <div class="ui labeled input">
+            <div class="ui label">
+              Filter:
+            </div>
+            <input name="filter-table" id="filter-table" type="text" placeholder="e.g. student number" value="{{filterVar}}">
           </div>
-          <input name="filter-table" id="filter-table" type="text" placeholder="e.g. student number" value="{{filterVar}}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="six wide column">
+          <h5 class="ui center aligned header table-heading">Mark distribution percentage</h5>
+          <div class="ct-chart ct-perfect-fourth marks-graph">
+          </div>
+        </div>
+        <div class="ten wide column">
+        {{> reactiveTable settings=settings}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="four wide column">
+          <a class="ui fluid button download-json" href="{{jsonData}}" download="{{markingScheme.name}}.json">Download JSON (Web)</a>
+        </div>
+        <div class="four wide column">
+          <a class="ui fluid button download-csv" href="{{csvData}}" download="{{markingScheme.name}}.csv">Download CSV (Spreadsheet)</a>
+        </div>
+        <div class="four wide right floated column">
+          <button class="ui fluid {{#if deleteDisabled}} disabled {{/if}} button negative delete-rows">Delete Selected</button>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="ten wide column">
-      {{> reactiveTable settings=settings}}
-      </div>
-      <div class="six wide column">
-        <div class="ct-chart ct-perfect-fourth marks-graph">
-        </div>
-      </div>
+  {{else}}
+    <div class="ui segment loading-frame">
+  	  <div class="ui active inverted dimmer">
+        <h2 class="ui icon header">
+          <p></p>
+          <i class="file outline icon"></i>
+          <div class="content">Waiting for marks!
+            <div class="sub header">This page will update automatically as they are submitted.</div>
+          </div>
+        </h2>
+        <p></p>
+  	  </div>
+  	</div>
+  {{/if}}
+  <div class="ui small basic delete-check modal">
+    <div class="ui icon header">
+      <i class="warning circle icon"></i>
+      Delete Marks
     </div>
-    <h3 class="ui horizontal divider header"><i class="share icon"></i>Export</h3>
-    <div class="row">
-      <div class="four wide column">
-        <a class="ui fluid button download-json" href="{{jsonData}}" download="{{markingScheme.name}}.json">Download JSON (Web)</a>
+    <div class="content">
+      <p>Are you sure you want to delete these marks? This cannot be undone!</p>
+    </div>
+    <div class="actions">
+      <div class="ui green basic cancel inverted button">
+        No, keep them
       </div>
-      <div class="four wide column">
-        <a class="ui fluid button download-csv" href="{{csvData}}" download="{{markingScheme.name}}.csv">Download CSV (Spreadsheet)</a>
-      </div>
-      <div class="four wide column">
-        <button class="ui fluid button generate-links">Create Student-Specific Links</button>
+      <div class="ui red ok inverted button">
+        Delete
       </div>
     </div>
   </div>

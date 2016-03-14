@@ -1,8 +1,12 @@
-Template.marks.created = function() {
+Template.marks.onCreated(function() {
   this.filter = new ReactiveTable.Filter('filter-table');
-};
+  let schemeId = this.data.markingScheme._id;
+  Session.setDefault('s-' + schemeId, []);
+});
 
 Template.marks.onRendered(() => {
+  let schemeId = Template.instance().data.markingScheme._id;
+  Session.setDefault('s-' + schemeId, []);
   this.graph = Tracker.autorun(function(){
     if (Marks.find().count() > 0) {
       var markArray = Marks.find().fetch(),
@@ -57,7 +61,7 @@ Template.marks.helpers({
   settings: function() {
     return {
       collection: Template.instance().data.marks,
-      rowsPerPage: 40,
+      rowsPerPage: 30,
       filters: ['filter-table'],
       class: 'ui table striped selectable',
       fields: [{
@@ -84,14 +88,25 @@ Template.marks.helpers({
       }, {
         key: 'select',
         label: 'Select',
-        fn: function (value, object, key) {
-          return new Spacebars.SafeString('<div class="ui checkbox">' +
-              '<input type="checkbox" name="check">' +
-              '<label></label>' +
-            '</div>');
+        sortable: false,
+        fn: function (value, object) {
+          let selectedRows = Session.get('s-' +
+              MarkingSchemes.find().fetch()[0]._id);
+          if (selectedRows.indexOf(object._id) > -1) {
+            return new Spacebars.SafeString('<div class="ui checked checkbox"' +
+                ' id="'+ object._id + '"><input type="checkbox" checked="" ' +
+                'name="check"><label></label></div>');
+          } else {
+            return new Spacebars.SafeString('<div class="ui checkbox" ' +
+                'id="'+ object._id + '"><input type="checkbox" ' +
+                'name="check"><label></label></div>');
+          }
         }
       }]
     };
+  },
+  marksExist: function () {
+    return Marks.find().count();
   }
 });
 
@@ -150,19 +165,47 @@ function generateCSV (template) {
 
 Template.marks.events({
   'click .reactive-table tbody tr': function(evt, template) {
-    if (evt.target.className !== 'select' && evt.target.nodeName !== 'INPUT') {
+    if (evt.target.className === 'select' || evt.target.nodeName === 'DIV') {
+      $(evt.target).children('.ui .checkbox').checkbox('toggle');
+    } else if (evt.target.nodeName !== 'INPUT' &&
+        evt.target.nodeName !== 'LABEL') {
       Router.go('markReport', {
         _id: this._id,
         _sid: template.data.markingScheme._id
       });
     }
   },
-  'click .checkbox': function () {
-    event.stopPropagation();
-
-  },
   'keyup #filter-table': function(evt, template) {
     template.filter.set($(evt.currentTarget).val());
+  },
+  'change .ui .checkbox': function(evt, template) {
+    let selectedRows = Session.get('s-' + template.data.markingScheme._id);
+    if ($('#' + evt.currentTarget.id).checkbox('is checked')) {
+      selectedRows.push(evt.currentTarget.id);
+    } else {
+      for (var i = selectedRows.length - 1; i >= 0; i--) {
+        if (selectedRows[i] === evt.currentTarget.id) {
+          selectedRows.splice(i, 1);
+        }
+      }
+    }
+    Session.set('s-' + template.data.markingScheme._id, selectedRows);
+  },
+  'click .delete-rows': function(evt, template) {
+    $('.ui.basic.delete-check.modal')
+      .modal({
+        closable: false,
+        onApprove: function() {
+          var selectedRows = Session.get('s-' +
+              template.data.markingScheme._id);
+          //check
+          selectedRows.forEach(sID => {
+            Meteor.call('deleteMark', sID);
+          });
+          Session.set('s-' + template.data.markingScheme._id, []);
+        },
+        detachable: false
+      }).modal('show');
   }
 });
 
@@ -178,6 +221,11 @@ Template.marks.helpers({
   csvData: function() {
     return "data:text/csv;charset=utf-8," +
       encodeURIComponent(generateCSV(Template.instance()));
+  },
+  deleteDisabled: function() {
+    let selectedRows = Session.get('s-' +
+        Template.instance().data.markingScheme._id);
+    return !selectedRows.length;
   }
 });
 
