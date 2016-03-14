@@ -23,10 +23,14 @@ Meteor.publish('markingSchemes', function(idArg) {
   }
 });
 
-Meteor.publish('marks', function(idArg) {
+Meteor.publish('marks', function(idArg, schemeId) {
   if (idArg) {
     return Marks.find({
       _id: idArg
+    });
+  } else if (schemeId) {
+    return Marks.find({
+      schemeId: schemeId
     });
   } else {
     if (!this.userId) {
