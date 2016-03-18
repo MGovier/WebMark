@@ -1,9 +1,4 @@
-Template.home.onRendered(() => {
-  $('.right-perspective-overlay').transition('slide right in');
-  $('.left-perspective-overlay').transition('slide left in');
-});
-
-Template.home.created = function() {
+Template.home.onCreated(function() {
   let intervalA = Meteor.setInterval(function() {
     $('.right-perspective-overlay').visibility('refresh');
   }, 20);
@@ -11,14 +6,19 @@ Template.home.created = function() {
     $('.left-perspective-overlay').visibility('refresh');
   }, 20);
   Session.set('intervalTracker', [intervalA, intervalB]);
-};
+});
 
-Template.home.destroyed = function() {
+Template.home.onRendered(() => {
+  $('.right-perspective-overlay').transition('slide right in');
+  $('.left-perspective-overlay').transition('slide left in');
+});
+
+Template.home.onDestroyed(() => {
   let intervals = Session.get('intervalTracker');
   intervals.forEach((id) => {
     Meteor.clearInterval(id);
   });
-};
+});
 
 Template.home.events({
   'click .google-log-in': function() {

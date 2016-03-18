@@ -1,3 +1,11 @@
+/**
+ * Database event hooks.
+ * These are called on certain update, insertion, or removal events.
+ */
+
+/**
+ * Create an example marking scheme, with marks, for a new user.
+ */
 Meteor.users.after.insert(function(userId, doc) {
   let example = {
       "name": "Example",
