@@ -1,0 +1,32 @@
+Meteor.startup(() => {
+  $('html').attr('lang', 'en');
+  RouterAutoscroll.marginTop = 50;
+  sAlert.config({
+    position: 'top',
+    effect: 'stackslide',
+    html: true
+  });
+});
+
+Template.main.onRendered(() => {
+  $('.ui.menu .ui.dropdown').dropdown({
+    on: 'hover'
+  });
+  $('.ui.menu .sign-in').popup({
+    inline: true,
+    hoverable: true,
+    position: 'bottom right',
+    delay: {
+      show: 100,
+      hide: 800
+    }
+  });
+});
+
+Template.navigation.helpers({
+  activeIfTemplate: function(template) {
+    var currentRoute = Router.current();
+    return currentRoute && template ===
+      currentRoute.lookupTemplate() ? 'active' : '';
+  }
+});
