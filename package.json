@@ -1,0 +1,24 @@
+{
+  "name": "WebMark",
+  "version": "1.0.0",
+  "description": "A Meteor powered Web Application to enable efficient and flexible marking of assignments.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MGovier/WebMark.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MGovier/WebMark/issues"
+  },
+  "homepage": "https://github.com/MGovier/WebMark#readme",
+  "dependencies": {
+    "chartist": "^0.9.7",
+    "dragula": "^3.6.8"
+  }
+}

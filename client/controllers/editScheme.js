@@ -1,3 +1,5 @@
+import dragula from 'dragula';
+
 Template.editScheme.onRendered(function() {
   let rubricUUIDs = this.data.scheme.aspects;
   rubricUUIDs.forEach(aspect => {
@@ -6,7 +8,6 @@ Template.editScheme.onRendered(function() {
       row.uuid = UI._globalHelpers.generateUUID();
     });
   });
-  console.log(rubricUUIDs);
 
   Session.set('adjustmentAllowed', false);
   Session.set('rubricObject', this.data.scheme.aspects);

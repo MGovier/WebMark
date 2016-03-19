@@ -1,7 +1,7 @@
 /**
  * JS for new marking scheme functionality.
  */
-
+import dragula from 'dragula';
 /**
  * Called when template inserted into DOM.
  * Initialise Semantic UI components and Dragula listener.

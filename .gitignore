@@ -1,6 +1,11 @@
+# Ignore node modules:
+node_modules/
+
 # Ignore generated semantic-ui files:
 client/lib/semantic-ui/definitions/
 client/lib/semantic-ui/themes/
 client/lib/semantic-ui/.custom.semantic.json
 client/lib/semantic-ui/themes/theme.import.less
+
+# Ignore platform specific builds:
 builds/

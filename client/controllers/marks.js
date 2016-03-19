@@ -2,6 +2,7 @@
  * Create a filter object the first time this template in instantiated.
  * This can't be an arrow function!
  */
+
 Template.marks.onCreated(function() {
   this.filter = new ReactiveTable.Filter('filter-table');
 });
