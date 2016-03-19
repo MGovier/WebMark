@@ -32,6 +32,9 @@ Template.editScheme.onRendered(function() {
     position: 'top left'
   });
   $('.name-field').trigger('click');
+  if (Session.get('unitCode')) {
+    $('.unit-select').dropdown('set selected', Session.get('unitCode'));
+  }
 
   // DRAGULA
   var drake = dragula({
