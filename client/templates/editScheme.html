@@ -16,7 +16,7 @@
               <label for="scheme-name">Parent Unit</label>
               <select class="ui fluid search selection dropdown unit-select" name="scheme-unit">
                 <option value="">UNITCODE</option>
-                {{#each unit in units}}
+                {{#each unit in units.units}}
                   <option value="{{unit}}">{{unit}}</option>
                 {{/each}}
               </select>
