@@ -3,6 +3,8 @@
  * These are called on certain update, insertion, or removal events.
  */
 
+/* jshint maxlen:false */
+
 /**
  * Remove older activity entries when a new one is added.
  */
