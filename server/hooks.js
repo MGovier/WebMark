@@ -12,9 +12,7 @@ Activities.after.insert(function(userId) {
   let log = Activities.find({relevantTo: userId}, {sort:{performedAt: 1}}),
     array = log.fetch(),
     count = log.count();
-  console.log(count);
   for (var i = 0; i < count - 5; i++) {
-    console.log('removing', array[i]);
     Activities.remove(array[i]._id);
   }
 });

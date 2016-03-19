@@ -6,9 +6,6 @@
    rubricObject: function() {
      return Session.get('rubricObject');
    },
-   canUndo: function() {
-     return Session.get('rubricHistory').length > 0;
-   },
    randomExample: function(index) {
      let examples = ['writing quality', 'level of documentation',
        'testing strategy', 'detail of analysis', 'referencing'];

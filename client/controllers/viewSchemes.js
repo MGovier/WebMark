@@ -52,10 +52,6 @@ Template.viewSchemesListItem.events({
         detachable: false
       }).modal('show');
   },
-  'click .edit-scheme': function(evt) {
-    evt.preventDefault();
-    window.alert('Coming soon!');
-  },
   'click .copy-scheme-url': function(evt) {
     evt.preventDefault();
     $('.ui.popup div.content').text('Copied to clipboard!');

@@ -10,15 +10,15 @@ Template.marks.onCreated(function() {
  * Check a session variable exists if this scheme was rendered but not created.
  * Attach a tracker to the marks data, to update the chart automatically.
  */
-Template.marks.onRendered(() => {
-  let schemeId = Template.instance().data.markingScheme._id;
+Template.marks.onRendered(function() {
+  let schemeId = this.data.markingScheme._id;
   // Unique session variable to track selected rows across app navigation.
   // Using a shared one would cause delete operations to affect other tables.
   Session.setDefault('s-' + schemeId, []);
   this.graph = Tracker.autorun(function(){
-    if (Marks.find().count() > 0) {
+    if (Marks.find().count() > 0 && MarkingSchemes.find().count() > 0) {
       var markArray = Marks.find().fetch(),
-          maxMarks = markArray[0].maxMarks,
+          maxMarks = MarkingSchemes.find().fetch()[0].maxMarks,
           interval = maxMarks / 6,
           labels = [],
           series = [];
@@ -26,7 +26,7 @@ Template.marks.onRendered(() => {
         var lowerInterval = interval * i,
             upperInterval = (interval * (i + 1)) - (i === 5 ? 0 : 1),
             count = 0;
-        var label = `${lowerInterval} - ${upperInterval}`;
+        var label = `${lowerInterval.toFixed(2)} - ${upperInterval.toFixed(2)}`;
         labels.push(label);
         for (var m = 0; m < markArray.length; m++) {
           if (markArray[m].marks >= lowerInterval &&
@@ -62,7 +62,7 @@ Template.marks.onRendered(() => {
 /**
  * When this template leaves the DOM.
  */
-Template.marks.onDestroyed(() => {
+Template.marks.onDestroyed(function() {
   // Stop the tracker trying to auto-update the graph when destroyed.
   if (this.graph) {
     this.graph.stop();

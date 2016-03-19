@@ -1,13 +1,4 @@
-/**
- * JS for new marking scheme functionality.
- */
-
-/**
- * Called when template inserted into DOM.
- * Initialise Semantic UI components and Dragula listener.
- */
-Template.insertScheme.onRendered(() => {
-
+Template.editScheme.onRendered(function() {
   // SEMANTIC UI
   $('.ui.checkbox').checkbox();
   $('.unit-select').dropdown({
@@ -42,37 +33,38 @@ Template.insertScheme.onRendered(() => {
     }, 80);
   });
 
-  // If session var is defined, use that for the option value.
-  if (Session.get('unitCode')) {
-    $('.unit-select').dropdown('set selected', Session.get('unitCode'));
-  }
+  Session.set('adjustmentAllowed', false);
+  Session.set('rubricObject', this.data.scheme.aspects);
+  Session.set('comments', this.data.scheme.comments);
+  Session.set('schemeName', this.data.scheme.name);
+  Session.set('unitCode', this.data.scheme.unitCode);
+  Session.set('editingName', false);
+  Session.set('commentHistory', []);
+
 });
 
-/**
- * Define default variables the first time this template is rendered.
- */
-Template.insertScheme.onCreated(() => {
-  Session.setDefault('adjustmentAllowed', false);
-  Session.setDefault('rubricObject', [{
+Template.editScheme.onDestroyed(() => {
+  Session.set('adjustmentAllowed', false);
+  Session.set('rubricObject', [{
     uuid: UI._globalHelpers.generateUUID(),
     rows: [{
       uuid: UI._globalHelpers.generateUUID()
     }],
     maxMark: 0
   }]);
-  Session.setDefault('comments', [{
+  Session.set('comments', [{
     uuid: UI._globalHelpers.generateUUID()
   }]);
-  Session.setDefault('schemeName', UI._globalHelpers.generateFunName());
-  Session.setDefault('unitCode', '');
-  Session.setDefault('editingName', false);
-  Session.setDefault('commentHistory', []);
+  Session.set('schemeName', UI._globalHelpers.generateFunName());
+  Session.set('unitCode', '');
+  Session.set('editingName', false);
+  Session.set('commentHistory', []);
 });
 
 /**
  * Helper functions.
  */
-Template.insertScheme.helpers({
+Template.editScheme.helpers({
   totalMarks: totalMarksFunction,
   schemeName: function() {
     return Session.get('schemeName');
@@ -82,14 +74,17 @@ Template.insertScheme.helpers({
   },
   isThisSelected: function() {
     return true;
+  },
+  description: function() {
+    return Template.instance().data.scheme.description;
   }
 });
 
 /**
  * Event listeners.
  */
-Template.insertScheme.events({
-  'click .submit-scheme': function(evt) {
+Template.editScheme.events({
+  'click .submit-scheme': function(evt, template) {
     let form = $('#marking-scheme-form')[0];
     if (form.checkValidity()) {
       // Change class to show request is being processed.
@@ -108,16 +103,18 @@ Template.insertScheme.events({
         'maxMarks': totalMarksFunction()
       };
       // Call Meteor function to add data to DB. This will run offline first.
-      Meteor.call('addScheme', schemaObject, (error) => {
-        if (error) {
-          // Alert user to error.
-          sAlert.error(error.message, error.details);
-          $('.scheme-submit-button').removeClass('loading')
-            .addClass('submit-scheme');
-        }
+      Meteor.call('updateScheme', template.data.scheme._id, schemaObject,
+        (error) => {
+          if (error) {
+            // Alert user to error.
+            sAlert.error(error.message, error.details);
+            $('.scheme-submit-button').removeClass('loading')
+              .addClass('submit-scheme');
+            console.log(error);
+          }
       });
       // If no error, show success notification.
-      sAlert.success(schemaObject.name + ' added!', {
+      sAlert.success(schemaObject.name + ' edited!', {
         position: 'top-right',
         onRouteClose: false,
         offset: 60
@@ -125,9 +122,8 @@ Template.insertScheme.events({
 
       $('.scheme-submit-button').removeClass('loading')
         .addClass('submit-scheme');
-      resetSession();
       form.reset();
-      // Send user to dashboard to use or share the new scheme.
+      // Send user to dashboard to use or share the updated scheme.
       Router.go('dashboard');
     }
     // Semantic validation could be added here for additional user guidance.
@@ -161,8 +157,6 @@ Template.insertScheme.events({
   }
 });
 
-// UTILITY FUNCTIONS
-
 /**
  * Calculate total marks for this scheme using the max mark for each rubric.
  */
@@ -173,25 +167,4 @@ var totalMarksFunction = function() {
     totalMarks += rubric.maxMark;
   });
   return totalMarks;
-};
-
-/**
- * Reset session variables. Used on submission.
- */
-var resetSession = function() {
-  Session.set('adjustmentAllowed', false);
-  Session.set('rubricObject', [{
-    uuid: UI._globalHelpers.generateUUID(),
-    rows: [{
-      uuid: UI._globalHelpers.generateUUID()
-    }],
-    maxMark: 0
-  }]);
-  Session.set('comments', [{
-    uuid: UI._globalHelpers.generateUUID()
-  }]);
-  Session.set('schemeName', UI._globalHelpers.generateFunName());
-  Session.set('unitCode', '');
-  Session.set('editingName', false);
-  Session.set('commentHistory', []);
 };
