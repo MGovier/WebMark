@@ -6,7 +6,7 @@
  * Called when template inserted into DOM.
  * Initialise Semantic UI components and Dragula listener.
  */
-Template.insertScheme.onRendered(() => {
+Template.insertScheme.onRendered(function() {
 
   // SEMANTIC UI
   $('.ui.checkbox').checkbox();
@@ -41,7 +41,7 @@ Template.insertScheme.onRendered(() => {
       Session.set('rubricObject', rObj);
     }, 80);
   });
-
+  this.rubric = Session.get('rubric');
   // If session var is defined, use that for the option value.
   if (Session.get('unitCode')) {
     $('.unit-select').dropdown('set selected', Session.get('unitCode'));
@@ -73,6 +73,9 @@ Template.insertScheme.onCreated(() => {
  * Helper functions.
  */
 Template.insertScheme.helpers({
+  rubric: function() {
+    return Session.get('rubricObject');
+  },
   totalMarks: totalMarksFunction,
   schemeName: function() {
     return Session.get('schemeName');

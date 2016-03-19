@@ -1,4 +1,21 @@
 Template.editScheme.onRendered(function() {
+  let rubricUUIDs = this.data.scheme.aspects;
+  rubricUUIDs.forEach(aspect => {
+    aspect.uuid = UI._globalHelpers.generateUUID();
+    aspect.rows.forEach(row => {
+      row.uuid = UI._globalHelpers.generateUUID();
+    });
+  });
+  console.log(rubricUUIDs);
+
+  Session.set('adjustmentAllowed', false);
+  Session.set('rubricObject', this.data.scheme.aspects);
+  Session.set('comments', this.data.scheme.comments);
+  Session.set('schemeName', this.data.scheme.name);
+  Session.set('unitCode', this.data.scheme.unitCode);
+  Session.set('editingName', false);
+  Session.set('commentHistory', []);
+
   // SEMANTIC UI
   $('.ui.checkbox').checkbox();
   $('.unit-select').dropdown({
@@ -32,15 +49,6 @@ Template.editScheme.onRendered(function() {
       Session.set('rubricObject', rObj);
     }, 80);
   });
-
-  Session.set('adjustmentAllowed', false);
-  Session.set('rubricObject', this.data.scheme.aspects);
-  Session.set('comments', this.data.scheme.comments);
-  Session.set('schemeName', this.data.scheme.name);
-  Session.set('unitCode', this.data.scheme.unitCode);
-  Session.set('editingName', false);
-  Session.set('commentHistory', []);
-
 });
 
 Template.editScheme.onDestroyed(() => {

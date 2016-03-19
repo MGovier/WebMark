@@ -12,7 +12,6 @@ session                 # Client-side reactive dictionary for your app
 jquery                  # Helpful client-side library
 tracker                 # Meteor's client-side reactive programming library
 
-standard-minifiers      # JS/CSS minifiers run for production mode
 ecmascript              # Enable ECMAScript2015+ syntax in app code
 
 semantic:ui
@@ -32,6 +31,9 @@ okgrow:router-autoscroll
 glasser:reactive-fromnow
 juliancwirko:s-alert
 juliancwirko:s-alert-stackslide
-browser-policy-content
 matb33:collection-hooks
 mfpierre:chartist-js
+reactive-dict
+standard-minifier-css
+standard-minifier-js
+browser-policy-content
