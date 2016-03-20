@@ -199,4 +199,4 @@ function resetSession() {
   Session.set('unitCode', '');
   Session.set('editingName', false);
   Session.set('commentHistory', []);
-};
+}

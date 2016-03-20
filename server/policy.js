@@ -3,8 +3,7 @@
  * Allows Google fonts used in styles and Font Data URLs.
  * Scripts should be blocked from inline and external sources to prevent XSS.
  */
-// TEMPORARY WHILE ISSUE IS RESOLVED IN RC:
-// BrowserPolicy.content.disallowInlineScripts();
+BrowserPolicy.content.disallowInlineScripts();
 BrowserPolicy.content.disallowEval();
 BrowserPolicy.content.allowInlineStyles();
 BrowserPolicy.content.allowFontDataUrl();
