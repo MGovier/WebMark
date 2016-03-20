@@ -19,6 +19,7 @@
   "homepage": "https://github.com/MGovier/WebMark#readme",
   "dependencies": {
     "chartist": "^0.9.7",
-    "dragula": "^3.6.8"
+    "dragula": "^3.6.8",
+    "moment": "^2.12.0"
   }
 }

@@ -3,6 +3,8 @@
  * This can't be an arrow function!
  */
 
+import moment from 'moment';
+
 Template.marks.onCreated(function() {
   this.filter = new ReactiveTable.Filter('filter-table');
 });

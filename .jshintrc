@@ -28,7 +28,6 @@
     "Clipboard": false,
     "Router": false,
     "ReactiveFromNow": false,
-    "moment": false,
     "Marks": false,
     "MarkingSchemes": false,
     "Activities": false,
@@ -37,14 +36,14 @@
     "template": false,
     "ReactiveVar": false,
     "Blaze": false,
-    "dragula": false,
     "UI": false,
     "BrowserPolicy": false,
     "Ground": false,
     "Schemas": false,
     "Spacebars": false,
     "Tracker": false,
-    "Chartist": false
+    "Chartist": false,
+    "ReactiveDict": false
   },
   "bitwise": true,
     // true: Prohibit bitwise operators (&, |, ^, etc.)

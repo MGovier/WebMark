@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 Template.viewSchemes.onRendered(() => {
   $('.basic.button').popup({
     inline: false,

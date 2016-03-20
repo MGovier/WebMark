@@ -19,7 +19,6 @@ flemay:less-autoprefixer
 iron:router
 aldeed:simple-schema
 aldeed:collection2
-momentjs:moment
 accounts-google
 accounts-ui
 appcache
