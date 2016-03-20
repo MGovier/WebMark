@@ -17,6 +17,11 @@ Template.editScheme.onRendered(function() {
   Session.set('editingName', false);
   Session.set('commentHistory', []);
 
+  $('input[name="adjustment-positive"]')
+    .val(this.data.scheme.adjustmentValuePositive);
+  $('input[name="adjustment-negative"]')
+    .val(this.data.scheme.adjustmentValueNegative);
+
   // SEMANTIC UI
   $('.ui.checkbox').checkbox();
   $('.unit-select').dropdown({
@@ -79,6 +84,9 @@ Template.editScheme.onDestroyed(() => {
 var totalMarksFunction = function() {
   let rObjs = Session.get('rubricObject'),
     totalMarks = 0;
+  if (!rObjs) {
+    return 0;
+  }
   rObjs.forEach((rubric) => {
     totalMarks += rubric.maxMark;
   });
