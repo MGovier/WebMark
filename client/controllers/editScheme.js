@@ -32,7 +32,7 @@ Template.editScheme.onRendered(function() {
     position: 'top left'
   });
   $('.name-field').trigger('click');
-  if (Session.get('unitCode')) {
+  if (Session.get('unitCode') !== 'zzNO_UNIT') {
     $('.unit-select').dropdown('set selected', Session.get('unitCode'));
   }
 
@@ -72,6 +72,18 @@ Template.editScheme.onDestroyed(() => {
   Session.set('editingName', false);
   Session.set('commentHistory', []);
 });
+
+/**
+ * Calculate total marks for this scheme using the max mark for each rubric.
+ */
+var totalMarksFunction = function() {
+  let rObjs = Session.get('rubricObject'),
+    totalMarks = 0;
+  rObjs.forEach((rubric) => {
+    totalMarks += rubric.maxMark;
+  });
+  return totalMarks;
+};
 
 /**
  * Helper functions.
@@ -168,15 +180,3 @@ Template.editScheme.events({
     }
   }
 });
-
-/**
- * Calculate total marks for this scheme using the max mark for each rubric.
- */
-var totalMarksFunction = function() {
-  let rObjs = Session.get('rubricObject'),
-    totalMarks = 0;
-  rObjs.forEach((rubric) => {
-    totalMarks += rubric.maxMark;
-  });
-  return totalMarks;
-};

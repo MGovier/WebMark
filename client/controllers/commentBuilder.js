@@ -17,7 +17,8 @@ Template.commentBuilder.helpers({
     }
   },
   canUndo: function() {
-    return Session.get('commentHistory').length > 0;
+    let commentHistory = Session.get('commentHistory');
+    return commentHistory && commentHistory.length > 0;
   }
 });
 

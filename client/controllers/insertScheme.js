@@ -1,7 +1,9 @@
 /**
  * JS for new marking scheme functionality.
  */
+
 import dragula from 'dragula';
+
 /**
  * Called when template inserted into DOM.
  * Initialise Semantic UI components and Dragula listener.
@@ -69,9 +71,21 @@ Template.insertScheme.onCreated(() => {
   Session.setDefault('commentHistory', []);
 });
 
-/**
- * Helper functions.
- */
+ /**
+  * Calculate total marks for this scheme using the max mark for each rubric.
+  */
+ var totalMarksFunction = function() {
+   let rObjs = Session.get('rubricObject'),
+     totalMarks = 0;
+   rObjs.forEach((rubric) => {
+     totalMarks += rubric.maxMark;
+   });
+   return totalMarks;
+ };
+
+ /**
+  * Helper functions.
+  */
 Template.insertScheme.helpers({
   rubric: function() {
     return Session.get('rubricObject');
@@ -167,21 +181,9 @@ Template.insertScheme.events({
 // UTILITY FUNCTIONS
 
 /**
- * Calculate total marks for this scheme using the max mark for each rubric.
- */
-var totalMarksFunction = function() {
-  let rObjs = Session.get('rubricObject'),
-    totalMarks = 0;
-  rObjs.forEach((rubric) => {
-    totalMarks += rubric.maxMark;
-  });
-  return totalMarks;
-};
-
-/**
  * Reset session variables. Used on submission.
  */
-var resetSession = function() {
+function resetSession() {
   Session.set('adjustmentAllowed', false);
   Session.set('rubricObject', [{
     uuid: UI._globalHelpers.generateUUID(),
