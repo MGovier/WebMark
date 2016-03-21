@@ -7,17 +7,17 @@
  */
 Template.commentBuilder.helpers({
   comments: function() {
-    return Session.get('comments');
+    return Template.instance().data.scheme.get('comments');
   },
   isLast: function(index) {
-    if (index === Session.get('comments').length - 1) {
+    if (index === Template.instance().data.scheme.get('comments').length - 1) {
       return 'last-comment';
     } else {
       return '';
     }
   },
   canUndo: function() {
-    let commentHistory = Session.get('commentHistory');
+    let commentHistory = Template.instance().data.scheme.get('commentHistory');
     return commentHistory && commentHistory.length > 0;
   }
 });
@@ -26,33 +26,33 @@ Template.commentBuilder.helpers({
  * Event listeners.
  */
 Template.commentBuilder.events({
-  'click .comment-remove': function(evt) {
+  'click .comment-remove': function(evt, template) {
     evt.preventDefault();
-    let comments = Session.get('comments'),
+    let comments = template.data.scheme.get('comments'),
       id = $(evt.currentTarget).closest('.comment-item').attr('data-uuid');
     comments = comments.filter((com) => {
       return com.uuid !== id;
     });
-    Session.set('comments', comments);
+    template.data.scheme.set('comments', comments);
   },
-  'click .add-comment': function(evt) {
+  'click .add-comment': function(evt, template) {
     evt.preventDefault();
-    let comments = Session.get('comments');
+    let comments = template.data.scheme.get('comments');
     comments.push({
       uuid: UI._globalHelpers.generateUUID()
     });
-    Session.set('comments', comments);
+    template.data.scheme.set('comments', comments);
   },
-  'change input': function() {
-    let comments = Session.get('comments'),
-      commentArray = Session.get('commentHistory');
+  'change input': function(evt, template) {
+    let comments = template.data.scheme.get('comments'),
+      commentArray = template.data.scheme.get('commentHistory');
     comments.forEach((com) => {
       com.comment = $('.comment-item[data-uuid="' + com.uuid + '"] input')
         .val();
     });
-    Session.set('comments', comments);
+    template.data.scheme.set('comments', comments);
     commentArray.push(comments);
-    Session.set('commentHistory', commentArray);
+    template.data.scheme.set('commentHistory', commentArray);
 
   },
   'keydown .last-comment': function(evt) {
@@ -75,10 +75,10 @@ Template.commentBuilder.events({
       $(evt.currentTarget).trigger(e);
     }
   },
-  'click .undo-comment-action': function(evt) {
+  'click .undo-comment-action': function(evt, template) {
     evt.preventDefault();
-    let commentArray = Session.get('commentHistory');
-    Session.set('comments', commentArray.pop());
-    Session.set('commentHistory', commentArray);
+    let commentArray = template.data.scheme.get('commentHistory');
+    template.data.scheme.set('comments', commentArray.pop());
+    template.data.scheme.set('commentHistory', commentArray);
   }
 });

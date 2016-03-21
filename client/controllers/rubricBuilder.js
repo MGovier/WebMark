@@ -4,7 +4,7 @@
 
  Template.rubricBuilder.helpers({
    rubricObject: function() {
-     return Session.get('rubricObject');
+     return Template.instance().data.scheme.get('rubricObject');
    },
    randomExample: function(index) {
      let examples = ['writing quality', 'level of documentation',
@@ -19,9 +19,9 @@
  });
 
 Template.rubricBuilder.events({
-  'click .add-criterion': function(evt) {
+  'click .add-criterion': function(evt, template) {
     evt.preventDefault();
-    let rObjs = Session.get('rubricObject'),
+    let rObjs = template.data.scheme.get('rubricObject'),
       id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid');
     rObjs.forEach((rubric) => {
       if (rubric.uuid === id) {
@@ -30,11 +30,11 @@ Template.rubricBuilder.events({
         });
       }
     });
-    Session.set('rubricObject', rObjs);
+    template.data.scheme.set('rubricObject', rObjs);
   },
-  'click .add-aspect': function(evt) {
+  'click .add-aspect': function(evt, template) {
     evt.preventDefault();
-    let rObj = Session.get('rubricObject');
+    let rObj = template.data.scheme.get('rubricObject');
     rObj.push({
       uuid: UI._globalHelpers.generateUUID(),
       rows: [{
@@ -42,11 +42,11 @@ Template.rubricBuilder.events({
       }],
       maxMark: 0
     });
-    Session.set('rubricObject', rObj);
+    template.data.scheme.set('rubricObject', rObj);
   },
-  'click .rubric-array-remove': function(evt) {
+  'click .rubric-array-remove': function(evt, template) {
     evt.preventDefault();
-    let rObjs = Session.get('rubricObject'),
+    let rObjs = template.data.scheme.get('rubricObject'),
       rowId = $(evt.currentTarget).closest('tr').attr('data-uuid'),
       tableId = $(evt.currentTarget).closest('table').attr('data-uuid');
     rObjs.forEach((rubric) => {
@@ -63,18 +63,18 @@ Template.rubricBuilder.events({
         rubric.maxMark = maxMark;
       }
     });
-    Session.set('rubricObject', rObjs);
+    template.data.scheme.set('rubricObject', rObjs);
   },
-  'click .remove-aspect': function(evt) {
+  'click .remove-aspect': function(evt, template) {
     evt.preventDefault();
-    let rObjs = Session.get('rubricObject'),
+    let rObjs = template.data.scheme.get('rubricObject'),
       id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid');
     rObjs = rObjs.filter((rubric) => {
       return rubric.uuid !== id;
     });
-    Session.set('rubricObject', rObjs);
+    template.data.scheme.set('rubricObject', rObjs);
   },
-  'change input': function() {
+  'change input': function(evt, template) {
     let rObj = [],
       $tables = $('.rubric-table');
     $tables.each((index, table) => {
@@ -102,7 +102,7 @@ Template.rubricBuilder.events({
       rubric.maxMark = maxMark;
       rObj.push(rubric);
     });
-    Session.set('rubricObject', rObj);
+    template.data.scheme.set('rubricObject', rObj);
   },
   'keydown input[name="criteria-value"]': function(evt) {
     let $table = $(evt.currentTarget).closest('table'),
@@ -131,9 +131,9 @@ Template.rubricBuilder.events({
       $(evt.currentTarget).trigger(e);
     }
   },
-  'click .duplicate-aspect': function(evt) {
+  'click .duplicate-aspect': function(evt, template) {
     evt.preventDefault();
-    let rObj = Session.get('rubricObject'),
+    let rObj = template.data.scheme.get('rubricObject'),
       id = $(evt.currentTarget).closest('.rubric-table').attr('data-uuid');
     rObj.forEach((rubric) => {
       if (rubric.uuid === id) {
@@ -153,6 +153,6 @@ Template.rubricBuilder.events({
         });
       }
     });
-    Session.set('rubricObject', rObj);
+    template.data.scheme.set('rubricObject', rObj);
   }
 });
