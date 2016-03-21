@@ -54,7 +54,6 @@ Template.insertScheme.onRendered(function() {
  * Define default variables the first time this template is rendered.
  */
 Template.insertScheme.onCreated(() => {
-  newScheme.setDefault('adjustmentAllowed', false);
   newScheme.setDefault('rubricObject', [{
     uuid: UI._globalHelpers.generateUUID(),
     rows: [{
@@ -176,7 +175,6 @@ Template.insertScheme.events({
  * UUIDs not ideal, but used for tracking drag-and-drop and deletion.
  */
 function resetSchemeData() {
-  newScheme.set('adjustmentAllowed', false);
   newScheme.set('rubricObject', [{
     uuid: UI._globalHelpers.generateUUID(),
     rows: [{

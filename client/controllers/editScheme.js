@@ -11,7 +11,6 @@ Template.editScheme.onRendered(function() {
     });
   });
 
-  editScheme.set('adjustmentAllowed', false);
   editScheme.set('rubricObject', this.data.scheme.aspects);
   editScheme.set('comments', this.data.scheme.comments);
   editScheme.set('schemeName', this.data.scheme.name);
