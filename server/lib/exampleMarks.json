@@ -1,0 +1,193 @@
+[{
+  "marker": "Anna",
+  "studentNo": "up100",
+  "schemeName": "Example",
+  "aspects": [{
+    "aspect": "Report Structure",
+    "selected": "Good, nearly complete, structure.",
+    "mark": 8,
+    "maxMark": 10
+  }, {
+    "aspect": "Evaluation Quality",
+    "selected": "Nearly complete.",
+    "mark": 7,
+    "maxMark": 10
+  }, {
+    "aspect": "Knowledge and Understanding",
+    "selected": "Research is thorough and goes beyond what was presented in class or in the assigned texts.",
+    "mark": 20,
+    "maxMark": 20
+  }, {
+    "aspect": "Thinking and Inquiry",
+    "selected": "The presentation shows an analytical structure and a central thesis, but the analysis is not always fully developed and/or linked to the thesis.",
+    "mark": 6,
+    "maxMark": 10
+  }, {
+    "aspect": "Presentation Skills",
+    "selected": "The presenter speaks clearly and loudly enough to be heard, but  tends to drone and/or fails to use eye contact, gestures, and body language consistently or effectively at times.",
+    "mark": 6,
+    "maxMark": 10
+  }],
+  "presetComments": [
+    "Citations were not in the correct style. Use Harvard APA 6th Edition.",
+    "Excellent supporting evidence."
+  ],
+  "freeComment": "Great effort, but try to actively engage the audience in the presentation.",
+  "adjustment": 1,
+  "marks": 48,
+  "maxMarks": 60,
+  "createdAt": ""
+}, {
+  "marker": "Ben",
+  "studentNo": "up101",
+  "schemeName": "Example",
+  "aspects": [{
+    "aspect": "Report Structure",
+    "selected": "Excellent structure that meets all requirements.",
+    "mark": 10,
+    "maxMark": 10
+  }, {
+    "aspect": "Evaluation Quality",
+    "selected": "Thorough evaluation, with originality and and a scientific approach.",
+    "mark": 10,
+    "maxMark": 10
+  }, {
+    "aspect": "Knowledge and Understanding",
+    "selected": "Research is thorough and goes beyond what was presented in class or in the assigned texts.",
+    "mark": 20,
+    "maxMark": 20
+  }, {
+    "aspect": "Thinking and Inquiry",
+    "selected": "The presentation is centered around a thesis which shows a highly developed awareness of historiographic or social issues and a high level of conceptual ability.",
+    "mark": 10,
+    "maxMark": 10
+  }, {
+    "aspect": "Presentation Skills",
+    "selected": "The presenter speaks clearly and loudly enough to be heard, using eye contact, a lively tone, gestures, and body language to engage the audience.",
+    "mark": 10,
+    "maxMark": 10
+  }],
+  "presetComments": [
+    "Excellent supporting evidence."
+  ],
+  "freeComment": "An excellent piece of work, supported by a strong presentation. It is easy to forget that this project was completed in only 2 weeks!",
+  "marks": 60,
+  "maxMarks": 60,
+  "createdAt": ""
+}, {
+  "marker": "Charlie",
+  "studentNo": "up102",
+  "schemeName": "Example",
+  "aspects": [{
+    "aspect": "Report Structure",
+    "selected": "Some elements of report are missing.",
+    "mark": 5,
+    "maxMark": 10
+  }, {
+    "aspect": "Evaluation Quality",
+    "selected": "No submission.",
+    "mark": 0,
+    "maxMark": 10
+  }, {
+    "aspect": "Knowledge and Understanding",
+    "selected": "Little or no research is apparent.",
+    "mark": 5,
+    "maxMark": 20
+  }, {
+    "aspect": "Thinking and Inquiry",
+    "selected": "The presentation shows no analytical structure and no central thesis.",
+    "mark": 3,
+    "maxMark": 10
+  }, {
+    "aspect": "Presentation Skills",
+    "selected": "The presenter speaks clearly and loudly enough to be heard, but  tends to drone and/or fails to use eye contact, gestures, and body language consistently or effectively at times.",
+    "mark": 6,
+    "maxMark": 10
+  }],
+  "presetComments": [
+    "Investigate more objective means of evaluating your work.",
+    "Citations were not in the correct style. Use Harvard APA 6th Edition."
+  ],
+  "freeComment": "You need to be able to critically evaluate your work - this section was missing. The abstract also failed to mention the technique for solving the problem.",
+  "adjustment": -2,
+  "marks": 17,
+  "maxMarks": 60,
+  "createdAt": ""
+}, {
+  "marker": "Dawn",
+  "studentNo": "up103",
+  "schemeName": "Example",
+  "aspects": [{
+    "aspect": "Report Structure",
+    "selected": "Structure interrupts flow of paper, and could benefit from re-ordering - but otherwise good.",
+    "mark": 7,
+    "maxMark": 10
+  }, {
+    "aspect": "Evaluation Quality",
+    "selected": "Some elements overlooked.",
+    "mark": 5,
+    "maxMark": 10
+  }, {
+    "aspect": "Knowledge and Understanding",
+    "selected": "Research is adequate but does not go much beyond what was presented in class or in the assigned text.",
+    "mark": 10,
+    "maxMark": 20
+  }, {
+    "aspect": "Thinking and Inquiry",
+    "selected": "The presentation is centered around a thesis which shows a highly developed awareness of historiographic or social issues and a high level of conceptual ability.",
+    "mark": 10,
+    "maxMark": 10
+  }, {
+    "aspect": "Presentation Skills",
+    "selected": "The presenter speaks clearly and loudly enough to be heard, using eye contact, a lively tone, gestures, and body language to engage the audience.",
+    "mark": 10,
+    "maxMark": 10
+  }],
+  "presetComments": [
+    "Label your diagrams."
+  ],
+  "freeComment": "Excellent presentation. A bit more research and supporting evidence would have pushed this into the higher mark categories!",
+  "marks": 42,
+  "maxMarks": 60,
+  "createdAt": ""
+}, {
+  "marker": "Ellen",
+  "studentNo": "up104",
+  "schemeName": "Example",
+  "aspects": [{
+    "aspect": "Report Structure",
+    "selected": "Good, nearly complete, structure.",
+    "mark": 8,
+    "maxMark": 10
+  }, {
+    "aspect": "Evaluation Quality",
+    "selected": "Strong evaluation, although following a traditional approach.",
+    "mark": 8,
+    "maxMark": 10
+  }, {
+    "aspect": "Knowledge and Understanding",
+    "selected": "Research is adequate but does not go much beyond what was presented in class or in the assigned text.",
+    "mark": 10,
+    "maxMark": 20
+  }, {
+    "aspect": "Thinking and Inquiry",
+    "selected": "The presentation is centered around a thesis which shows a highly developed awareness of historiographic or social issues and a high level of conceptual ability.",
+    "mark": 10,
+    "maxMark": 10
+  }, {
+    "aspect": "Presentation Skills",
+    "selected": "The presenter speaks clearly and loudly enough to be heard, using eye contact, a lively tone, gestures, and body language to engage the audience.",
+    "mark": 10,
+    "maxMark": 10
+  }],
+  "presetComments": [
+    "Investigate more objective means of evaluating your work.",
+    "Label your diagrams.",
+    "Excellent supporting evidence."
+  ],
+  "freeComment": "Strong purpose to the project, that was clearly explained and well researched. A more unique method of evaluation could have been used.",
+  "adjustment": 1,
+  "marks": 47,
+  "maxMarks": 60,
+  "createdAt": ""
+}]
