@@ -3,6 +3,11 @@
  */
 
 import dragula from 'dragula';
+import { generateUUID,
+  generateFunName,
+  resetSchemeData,
+  calculateTotalMarks,
+} from '../lib/utils';
 
 const newScheme = new ReactiveDict('newScheme');
 
@@ -10,7 +15,7 @@ const newScheme = new ReactiveDict('newScheme');
  * Called when template inserted into DOM.
  * Initialise Semantic UI components and Dragula listener.
  */
-Template.insertScheme.onRendered(function() {
+Template.insertScheme.onRendered(function render() {
   // SEMANTIC UI
   $('.ui.checkbox').checkbox();
   $('.unit-select').dropdown({
@@ -23,27 +28,26 @@ Template.insertScheme.onRendered(function() {
   });
   $('.tooltip-buttons button').popup({
     inline: false,
-    position: 'top left'
+    position: 'top left',
   });
   $('.name-field').trigger('click');
   // DRAGULA
-  var drake = dragula({
-    isContainer: function(el) {
+  const drake = dragula({
+    isContainer(el) {
       return el.classList.contains('dragula-container');
     },
-    invalid: function(el) {
+    invalid(el) {
       return el.nodeName === 'INPUT';
-    }
+    },
   });
-  drake.on('dragend', function() {
+  drake.on('dragend', () => {
     $('.rubric-table input:first').trigger('change');
-    let rObj = newScheme.get('rubricObject');
+    const rObj = newScheme.get('rubricObject');
     newScheme.set('rubricObject', []);
-    Meteor.setTimeout(function() {
+    Meteor.setTimeout(() => {
       newScheme.set('rubricObject', rObj);
     }, 80);
   });
-  this.rubric = newScheme.get('rubric');
   // If session var is defined, use that for the option value.
   if (newScheme.get('unitCode')) {
     $('.unit-select').dropdown('set selected', newScheme.get('unitCode'));
@@ -55,16 +59,16 @@ Template.insertScheme.onRendered(function() {
  */
 Template.insertScheme.onCreated(() => {
   newScheme.setDefault('rubricObject', [{
-    uuid: UI._globalHelpers.generateUUID(),
+    uuid: generateUUID(),
     rows: [{
-      uuid: UI._globalHelpers.generateUUID()
+      uuid: generateUUID(),
     }],
-    maxMark: 0
+    maxMark: 0,
   }]);
   newScheme.setDefault('comments', [{
-    uuid: UI._globalHelpers.generateUUID()
+    uuid: generateUUID(),
   }]);
-  newScheme.setDefault('schemeName', UI._globalHelpers.generateFunName());
+  newScheme.setDefault('schemeName', generateFunName());
   newScheme.setDefault('unitCode', '');
   newScheme.setDefault('editingName', false);
   newScheme.setDefault('commentHistory', []);
@@ -74,45 +78,47 @@ Template.insertScheme.onCreated(() => {
   * Helper functions.
   */
 Template.insertScheme.helpers({
-  rubric: function() {
+  rubric() {
     return newScheme.get('rubricObject');
   },
-  totalMarks: totalMarksFunction,
-  schemeName: function() {
+  totalMarks() {
+    return calculateTotalMarks(newScheme);
+  },
+  schemeName() {
     return newScheme.get('schemeName');
   },
-  editingName: function() {
+  editingName() {
     return newScheme.get('editingName');
   },
-  isThisSelected: function() {
+  isThisSelected() {
     return true;
   },
-  newScheme: function() {
+  newScheme() {
     return newScheme;
-  }
+  },
 });
 
 /**
  * Event listeners.
  */
 Template.insertScheme.events({
-  'click .submit-scheme': function(evt) {
-    let form = $('#marking-scheme-form')[0];
+  'click .submit-scheme'(event) {
+    const form = $('#marking-scheme-form')[0];
     if (form.checkValidity()) {
       // Change class to show request is being processed.
       $('.submit-scheme').removeClass('submit-scheme').addClass('loading');
-      evt.preventDefault();
+      event.preventDefault();
       // Serialize data.
-      let schemaObject = {
-        'name': $('input[name="scheme-name"]').val(),
-        'description': $('textarea[name="scheme-desc"]').val(),
-        'createdAt': new Date(),
-        'unitCode': newScheme.get('unitCode'),
-        'aspects': newScheme.get('rubricObject'),
-        'comments': newScheme.get('comments'),
-        'adjustmentValuePositive': $('input[name="adjustment-positive"]').val(),
-        'adjustmentValueNegative': $('input[name="adjustment-negative"]').val(),
-        'maxMarks': totalMarksFunction()
+      const schemaObject = {
+        name: $('input[name="scheme-name"]').val(),
+        description: $('textarea[name="scheme-desc"]').val(),
+        createdAt: new Date(),
+        unitCode: newScheme.get('unitCode'),
+        aspects: newScheme.get('rubricObject'),
+        comments: newScheme.get('comments'),
+        adjustmentValuePositive: $('input[name="adjustment-positive"]').val(),
+        adjustmentValueNegative: $('input[name="adjustment-negative"]').val(),
+        maxMarks: calculateTotalMarks(newScheme),
       };
       // Call Meteor function to add data to DB. This will run offline first.
       Meteor.call('addScheme', schemaObject, (error) => {
@@ -124,81 +130,46 @@ Template.insertScheme.events({
         }
       });
       // If no error, show success notification.
-      sAlert.success(schemaObject.name + ' added!', {
+      sAlert.success(`${schemaObject.name} added!`, {
         position: 'top-right',
         onRouteClose: false,
-        offset: 60
+        offset: 60,
       });
 
       $('.scheme-submit-button').removeClass('loading')
         .addClass('submit-scheme');
-      resetSchemeData();
+      resetSchemeData(newScheme);
       form.reset();
       // Send user to dashboard to use or share the new scheme.
       Router.go('dashboard');
     }
     // Semantic validation could be added here for additional user guidance.
   },
-  'click .scheme-submit-button .loading': function(evt) {
-    evt.preventDefault();
+  'click .scheme-submit-button .loading'(event) {
+    event.preventDefault();
   },
   // Change name field to input when selected.
-  'click .name-field': function() {
+  'click .name-field'() {
     newScheme.set('editingName', true);
-    setTimeout(function() {
+    setTimeout(() => {
       $('input[name="scheme-name"]').select();
     }, 100);
   },
   // Change the input back to heading after they leave.
-  'blur input[name="scheme-name"]': function() {
+  'blur input[name="scheme-name"]'() {
     newScheme.set('editingName', false);
     newScheme.set('schemeName', $('input[name="scheme-name"]').val());
   },
   // Allow return to move between initial inputs
-  'keydown': function(evt) {
-    if (evt.keyCode === 13 &&
-      $(evt.currentTarget).attr('name') === "scheme-name") {
-        evt.preventDefault();
-        $('#unit-field input').focus();
-    } else if (evt.keyCode === 13 &&
-      $(evt)[0].target === $('input.search:first')[0]) {
-        evt.preventDefault();
-        $('textarea[name="scheme-desc"]').focus();
+  'keydown'(event) {
+    if (event.keyCode === 13 &&
+      $(event.currentTarget).attr('name') === 'scheme-name') {
+      event.preventDefault();
+      $('#unit-field input').focus();
+    } else if (event.keyCode === 13 &&
+      $(event)[0].target === $('input.search:first')[0]) {
+      event.preventDefault();
+      $('textarea[name="scheme-desc"]').focus();
     }
-  }
+  },
 });
-
-// UTILITY FUNCTIONS
-
-/**
- * Reset session variables. Used on submission.
- * UUIDs not ideal, but used for tracking drag-and-drop and deletion.
- */
-function resetSchemeData() {
-  newScheme.set('rubricObject', [{
-    uuid: UI._globalHelpers.generateUUID(),
-    rows: [{
-      uuid: UI._globalHelpers.generateUUID()
-    }],
-    maxMark: 0
-  }]);
-  newScheme.set('comments', [{
-    uuid: UI._globalHelpers.generateUUID()
-  }]);
-  newScheme.set('schemeName', UI._globalHelpers.generateFunName());
-  newScheme.set('unitCode', '');
-  newScheme.set('editingName', false);
-  newScheme.set('commentHistory', []);
-}
-
-/**
- * Calculate total marks for this scheme using the max mark for each rubric.
- */
-function totalMarksFunction() {
-  let rObjs = newScheme.get('rubricObject'),
-    totalMarks = 0;
-  rObjs.forEach((rubric) => {
-    totalMarks += rubric.maxMark;
-  });
-  return totalMarks;
-}

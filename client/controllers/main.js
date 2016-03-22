@@ -4,13 +4,13 @@ Meteor.startup(() => {
   sAlert.config({
     position: 'top',
     effect: 'stackslide',
-    html: true
+    html: true,
   });
 });
 
 Template.main.onRendered(() => {
   $('.ui.menu .ui.dropdown').dropdown({
-    on: 'hover'
+    on: 'hover',
   });
   $('.ui.menu .sign-in').popup({
     inline: true,
@@ -18,7 +18,7 @@ Template.main.onRendered(() => {
     position: 'bottom right',
     delay: {
       show: 100,
-      hide: 800
-    }
+      hide: 800,
+    },
   });
 });

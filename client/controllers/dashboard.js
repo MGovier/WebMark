@@ -1,31 +1,31 @@
+/* eslint new-cap: 0 */
+
 Template.dashboard.helpers({
-  firstName: function() {
+  firstName() {
     if (Meteor.userId()) {
       return Meteor.user().profile.name.split(' ')[0];
-    } else {
-      return '';
     }
+    return '';
   },
-  connected: function() {
+  connected() {
     return Meteor.status().connected;
-  }
+  },
 });
 
 Template.dashboard.events({
-  'click .new-scheme': function() {
+  'click .new-scheme'() {
     Router.go('insertScheme');
-  }
+  },
 });
 
 Template.activityView.helpers({
-  friendlyDate: function(date) {
+  friendlyDate(date) {
     return ReactiveFromNow(date);
   },
-  icon: function(type) {
+  icon(type) {
     if (type === 'new') {
       return 'certificate';
-    } else {
-      return 'pencil';
     }
-  }
+    return 'pencil';
+  },
 });

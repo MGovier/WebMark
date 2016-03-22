@@ -1,18 +1,27 @@
 import dragula from 'dragula';
+import { generateUUID, calculateTotalMarks } from '../lib/utils';
 
 const editScheme = new ReactiveDict('editScheme');
 
-Template.editScheme.onRendered(function() {
-  let rubricUUIDs = this.data.scheme.aspects;
-  rubricUUIDs.forEach(aspect => {
-    aspect.uuid = UI._globalHelpers.generateUUID();
-    aspect.rows.forEach(row => {
-      row.uuid = UI._globalHelpers.generateUUID();
-    });
-  });
+Template.editScheme.onRendered(function render() {
+  // First, need to reassign UUIDs for tracking deletion and drag.
+  const rubricAspects = this.data.scheme.aspects;
+  for (let i = 0; i < rubricAspects.length; i++) {
+    const aspect = rubricAspects[i];
+    aspect.uuid = generateUUID();
+    for (let j = 0; j < aspect.rows.length; j++) {
+      aspect.rows[j].uuid = generateUUID();
+    }
+    rubricAspects[i] = aspect;
+  }
+  const comments = this.data.scheme.comments;
+  for (let i = 0; i < comments.length; i++) {
+    const com = comments[i];
+    com.uuid = generateUUID();
+  }
 
-  editScheme.set('rubricObject', this.data.scheme.aspects);
-  editScheme.set('comments', this.data.scheme.comments);
+  editScheme.set('rubricObject', rubricAspects);
+  editScheme.set('comments', comments);
   editScheme.set('schemeName', this.data.scheme.name);
   editScheme.set('unitCode', this.data.scheme.unitCode);
   editScheme.set('editingName', false);
@@ -35,27 +44,27 @@ Template.editScheme.onRendered(function() {
   });
   $('.tooltip-buttons button').popup({
     inline: false,
-    position: 'top left'
+    position: 'top left',
   });
   $('.name-field').trigger('click');
   if (editScheme.get('unitCode') !== 'zzNO_UNIT') {
-    $('.unit-select').dropdown('set selected', Session.get('unitCode'));
+    $('.unit-select').dropdown('set selected', editScheme.get('unitCode'));
   }
 
   // DRAGULA
-  var drake = dragula({
-    isContainer: function(el) {
+  const drake = dragula({
+    isContainer(el) {
       return el.classList.contains('dragula-container');
     },
-    invalid: function(el) {
+    invalid(el) {
       return el.nodeName === 'INPUT';
-    }
+    },
   });
-  drake.on('dragend', function() {
+  drake.on('dragend', () => {
     $('.rubric-table input:first').trigger('change');
-    let rObj = Session.get('rubricObject');
+    const rObj = editScheme.get('rubricObject');
     editScheme.set('rubricObject', []);
-    Meteor.setTimeout(function() {
+    Meteor.setTimeout(() => {
       editScheme.set('rubricObject', rObj);
     }, 80);
   });
@@ -65,62 +74,63 @@ Template.editScheme.onRendered(function() {
  * Helper functions.
  */
 Template.editScheme.helpers({
-  totalMarks: totalMarksFunction,
-  schemeName: function() {
+  totalMarks() {
+    return calculateTotalMarks(editScheme);
+  },
+  schemeName() {
     return editScheme.get('schemeName');
   },
-  editingName: function() {
+  editingName() {
     return editScheme.get('editingName');
   },
-  isThisSelected: function() {
+  isThisSelected() {
     return true;
   },
-  description: function() {
+  description() {
     return Template.instance().data.scheme.description;
   },
-  editScheme: function() {
+  editScheme() {
     return editScheme;
-  }
+  },
 });
 
 /**
  * Event listeners.
  */
 Template.editScheme.events({
-  'click .submit-scheme': function(evt, template) {
-    let form = $('#marking-scheme-form')[0];
+  'click .submit-scheme'(event, templateInstance) {
+    const form = $('#marking-scheme-form')[0];
     if (form.checkValidity()) {
       // Change class to show request is being processed.
       $('.submit-scheme').removeClass('submit-scheme').addClass('loading');
-      evt.preventDefault();
+      event.preventDefault();
       // Serialize data.
-      let schemaObject = {
-        'name': $('input[name="scheme-name"]').val(),
-        'description': $('textarea[name="scheme-desc"]').val(),
-        'createdAt': new Date(),
-        'unitCode': editScheme.get('unitCode'),
-        'aspects': editScheme.get('rubricObject'),
-        'comments': editScheme.get('comments'),
-        'adjustmentValuePositive': $('input[name="adjustment-positive"]').val(),
-        'adjustmentValueNegative': $('input[name="adjustment-negative"]').val(),
-        'maxMarks': totalMarksFunction()
+      const schemaObject = {
+        name: $('input[name="scheme-name"]').val(),
+        description: $('textarea[name="scheme-desc"]').val(),
+        createdAt: new Date(),
+        unitCode: editScheme.get('unitCode'),
+        aspects: editScheme.get('rubricObject'),
+        comments: editScheme.get('comments'),
+        adjustmentValuePositive: $('input[name="adjustment-positive"]').val(),
+        adjustmentValueNegative: $('input[name="adjustment-negative"]').val(),
+        maxMarks: calculateTotalMarks(editScheme),
       };
       // Call Meteor function to add data to DB. This will run offline first.
-      Meteor.call('updateScheme', template.data.scheme._id, schemaObject,
+      Meteor.call('updateScheme', templateInstance.data.scheme._id, schemaObject,
         (error) => {
           if (error) {
             // Alert user to error.
             sAlert.error(error.message, error.details);
             $('.scheme-submit-button').removeClass('loading')
               .addClass('submit-scheme');
-            console.log(error);
           }
-      });
+        });
       // If no error, show success notification.
-      sAlert.success(schemaObject.name + ' edited!', {
+      sAlert.success(`${schemaObject.name} edited!`, {
         position: 'top-right',
         onRouteClose: false,
-        offset: 60
+        offset: 60,
       });
 
       $('.scheme-submit-button').removeClass('loading')
@@ -131,48 +141,31 @@ Template.editScheme.events({
     }
     // Semantic validation could be added here for additional user guidance.
   },
-  'click .scheme-submit-button .loading': function(evt) {
-    evt.preventDefault();
+  'click .scheme-submit-button .loading'(event) {
+    event.preventDefault();
   },
   // Change name field to input when selected.
-  'click .name-field': function() {
+  'click .name-field'() {
     editScheme.set('editingName', true);
-    setTimeout(function() {
+    setTimeout(() => {
       $('input[name="scheme-name"]').select();
     }, 100);
   },
   // Change the input back to heading after they leave.
-  'blur input[name="scheme-name"]': function() {
+  'blur input[name="scheme-name"]'() {
     editScheme.set('editingName', false);
     editScheme.set('schemeName', $('input[name="scheme-name"]').val());
   },
   // Allow return to move between initial inputs
-  'keydown': function(evt) {
-    if (evt.keyCode === 13 &&
-      $(evt.currentTarget).attr('name') === "scheme-name") {
-        evt.preventDefault();
-        $('#unit-field input').focus();
-    } else if (evt.keyCode === 13 &&
-      $(evt)[0].target === $('input.search:first')[0]) {
-        evt.preventDefault();
-        $('textarea[name="scheme-desc"]').focus();
+  'keydown'(event) {
+    if (event.keyCode === 13 &&
+      $(event.currentTarget).attr('name') === 'scheme-name') {
+      event.preventDefault();
+      $('#unit-field input').focus();
+    } else if (event.keyCode === 13 &&
+      $(event)[0].target === $('input.search:first')[0]) {
+      event.preventDefault();
+      $('textarea[name="scheme-desc"]').focus();
     }
-  }
+  },
 });
-
-// UTILITY FUNCTIONS
-
-/**
- * Calculate total marks for this scheme using the max mark for each rubric.
- */
-function totalMarksFunction() {
-  let rObjs = editScheme.get('rubricObject'),
-    totalMarks = 0;
-  if (!rObjs) {
-    return 0;
-  }
-  rObjs.forEach((rubric) => {
-    totalMarks += rubric.maxMark;
-  });
-  return totalMarks;
-}
