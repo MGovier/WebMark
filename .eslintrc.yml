@@ -1,0 +1,26 @@
+env:
+  browser: true
+  node: true
+  meteor: true
+
+plugins:
+  - meteor
+
+extends:
+  - airbnb/base
+  - plugin:meteor/recommended
+
+parserOptions:
+  ecmaVersion: 6
+  sourceType: "module"
+
+globals:
+  # collections
+  Foo: false
+  Bar: false
+
+  # packages
+  sAlert: true
+  RouterAutoscroll: true
+  jQuery: true
+  ReactiveFromNow: true

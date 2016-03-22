@@ -36,3 +36,4 @@ standard-minifier-css
 standard-minifier-js
 browser-policy-content
 mfpierre:chartist-js
+practicalmeteor:mocha
