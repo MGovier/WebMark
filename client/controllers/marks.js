@@ -5,7 +5,7 @@
 
 import moment from 'moment';
 
-Template.marks.onCreated(function() {
+Template.marks.onCreated(function created() {
   this.filter = new ReactiveTable.Filter('filter-table');
 });
 
@@ -13,8 +13,8 @@ Template.marks.onCreated(function() {
  * Check a session variable exists if this scheme was rendered but not created.
  * Attach a tracker to the marks data, to update the chart automatically.
  */
-Template.marks.onRendered(function() {
-  let schemeId = this.data.markingScheme._id;
+Template.marks.onRendered(function render() {
+  const schemeId = this.data.markingScheme._id;
   // Unique session variable to track selected rows across app navigation.
   // Using a shared one would cause delete operations to affect other tables.
   Session.setDefault('s-' + schemeId, []);

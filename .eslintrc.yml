@@ -15,12 +15,17 @@ parserOptions:
   sourceType: "module"
 
 globals:
-  # collections
-  Foo: false
-  Bar: false
+  # Collections
+  MarkingSchemes: true
+  Marks: true
+  Activities: true
+  Units: true
 
-  # packages
+  # Packages
   sAlert: true
   RouterAutoscroll: true
   jQuery: true
   ReactiveFromNow: true
+  ReactiveTable: true
+  Ground: true
+  SimpleSchema: true

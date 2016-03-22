@@ -15,7 +15,7 @@ const newScheme = new ReactiveDict('newScheme');
  * Called when template inserted into DOM.
  * Initialise Semantic UI components and Dragula listener.
  */
-Template.insertScheme.onRendered(function render() {
+Template.insertScheme.onRendered(() => {
   // SEMANTIC UI
   $('.ui.checkbox').checkbox();
   $('.unit-select').dropdown({
@@ -135,7 +135,6 @@ Template.insertScheme.events({
         onRouteClose: false,
         offset: 60,
       });
-
       $('.scheme-submit-button').removeClass('loading')
         .addClass('submit-scheme');
       resetSchemeData(newScheme);
