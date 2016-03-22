@@ -6,18 +6,22 @@ const editScheme = new ReactiveDict('editScheme');
 Template.editScheme.onRendered(function render() {
   // First, need to reassign UUIDs for tracking deletion and drag.
   const rubricAspects = this.data.scheme.aspects;
-  for (let i = 0; i < rubricAspects.length; i++) {
-    const aspect = rubricAspects[i];
-    aspect.uuid = generateUUID();
-    for (let j = 0; j < aspect.rows.length; j++) {
-      aspect.rows[j].uuid = generateUUID();
+  for (const i in rubricAspects) {
+    if (rubricAspects.hasOwnProperty(i)) {
+      const aspect = rubricAspects[i];
+      aspect.uuid = generateUUID();
+      for (const j in aspect.rows) {
+        if (aspect.rows.hasOwnProperty(j)) {
+          aspect.rows[j].uuid = generateUUID();
+        }
+      }
     }
-    rubricAspects[i] = aspect;
   }
   const comments = this.data.scheme.comments;
-  for (let i = 0; i < comments.length; i++) {
-    const com = comments[i];
-    com.uuid = generateUUID();
+  for (const i in comments) {
+    if (comments.hasOwnProperty(i)) {
+      comments[i].uuid = generateUUID();
+    }
   }
 
   editScheme.set('rubricObject', rubricAspects);

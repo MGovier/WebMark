@@ -50,19 +50,22 @@ Template.rubricBuilder.events({
     const rObjs = templateInstance.data.scheme.get('rubricObject');
     const rowId = $(event.currentTarget).closest('tr').attr('data-uuid');
     const tableId = $(event.currentTarget).closest('table').attr('data-uuid');
-    for (let i = 0; i < rObjs.length; i++) {
-      const rubric = rObjs[i];
-      if (rubric.uuid === tableId) {
-        let maxMark = 0;
-        rubric.rows = rubric.rows.filter(row => {
-          return row.uuid !== rowId;
-        });
-        rubric.rows.forEach((row) => {
-          if (row.criteriaValue > maxMark) {
-            maxMark = row.criteriaValue;
-          }
-        });
-        rubric.maxMark = maxMark;
+    // Most efficient loop through array elements https://jsperf.com/loops
+    for (const i in rObjs) {
+      if (rObjs.hasOwnProperty(i)) {
+        const rubric = rObjs[i];
+        if (rubric.uuid === tableId) {
+          let maxMark = 0;
+          rubric.rows = rubric.rows.filter(row => {
+            return row.uuid !== rowId;
+          });
+          rubric.rows.forEach((row) => {
+            if (row.criteriaValue > maxMark) {
+              maxMark = row.criteriaValue;
+            }
+          });
+          rubric.maxMark = maxMark;
+        }
       }
     }
     templateInstance.data.scheme.set('rubricObject', rObjs);

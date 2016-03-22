@@ -47,9 +47,12 @@ Template.commentBuilder.events({
   'change input'(event, templateInstance) {
     const comments = templateInstance.data.scheme.get('comments');
     const commentArray = templateInstance.data.scheme.get('commentHistory');
-    for (let i = 0; i < comments.length; i++) {
-      const com = comments[i];
-      com.comment = $(`.comment-item[data-uuid="${com.uuid}"] input`).val();
+    // Most efficient loop through array elements https://jsperf.com/loops
+    for (const i in comments) {
+      if (comments.hasOwnProperty(i)) {
+        const com = comments[i];
+        com.comment = $(`.comment-item[data-uuid="${com.uuid}"] input`).val();
+      }
     }
     templateInstance.data.scheme.set('comments', comments);
     commentArray.push(comments);

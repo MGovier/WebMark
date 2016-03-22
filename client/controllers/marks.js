@@ -1,6 +1,6 @@
 /**
  * Create a filter object the first time this template in instantiated.
- * This can't be an arrow function!
+ * Careful with arrow functions due to `this` context.
  */
 
 import moment from 'moment';
