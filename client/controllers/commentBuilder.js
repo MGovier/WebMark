@@ -31,9 +31,7 @@ Template.commentBuilder.events({
     event.preventDefault();
     let comments = templateInstance.data.scheme.get('comments');
     const id = $(event.currentTarget).closest('.comment-item').attr('data-uuid');
-    comments = comments.filter(com => {
-      return com.uuid !== id;
-    });
+    comments = comments.filter(com => com.uuid !== id);
     templateInstance.data.scheme.set('comments', comments);
   },
   'click .add-comment'(event, templateInstance) {

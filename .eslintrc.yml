@@ -30,3 +30,4 @@ globals:
   Ground: true
   SimpleSchema: true
   Chartist: true
+  BrowserPolicy: true
