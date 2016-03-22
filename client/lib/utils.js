@@ -1,32 +1,16 @@
+/**
+ * Utilities package.
+ * Exports all functions for use by specific module imports.
+ */
+
 function generateUUID() {
   // Source: User 'broofa' at StackOverflow:
   // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
     const r = crypto.getRandomValues(new Uint8Array(1))[0] % 16 | 0;
     const v = c === 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
-}
-
-/**
- * Reset session variables. Used on submission.
- * UUIDs not ideal, but used for tracking drag-and-drop and deletion.
- */
-function resetSchemeData(dict) {
-  dict.set('rubricObject', [{
-    uuid: UI._globalHelpers.generateUUID(),
-    rows: [{
-      uuid: UI._globalHelpers.generateUUID(),
-    }],
-    maxMark: 0,
-  }]);
-  dict.set('comments', [{
-    uuid: UI._globalHelpers.generateUUID(),
-  }]);
-  dict.set('schemeName', UI._globalHelpers.generateFunName());
-  dict.set('unitCode', '');
-  dict.set('editingName', false);
-  dict.set('commentHistory', []);
 }
 
 /**
@@ -525,6 +509,27 @@ function generateFunName() {
   ];
   return `${left[Math.floor(Math.random() * left.length)]}
   ${right[Math.floor(Math.random() * right.length)]}`;
+}
+
+/**
+ * Reset session variables. Used on submission.
+ * UUIDs not ideal, but used for tracking drag-and-drop and deletion.
+ */
+function resetSchemeData(dict) {
+  dict.set('rubricObject', [{
+    uuid: generateUUID(),
+    rows: [{
+      uuid: generateUUID(),
+    }],
+    maxMark: 0,
+  }]);
+  dict.set('comments', [{
+    uuid: generateUUID(),
+  }]);
+  dict.set('schemeName', generateFunName());
+  dict.set('unitCode', '');
+  dict.set('editingName', false);
+  dict.set('commentHistory', []);
 }
 
 export {
