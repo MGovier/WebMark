@@ -29,3 +29,4 @@ globals:
   ReactiveTable: true
   Ground: true
   SimpleSchema: true
+  Chartist: true
