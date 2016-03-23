@@ -31,6 +31,9 @@ Template.activityView.helpers({
     if (type === 'new') {
       return 'certificate';
     }
+    if (type === 'edit') {
+      return 'configure';
+    }
     return 'pencil';
   },
 });
