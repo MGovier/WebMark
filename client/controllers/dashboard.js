@@ -19,3 +19,12 @@ Template.dashboard.events({
     FlowRouter.go('insertScheme');
   },
 });
+
+Template.dashboard.onCreated(function created() {
+  const self = this;
+  self.autorun(() => {
+    if (!Meteor.userId()) {
+      FlowRouter.go('landing');
+    }
+  });
+});

@@ -91,7 +91,7 @@ Template.insertScheme.helpers({
   },
   units() {
     const unitCollection = Units.findOne({ creator: Meteor.userId() });
-    return unitCollection.units;
+    return unitCollection ? unitCollection.units : [];
   },
   totalMarks() {
     return calculateTotalMarks(newScheme);

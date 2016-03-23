@@ -15,6 +15,11 @@ Template.marks.onCreated(function created() {
     self.subscribe('markingSchemes', FlowRouter.getParam('_id'));
     self.subscribe('marks', null, FlowRouter.getParam('_id'));
   });
+  self.autorun(() => {
+    if (!Meteor.userId()) {
+      FlowRouter.go('landing');
+    }
+  });
 });
 
 /**

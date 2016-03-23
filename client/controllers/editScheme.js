@@ -30,6 +30,11 @@ Template.editScheme.onCreated(function created() {
       }, 100);
     }
   });
+  self.autorun(() => {
+    if (!Meteor.userId()) {
+      FlowRouter.go('landing');
+    }
+  });
 });
 
 Template.editScheme.onRendered(() => {
@@ -179,7 +184,7 @@ Template.editScheme.events({
         .addClass('submit-scheme');
       form.reset();
       // Send user to dashboard to use or share the updated scheme.
-      Router.go('dashboard');
+      FlowRouter.go('dashboard');
     }
     // Semantic validation could be added here for additional user guidance.
   },
