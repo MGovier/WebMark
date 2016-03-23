@@ -113,7 +113,7 @@ Template.editScheme.helpers({
     return MarkingSchemes.findOne({ _id: FlowRouter.getParam('_id') });
   },
   units() {
-    const unitCollection = Units.findOne({});
+    const unitCollection = Units.findOne({ creator: Meteor.userId() });
     return unitCollection.units;
   },
   totalMarks() {

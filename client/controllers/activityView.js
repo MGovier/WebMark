@@ -14,7 +14,9 @@ Template.activityView.onCreated(function created() {
 
 Template.activityView.helpers({
   activities() {
-    const activity = Activities.find({}, {
+    const activity = Activities.find({
+      relevantTo: Meteor.userId(),
+    }, {
       sort: {
         performedAt: -1,
       },

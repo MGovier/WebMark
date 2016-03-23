@@ -27,9 +27,14 @@ Template.marks.onRendered(function render() {
   // Using a shared one would cause delete operations to affect other tables.
   sessionSelect.setDefault(schemeId, []);
   this.graph = Tracker.autorun(() => {
-    if (Marks.find().count() > 0 && MarkingSchemes.find().count() > 0) {
-      const markArray = Marks.find().fetch();
-      const maxMarks = MarkingSchemes.find().fetch()[0].maxMarks;
+    const marks = Marks.find({
+      schemeId: FlowRouter.getParam('_id'),
+      schemeOwner: Meteor.userId(),
+    });
+    const markingScheme = MarkingSchemes.findOne({ _id: FlowRouter.getParam('_id') });
+    if (marks.count() > 0 && markingScheme) {
+      const markArray = marks.fetch();
+      const maxMarks = markingScheme.maxMarks;
       const interval = maxMarks / 6;
       const labels = [];
       const series = [];
@@ -89,7 +94,10 @@ Template.marks.helpers({
   // Configure ReactiveTable
   settings() {
     return {
-      collection: Marks.find({}),
+      collection: Marks.find({
+        schemeId: FlowRouter.getParam('_id'),
+        schemeOwner: Meteor.userId(),
+      }),
       rowsPerPage: 30,
       filters: ['filter-table'],
       class: 'ui table striped selectable',
@@ -131,10 +139,13 @@ Template.marks.helpers({
     };
   },
   marks() {
-    return Marks.find({});
+    return Marks.find({
+      schemeId: FlowRouter.getParam('_id'),
+      schemeOwner: Meteor.userId(),
+    });
   },
   markingScheme() {
-    return MarkingSchemes.findOne({});
+    return MarkingSchemes.findOne({ _id: FlowRouter.getParam('_id') });
   },
   marksExist() {
     return Marks.find().count();

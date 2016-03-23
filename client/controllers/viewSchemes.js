@@ -18,7 +18,9 @@ Template.viewSchemes.onCreated(function created() {
 
 Template.viewSchemes.helpers({
   markingSchemes() {
-    return MarkingSchemes.find({}, {
+    return MarkingSchemes.find({
+      creator: Meteor.userId(),
+    }, {
       sort: {
         unitCode: 1,
         name: 1,

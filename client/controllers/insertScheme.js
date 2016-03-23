@@ -90,7 +90,7 @@ Template.insertScheme.helpers({
     return newScheme.get('rubricObject');
   },
   units() {
-    const unitCollection = Units.findOne({});
+    const unitCollection = Units.findOne({ creator: Meteor.userId() });
     return unitCollection.units;
   },
   totalMarks() {

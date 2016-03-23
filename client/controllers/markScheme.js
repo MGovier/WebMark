@@ -25,7 +25,7 @@ Template.markScheme.onRendered(() => {
 
 Template.markScheme.helpers({
   scheme() {
-    const scheme = MarkingSchemes.findOne({});
+    const scheme = MarkingSchemes.findOne({ _id: FlowRouter.getParam('_id') });
     return scheme;
   },
   countMarks() {
