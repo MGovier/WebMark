@@ -1,31 +1,30 @@
+/**
+ * Dashboard
+ */
+
 Template.dashboard.helpers({
-  firstName: function() {
+  firstName() {
     if (Meteor.userId()) {
       return Meteor.user().profile.name.split(' ')[0];
-    } else {
-      return '';
     }
+    return '';
   },
-  connected: function() {
+  connected() {
     return Meteor.status().connected;
-  }
+  },
 });
 
 Template.dashboard.events({
-  'click .new-scheme': function() {
-    Router.go('insertScheme');
-  }
+  'click .new-scheme'() {
+    FlowRouter.go('insertScheme');
+  },
 });
 
-Template.activityView.helpers({
-  friendlyDate: function(date) {
-    return ReactiveFromNow(date);
-  },
-  icon: function(type) {
-    if (type === 'new') {
-      return 'certificate';
-    } else {
-      return 'pencil';
+Template.dashboard.onCreated(function created() {
+  const self = this;
+  self.autorun(() => {
+    if (!Meteor.userId()) {
+      FlowRouter.go('landing');
     }
-  }
+  });
 });

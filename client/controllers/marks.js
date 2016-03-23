@@ -1,34 +1,55 @@
 /**
- * Create a filter object the first time this template in instantiated.
- * This can't be an arrow function!
+ * Create a filter object the first time this template is instantiated.
+ * Careful with arrow functions due to `this` context.
  */
-Template.marks.onCreated(function() {
-  this.filter = new ReactiveTable.Filter('filter-table');
+
+import moment from 'moment';
+import { generateJSON, generateCSV } from '../lib/utils';
+
+const sessionSelect = new ReactiveDict('sessionSelect');
+
+Template.marks.onCreated(function created() {
+  const self = this;
+  self.filter = new ReactiveTable.Filter('filter-table');
+  self.autorun(() => {
+    self.subscribe('markingSchemes', FlowRouter.getParam('_id'));
+    self.subscribe('marks', null, FlowRouter.getParam('_id'));
+  });
+  self.autorun(() => {
+    if (!Meteor.userId()) {
+      FlowRouter.go('landing');
+    }
+  });
 });
 
 /**
  * Check a session variable exists if this scheme was rendered but not created.
  * Attach a tracker to the marks data, to update the chart automatically.
  */
-Template.marks.onRendered(() => {
-  let schemeId = Template.instance().data.markingScheme._id;
+Template.marks.onRendered(function render() {
+  const schemeId = FlowRouter.getParam('_id');
   // Unique session variable to track selected rows across app navigation.
   // Using a shared one would cause delete operations to affect other tables.
-  Session.setDefault('s-' + schemeId, []);
-  this.graph = Tracker.autorun(function(){
-    if (Marks.find().count() > 0) {
-      var markArray = Marks.find().fetch(),
-          maxMarks = markArray[0].maxMarks,
-          interval = maxMarks / 6,
-          labels = [],
-          series = [];
-      for (var i = 0; i < 6; i++) {
-        var lowerInterval = interval * i,
-            upperInterval = (interval * (i + 1)) - (i === 5 ? 0 : 1),
-            count = 0;
-        var label = `${lowerInterval} - ${upperInterval}`;
+  sessionSelect.setDefault(schemeId, []);
+  this.graph = Tracker.autorun(() => {
+    const marks = Marks.find({
+      schemeId: FlowRouter.getParam('_id'),
+      schemeOwner: Meteor.userId(),
+    });
+    const markingScheme = MarkingSchemes.findOne({ _id: FlowRouter.getParam('_id') });
+    if (marks.count() > 0 && markingScheme) {
+      const markArray = marks.fetch();
+      const maxMarks = markingScheme.maxMarks;
+      const interval = maxMarks / 6;
+      const labels = [];
+      const series = [];
+      for (let i = 0; i < 6; ++i) {
+        const lowerInterval = interval * i;
+        const upperInterval = (interval * (i + 1)) - (i === 5 ? 0 : 1);
+        const label = `${lowerInterval.toFixed(0)} - ${upperInterval.toFixed(0)}`;
+        let count = 0;
         labels.push(label);
-        for (var m = 0; m < markArray.length; m++) {
+        for (let m = 0; m < markArray.length; ++m) {
           if (markArray[m].marks >= lowerInterval &&
               markArray[m].marks <= upperInterval) {
             count++;
@@ -36,25 +57,27 @@ Template.marks.onRendered(() => {
         }
         series.push((count / markArray.length) * 100);
       }
-      var data = {
+      const data = {
         labels,
-        series
+        series,
       };
-      var options = {
+      const options = {
         axisY: {
           onlyInteger: true,
-          offset: 20
+          offset: 20,
         },
-        distributeSeries: true
+        distributeSeries: true,
       };
-      // Create a Chartist bar chart.
-      new Chartist.Bar('.ct-chart', data, options).on('draw', function(data) {
-        if(data.type === 'bar') {
-          data.element.attr({
-            style: 'stroke-width: 20px'
-          });
-        }
-      });
+      // Create a Chartist bar chart. Wait for DOM.
+      Meteor.setTimeout(() => {
+        new Chartist.Bar('.ct-chart', data, options).on('draw', chart => {
+          if (chart.type === 'bar') {
+            chart.element.attr({
+              style: 'stroke-width: 20px',
+            });
+          }
+        });
+      }, 100);
     }
   });
 });
@@ -62,7 +85,7 @@ Template.marks.onRendered(() => {
 /**
  * When this template leaves the DOM.
  */
-Template.marks.onDestroyed(() => {
+Template.marks.onDestroyed(function destroy() {
   // Stop the tracker trying to auto-update the graph when destroyed.
   if (this.graph) {
     this.graph.stop();
@@ -74,187 +97,125 @@ Template.marks.onDestroyed(() => {
  */
 Template.marks.helpers({
   // Configure ReactiveTable
-  settings: function() {
+  settings() {
     return {
-      collection: Template.instance().data.marks,
+      collection: Marks.find({
+        schemeId: FlowRouter.getParam('_id'),
+        schemeOwner: Meteor.userId(),
+      }),
       rowsPerPage: 30,
       filters: ['filter-table'],
       class: 'ui table striped selectable',
       fields: [{
         key: 'studentNo',
-        label: 'Student No.'
+        label: 'Student No.',
       }, {
         key: 'marker',
-        label: 'Marked By'
+        label: 'Marked By',
       }, {
         key: 'createdAt',
         label: 'Marked On',
-        fn: function(value) {
+        fn(value) {
           return moment(value).format('D/M/YYYY');
-        }
+        },
       }, {
         key: 'marks',
-        label: 'Mark'
+        label: 'Mark',
       }, {
         key: 'percentage',
         label: '%',
-        fn: function(value, object) {
+        fn(value, object) {
           return Math.round((object.marks / object.maxMarks) * 100);
-        }
+        },
       }, {
         key: 'select',
         label: 'Select',
         sortable: false,
-        fn: function (value, object) {
-          let selectedRows = Session.get('s-' +
-              MarkingSchemes.find().fetch()[0]._id);
+        fn(value, object) {
+          const selectedRows = sessionSelect.get(MarkingSchemes.find().fetch()[0]._id);
           if (selectedRows && selectedRows.indexOf(object._id) > -1) {
-            return new Spacebars.SafeString('<div class="ui checked checkbox"' +
-                ' id="'+ object._id + '"><input type="checkbox" checked="" ' +
-                'name="check"><label></label></div>');
-          } else {
-            return new Spacebars.SafeString('<div class="ui checkbox" ' +
-                'id="'+ object._id + '"><input type="checkbox" ' +
-                'name="check"><label></label></div>');
+            return new Spacebars.SafeString(`<div class="ui checked checkbox" id="${object._id}">
+            <input type="checkbox" checked="" name="check"><label></label></div>`);
           }
-        }
-      }]
+          return new Spacebars.SafeString(`<div class="ui checkbox" id="${object._id}">
+          <input type="checkbox" name="check"><label></label></div>`);
+        },
+      }],
     };
   },
-  marksExist: function () {
+  marks() {
+    return Marks.find({
+      schemeId: FlowRouter.getParam('_id'),
+      schemeOwner: Meteor.userId(),
+    });
+  },
+  markingScheme() {
+    return MarkingSchemes.findOne({ _id: FlowRouter.getParam('_id') });
+  },
+  marksExist() {
     return Marks.find().count();
   },
-  filterVar: function() {
+  filterVar() {
     return Template.instance().filter.get();
   },
-  jsonData: function() {
-    return "data:text/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(
-        generateJSON(Template.instance(), null, '  ')));
+  jsonData(markingScheme, marks) {
+    return `data:text/json;charset=utf-8,
+    ${encodeURIComponent(JSON.stringify(generateJSON(markingScheme, marks), null, '  '))}`;
   },
-  csvData: function() {
-    return "data:text/csv;charset=utf-8," +
-      encodeURIComponent(generateCSV(Template.instance()));
+  csvData(markingScheme, marks) {
+    return `data:text/csv;charset=utf-8,
+    ${encodeURIComponent(generateCSV(markingScheme, marks))}`;
   },
-  deleteDisabled: function() {
-    let selectedRows = Session.get('s-' +
-        Template.instance().data.markingScheme._id);
+  deleteDisabled() {
+    const selectedRows = sessionSelect.get(FlowRouter.getParam('_id'));
     return selectedRows && !selectedRows.length;
-  }
+  },
 });
 
 /**
  * Event listeners.
  */
 Template.marks.events({
-  'click .reactive-table tbody tr': function(evt, template) {
-    if (evt.target.className === 'select' || evt.target.nodeName === 'DIV') {
-      $(evt.target).children('.ui .checkbox').checkbox('toggle');
-    } else if (evt.target.nodeName !== 'INPUT' &&
-        evt.target.nodeName !== 'LABEL') {
-      Router.go('markReport', {
+  'click .reactive-table tbody tr'(event) {
+    if (event.target.className === 'select' || event.target.nodeName === 'DIV') {
+      $(event.target).children('.ui .checkbox').checkbox('toggle');
+    } else if (event.target.nodeName !== 'INPUT' &&
+        event.target.nodeName !== 'LABEL') {
+      FlowRouter.go('markReport', {
         _id: this._id,
-        _sid: template.data.markingScheme._id
+        _sid: FlowRouter.getParam('_id'),
       });
     }
   },
-  'keyup #filter-table': function(evt, template) {
-    template.filter.set($(evt.currentTarget).val());
+  'keyup #filter-table'(event, templateInstance) {
+    templateInstance.filter.set($(event.currentTarget).val());
   },
-  'change .ui .checkbox': function(evt, template) {
-    let selectedRows = Session.get('s-' + template.data.markingScheme._id);
-    if ($('#' + evt.currentTarget.id).checkbox('is checked')) {
-      selectedRows.push(evt.currentTarget.id);
+  'change .ui .checkbox'(event) {
+    const selectedRows = sessionSelect.get(FlowRouter.getParam('_id'));
+    if ($(`#${event.currentTarget.id}`).checkbox('is checked')) {
+      selectedRows.push(event.currentTarget.id);
     } else {
-      for (var i = selectedRows.length - 1; i >= 0; i--) {
-        if (selectedRows[i] === evt.currentTarget.id) {
+      for (let i = selectedRows.length - 1; i >= 0; --i) {
+        if (selectedRows[i] === event.currentTarget.id) {
           selectedRows.splice(i, 1);
         }
       }
     }
-    Session.set('s-' + template.data.markingScheme._id, selectedRows);
+    sessionSelect.set(FlowRouter.getParam('_id'), selectedRows);
   },
-  'click .delete-rows': function(evt, template) {
+  'click .delete-rows'() {
     $('.ui.basic.delete-check.modal')
       .modal({
         closable: false,
-        onApprove: function() {
-          var selectedRows = Session.get('s-' +
-              template.data.markingScheme._id);
-          //check
+        onApprove() {
+          const selectedRows = sessionSelect.get(FlowRouter.getParam('_id'));
           selectedRows.forEach(sID => {
             Meteor.call('deleteMark', sID);
           });
           // Reset the selected rows attribute after they have been deleted.
-          Session.set('s-' + template.data.markingScheme._id, []);
+          sessionSelect.set(FlowRouter.getParam('_id'), []);
         },
-        detachable: false
+        detachable: false,
       }).modal('show');
-  }
-});
-
-// UTILITY FUNCTIONS
-
-/**
- * Generate a JSON file from template data.
- * @param  {Object} template  Data used to render this instance.
- * @return {Object}           JSON object of all data rows.
- */
-function generateJSON (template) {
-  let output = {
-    'schemeName': template.data.markingScheme.name,
-    'schemeCreator': Meteor.user().profile.name,
-    'exportTime': new Date(),
-    'reportCount': template.data.marks.count(),
-    'reports': [],
-    'maxMarks': template.data.markingScheme.maxMarks
   },
-  addMark = function (report) {
-    output.reports.push({
-      'marker': report.marker,
-      'studentNo': report.studentNo,
-      'marks': report.marks,
-      'aspects': report.aspects,
-      'presetComments': report.presetComments,
-      'comment': report.freeComment,
-      'adjustment': report.adjustment
-    });
-  };
-  template.data.marks.forEach(addMark);
-  return output;
-}
-
-/**
- * Generate a CSV file from template data.
- * @param  {Object} template  Data used to render this instance.
- * @return {String}           CSV formatted data.
- */
-function generateCSV (template) {
-  // Create CSV header first.
-  let output = 'Student No,Marker,Marks,Max Marks,Preset Comments,Comment';
-  template.data.markingScheme.aspects.forEach((aspect) => {
-    output += ',"' + aspect.aspect + ' Level","' + aspect.aspect + ' Mark","' +
-      aspect.aspect + ' Max Mark"';
-  });
-  output += ',Adjustment\n';
-
-  // Function to run on each data row.
-  let addMark = function (report) {
-    output += '"' + report.studentNo + '"';
-    output += ',"' + report.marker + '"';
-    output += ',' + report.marks;
-    output += ',' + report.maxMarks;
-    output += ',"' + report.presetComments + '"';
-    output += ',"' + report.freeComment + '"';
-    report.aspects.forEach((aspect) => {
-      output += ',"' + aspect.selected + '"';
-      output += ',' + aspect.mark;
-      output += ',' + aspect.maxMark;
-    });
-    output += ',' + (report.adjustment || 0);
-    output += '\n';
-  };
-
-  template.data.marks.forEach(addMark);
-  return output;
-}
+});

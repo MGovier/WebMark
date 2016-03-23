@@ -1,8 +1,10 @@
-<template name="insertScheme">
+<template name="editScheme">
   {{#if connectionReady}}
+    {{#if scheme}}
+    {{#with scheme}}
   <form id="marking-scheme-form">
     <div class="ui form">
-      <h3 class="ui horizontal divider header"><i class="certificate icon"></i>New Marking Scheme</h3>
+      <h3 class="ui horizontal divider header"><i class="certificate icon"></i>Edit Marking Scheme</h3>
       <div class="ui stackable four column grid">
         <div class="six wide column">
           <div class="row">
@@ -33,11 +35,11 @@
       </div>
       <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Rubric</h3>
 
-      {{> rubricBuilder scheme=newScheme}}
+      {{> rubricBuilder scheme=editScheme}}
 
       <h3 class="ui horizontal divider header"><i class="list layout icon"></i>Comments</h3>
 
-      {{> commentBuilder scheme=newScheme}}
+      {{> commentBuilder scheme=editScheme}}
 
       <h3 class="ui horizontal divider header"><i class="unlock alternate icon"></i>Adjustment</h3>
       <div class="ui stackable padded grid">
@@ -69,7 +71,10 @@
       </div>
     </div>
   </form>
-  {{semantic}}
+  {{/with}}
+  {{else}}
+    {{> notFound}}
+  {{/if}}
 {{else}}
   {{> loading}}
 {{/if}}

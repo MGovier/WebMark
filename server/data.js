@@ -8,23 +8,22 @@
  * Return a specific scheme if an ID was given.
  * @param  {String}   idArg   Optional scheme id.
  */
-Meteor.publish('markingSchemes', function(idArg) {
+Meteor.publish('markingSchemes', function pub(idArg) {
   // Return specific scheme if id is provided.
   // Security through obscurity, Google Docs style.
   if (idArg) {
     return MarkingSchemes.find({
-      _id: idArg
-    });
-  } else {
-    // Return nothing is the user is not logged in.
-    if (!this.userId) {
-      return [];
-    }
-    // Give the users the schemes they created.
-    return MarkingSchemes.find({
-      creator: this.userId
+      _id: idArg,
     });
   }
+  // Return nothing is the user is not logged in.
+  if (!this.userId) {
+    return [];
+  }
+  // Give the users the schemes they created.
+  return MarkingSchemes.find({
+    creator: this.userId,
+  });
 });
 
 /**
@@ -32,12 +31,12 @@ Meteor.publish('markingSchemes', function(idArg) {
  * @param  {String}   idArg       Optional marking report ID.
  * @param  {String}   schemeId    Optional marking scheme ID.
  */
-Meteor.publish('marks', function(idArg, schemeId) {
+Meteor.publish('marks', function pub(idArg, schemeId) {
   // If idArg is set, we're looking for a specific marking report.
   // This can be sent without user authentication, for student access.
   if (idArg) {
     return Marks.find({
-      _id: idArg
+      _id: idArg,
     });
   }
   // Other methods require user authentication.
@@ -46,41 +45,41 @@ Meteor.publish('marks', function(idArg, schemeId) {
   }
   if (schemeId) {
     return Marks.find({
-      schemeId: schemeId,
-      schemeOwner: this.userId
+      schemeId,
+      schemeOwner: this.userId,
     });
   }
   // If no arguments, return all marks relevant to the current user.
   return Marks.find({
-    schemeOwner: this.userId
+    schemeOwner: this.userId,
   });
 });
 
 /**
  * Publish activities relevant to the logged in user.
  */
-Meteor.publish('activities', function() {
+Meteor.publish('activities', function pub() {
   if (!this.userId) {
     return [];
   }
   return Activities.find({
-    relevantTo: this.userId
+    relevantTo: this.userId,
   }, {
     limit: 5,
     sort: {
-      performedAt: -1
-    }
+      performedAt: -1,
+    },
   });
 });
 
 /**
  * Publish a user's unit history.
  */
-Meteor.publish('units', function() {
+Meteor.publish('units', function pub() {
   if (!this.userId) {
     return [];
   }
   return Units.find({
-    creator: this.userId
+    creator: this.userId,
   });
 });
