@@ -8,9 +8,9 @@ Template.home.events({
     Meteor.loginWithGoogle();
   },
   'click .create-scheme'() {
-    Router.go('insertScheme');
+    FlowRouter.go('insertScheme');
   },
   'click .view-schemes'() {
-    Router.go('dashboard');
+    FlowRouter.go('dashboard');
   },
 });

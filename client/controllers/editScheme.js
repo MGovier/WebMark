@@ -3,9 +3,44 @@ import { generateUUID, calculateTotalMarks } from '../lib/utils';
 
 const editScheme = new ReactiveDict('editScheme');
 
-Template.editScheme.onRendered(function render() {
+Template.editScheme.onCreated(function created() {
+  const self = this;
+  self.autorun(() => {
+    self.subscribe('markingSchemes', FlowRouter.getParam('_id'));
+    self.subscribe('units');
+  });
+  self.autorun(() => {
+    if (self.subscriptionsReady()) {
+      // Give the DOM some time to be built, then configure Semantic.
+      Meteor.setTimeout(() => {
+        $('.ui.checkbox').checkbox();
+        $('.unit-select').dropdown({
+          allowAdditions: true,
+          maxSelections: false,
+          onChange: value => {
+            editScheme.set('unitCode', value);
+            $('textarea[name="scheme-desc"]').focus();
+          },
+        });
+        $('.tooltip-buttons button').popup({
+          inline: false,
+          position: 'top left',
+        });
+        $('.name-field').trigger('click');
+      }, 100);
+    }
+  });
+  self.autorun(() => {
+    if (!Meteor.userId()) {
+      FlowRouter.go('landing');
+    }
+  });
+});
+
+Template.editScheme.onRendered(() => {
+  const scheme = MarkingSchemes.findOne({ _id: FlowRouter.getParam('_id') });
   // First, need to reassign UUIDs for tracking deletion and drag.
-  const rubricAspects = this.data.scheme.aspects;
+  const rubricAspects = scheme.aspects;
   for (const i in rubricAspects) {
     if (rubricAspects.hasOwnProperty(i)) {
       const aspect = rubricAspects[i];
@@ -17,7 +52,7 @@ Template.editScheme.onRendered(function render() {
       }
     }
   }
-  const comments = this.data.scheme.comments;
+  const comments = scheme.comments;
   for (const i in comments) {
     if (comments.hasOwnProperty(i)) {
       comments[i].uuid = generateUUID();
@@ -26,15 +61,16 @@ Template.editScheme.onRendered(function render() {
 
   editScheme.set('rubricObject', rubricAspects);
   editScheme.set('comments', comments);
-  editScheme.set('schemeName', this.data.scheme.name);
-  editScheme.set('unitCode', this.data.scheme.unitCode);
+  editScheme.set('schemeName', scheme.name);
+  editScheme.set('unitCode', scheme.unitCode);
+  editScheme.set('description', scheme.description);
   editScheme.set('editingName', false);
   editScheme.set('commentHistory', []);
 
   $('input[name="adjustment-positive"]')
-    .val(this.data.scheme.adjustmentValuePositive);
+    .val(scheme.adjustmentValuePositive);
   $('input[name="adjustment-negative"]')
-    .val(this.data.scheme.adjustmentValueNegative);
+    .val(scheme.adjustmentValueNegative);
 
   // SEMANTIC UI
   $('.ui.checkbox').checkbox();
@@ -78,6 +114,13 @@ Template.editScheme.onRendered(function render() {
  * Helper functions.
  */
 Template.editScheme.helpers({
+  scheme() {
+    return MarkingSchemes.findOne({ _id: FlowRouter.getParam('_id') });
+  },
+  units() {
+    const unitCollection = Units.findOne({ creator: Meteor.userId() });
+    return unitCollection.units;
+  },
   totalMarks() {
     return calculateTotalMarks(editScheme);
   },
@@ -91,7 +134,7 @@ Template.editScheme.helpers({
     return true;
   },
   description() {
-    return Template.instance().data.scheme.description;
+    return editScheme.get('description');
   },
   editScheme() {
     return editScheme;
@@ -102,7 +145,7 @@ Template.editScheme.helpers({
  * Event listeners.
  */
 Template.editScheme.events({
-  'click .submit-scheme'(event, templateInstance) {
+  'click .submit-scheme'(event) {
     const form = $('#marking-scheme-form')[0];
     if (form.checkValidity()) {
       // Change class to show request is being processed.
@@ -121,7 +164,7 @@ Template.editScheme.events({
         maxMarks: calculateTotalMarks(editScheme),
       };
       // Call Meteor function to add data to DB. This will run offline first.
-      Meteor.call('updateScheme', templateInstance.data.scheme._id, schemaObject,
+      Meteor.call('updateScheme', FlowRouter.getParam('_id'), schemaObject,
         (error) => {
           if (error) {
             // Alert user to error.
@@ -141,7 +184,7 @@ Template.editScheme.events({
         .addClass('submit-scheme');
       form.reset();
       // Send user to dashboard to use or share the updated scheme.
-      Router.go('dashboard');
+      FlowRouter.go('dashboard');
     }
     // Semantic validation could be added here for additional user guidance.
   },

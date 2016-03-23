@@ -1,12 +1,12 @@
 <template name="navigation">
   <div class="ui blue large top inverted menu desktop-menu">
     <div class="ui container">
-      <div class="header {{activeIfTemplate 'home'}} item">
-        <a href="{{pathFor route='home'}}"><i class="student icon"></i> WebMark</a>
+      <div class="header {{isActiveRoute 'home'}} item">
+        <a href="/home"><i class="student icon"></i> WebMark</a>
       </div>
       {{#if currentUser}}
-        <a class="{{activeIfTemplate 'dashboard'}} item" href="{{pathFor route='dashboard'}}">Dashboard</a>
-        <a class="{{activeIfTemplate 'insertScheme'}} item" href="{{pathFor route='insertScheme'}}">New Scheme</a>
+        <a class="{{isActiveRoute 'dashboard'}} item" href="/dashboard">Dashboard</a>
+        <a class="{{isActiveRoute 'insertScheme'}} item" href="/newScheme">New Scheme</a>
       {{/if}}
       <div class="right menu">
         <a class="item sign-in">{{#if currentUser}} Log Out {{else}} Log In {{/if}}</a>
@@ -21,18 +21,18 @@
       </div>
     </div>
   </div>
-  
+
   <div class="ui large blue top inverted menu compacted-menu">
     <div class="header item">
-      <a href="{{pathFor route='home'}}"><i class="student icon"></i> WebMark</a>
+      <a href="/home"><i class="student icon"></i> WebMark</a>
     </div>
     <div class="right menu">
       <div class="ui simple dropdown item">
         Navigate
         <i class="dropdown icon"></i>
         <div class="menu">
-          <a class="{{activeIfTemplate 'dashboard'}} item" href="{{pathFor route='dashboard'}}">Dashboard</a>
-          <a class="{{activeIfTemplate 'insertScheme'}} item" href="{{pathFor route='insertScheme'}}">New Scheme</a>
+          <a class="{{isActiveRoute 'dashboard'}} item" href="/dashboard">Dashboard</a>
+          <a class="{{isActiveRoute 'insertScheme'}} item" href="/newScheme">New Scheme</a>
           <div class="item">{{> loginButtons}}</div>
         </div>
       </div>

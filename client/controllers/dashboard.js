@@ -1,4 +1,6 @@
-/* eslint new-cap: 0 */
+/**
+ * Dashboard
+ */
 
 Template.dashboard.helpers({
   firstName() {
@@ -14,18 +16,15 @@ Template.dashboard.helpers({
 
 Template.dashboard.events({
   'click .new-scheme'() {
-    Router.go('insertScheme');
+    FlowRouter.go('insertScheme');
   },
 });
 
-Template.activityView.helpers({
-  friendlyDate(date) {
-    return ReactiveFromNow(date);
-  },
-  icon(type) {
-    if (type === 'new') {
-      return 'certificate';
+Template.dashboard.onCreated(function created() {
+  const self = this;
+  self.autorun(() => {
+    if (!Meteor.userId()) {
+      FlowRouter.go('landing');
     }
-    return 'pencil';
-  },
+  });
 });

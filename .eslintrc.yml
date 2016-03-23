@@ -31,3 +31,5 @@ globals:
   SimpleSchema: true
   Chartist: true
   BrowserPolicy: true
+  FlowRouter: true
+  BlazeLayout: true

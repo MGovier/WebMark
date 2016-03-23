@@ -1,58 +1,66 @@
 <template name="markingReport">
-  <h3 class="ui horizontal divider header"><i class="user icon"></i>{{report.studentNo}}'s marks for {{scheme.name}}</h3>
-  <div class="ui two column centered stackable grid">
-    <div class="three column centered row">
-      <div class="center aligned column">
-        <div class="ui statistic">
-          <div class="value">
-            {{report.marks}} / {{report.maxMarks}}
+  {{#if connectionReady}}
+    {{#if report}}
+      <h3 class="ui horizontal divider header"><i class="user icon"></i>{{report.studentNo}}'s marks for {{scheme.name}}</h3>
+      <div class="ui two column centered stackable grid">
+        <div class="three column centered row">
+          <div class="center aligned column">
+            <div class="ui statistic">
+              <div class="value">
+                {{report.marks}} / {{report.maxMarks}}
+              </div>
+              <div class="label">
+                Total Marks
+              </div>
+            </div>
           </div>
-          <div class="label">
-            Total Marks
+          <div class="center aligned column">
+            <div class="ui statistic">
+              <div class="value">
+                {{percentage report.marks report.maxMarks}}%
+              </div>
+              <div class="label">
+                Percent
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="center aligned column">
-        <div class="ui statistic">
-          <div class="value">
-            {{percentage report.marks report.maxMarks}}%
-          </div>
-          <div class="label">
-            Percent
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <h3 class="ui horizontal divider header"><i class="comment outline icon"></i>Comments from {{report.marker}}</h3>
-  <p>
-    <ul>
-    {{#each comment in report.presetComments}}
-      <li>{{comment}}</li>
-    {{/each}}
-    </ul>
-  </p>
-  <p>{{report.freeComment}}</p>
-  {{#if report.adjustment}}
-    <p>Adjustment applied: {{showAdj report.adjustment}}</p>
+      <h3 class="ui horizontal divider header"><i class="comment outline icon"></i>Comments from {{report.marker}}</h3>
+      <p>
+        <ul>
+        {{#each comment in report.presetComments}}
+          <li>{{comment}}</li>
+        {{/each}}
+        </ul>
+      </p>
+      <p>{{report.freeComment}}</p>
+      {{#if report.adjustment}}
+        <p>Adjustment applied: {{showAdj report.adjustment}}</p>
+      {{/if}}
+      <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Aspects</h3>
+      <table class="ui celled compact table">
+        <thead>
+          <tr>
+            <th>Aspect</th>
+            <th>Mark</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each aspect in report.aspects}}
+            <tr>
+              <td class="collapsing">{{aspect.aspect}}</td>
+              <td class="collapsing">{{aspect.mark}} / {{aspect.maxMark}}</td>
+              <td>{{aspect.selected}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{else}}
+      {{> notFound}}
+    {{/if}}
+  {{else}}
+    {{> loading}}
   {{/if}}
-  <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Aspects</h3>
-  <table class="ui celled compact table">
-    <thead>
-      <tr>
-        <th>Aspect</th>
-        <th>Mark</th>
-        <th>Result</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each aspect in report.aspects}}
-        <tr>
-          <td class="collapsing">{{aspect.aspect}}</td>
-          <td class="collapsing">{{aspect.mark}} / {{aspect.maxMark}}</td>
-          <td>{{aspect.selected}}</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
 </template>

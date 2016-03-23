@@ -1,8 +1,11 @@
 <template name="markScheme">
+  {{#if connectionReady}}
+    {{#if scheme}}
+    {{#with scheme}}
   <div class="ui one column padded grid">
     <div class="column">
       <div class="ui breadcrumb">
-        <a class="section" href="{{pathFor route='dashboard'}}">Marking Schemes</a>
+        <a class="section" href="/dashboard">Marking Schemes</a>
         <i class="right angle icon divider"></i>
         <div class="active section">{{name}}</div>
       </div>
@@ -102,7 +105,7 @@
               <textarea class="free-comment-field"></textarea>
             </div>
           </div>
-          {{#if adjustable}}
+          {{#if adjustable scheme}}
           <h3 class="ui horizontal divider header"><i class="adjust icon"></i>Adjustment</h3>
           <div class="ui one column centered padded grid">
             <div class="one column centered row">
@@ -159,4 +162,11 @@
       </form>
     </div>
   </div>
+  {{/with}}
+  {{else}}
+    {{> notFound}}
+  {{/if}}
+{{else}}
+  {{> loading}}
+{{/if}}
 </template>
