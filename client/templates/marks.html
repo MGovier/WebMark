@@ -1,5 +1,6 @@
 <template name="marks">
   {{#if Template.subscriptionsReady}}
+    {{#if markingScheme}}
     <h3 class="ui horizontal divider header"><i class="users icon"></i>Marks for {{markingScheme.name}}</h3>
     {{#if marksExist}}
       <div class="ui stackable grid">
@@ -69,5 +70,10 @@
         </div>
       </div>
     </div>
+    {{else}}
+      {{> notFound}}
+    {{/if}}
+  {{else}}
+    {{> loading}}
   {{/if}}
 </template>
