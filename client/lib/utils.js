@@ -5,9 +5,13 @@
 
 import { adjectives, scientists } from './naming.js';
 
+/**
+ * Create a unique ID string according to standard.
+ * Source: User 'broofa' at StackOverflow:
+ * https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+ * @return {String} UUID
+ */
 function generateUUID() {
-  // Source: User 'broofa' at StackOverflow:
-  // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
     const r = crypto.getRandomValues(new Uint8Array(1))[0] % 16 | 0;
     const v = c === 'x' ? r : (r & 0x3 | 0x8);
@@ -60,14 +64,14 @@ function resetSchemeData(dict) {
  * @param  {Object} template  Data used to render this instance.
  * @return {Object}           JSON object of all data rows.
  */
-function generateJSON(template) {
+function generateJSON(markingScheme, marks) {
   const output = {
-    schemeName: template.data.markingScheme.name,
+    schemeName: markingScheme.name,
     schemeCreator: Meteor.user().profile.name,
     exportTime: new Date(),
-    reportCount: template.data.marks.count(),
+    reportCount: marks.count(),
     reports: [],
-    maxMarks: template.data.markingScheme.maxMarks,
+    maxMarks: markingScheme.maxMarks,
   };
   function addMark(report) {
     output.reports.push({
@@ -80,7 +84,7 @@ function generateJSON(template) {
       adjustment: report.adjustment,
     });
   }
-  template.data.marks.forEach(addMark);
+  marks.forEach(addMark);
   return output;
 }
 
@@ -89,10 +93,10 @@ function generateJSON(template) {
  * @param  {Object} template  Data used to render this instance.
  * @return {String}           CSV formatted data.
  */
-function generateCSV(template) {
+function generateCSV(markingScheme, marks) {
   // Create CSV header first.
   let output = 'Student No,Marker,Marks,Max Marks,Preset Comments,Comment';
-  template.data.markingScheme.aspects.forEach((aspect) => {
+  markingScheme.aspects.forEach((aspect) => {
     output += `,"${aspect.aspect} Level","${aspect.aspect} Mark","${aspect.aspect} Max Mark"`;
   });
   output += ',Adjustment\n';
@@ -114,10 +118,39 @@ function generateCSV(template) {
     output += '\n';
   }
 
-  template.data.marks.forEach(addMark);
+  marks.forEach(addMark);
   return output;
 }
 
+/**
+ * Count marks from rubric selections and adjustment.
+ * @todo Abstract this.
+ * @return {Number} Total marks.
+ */
+function countMarks() {
+  let total = 0;
+  const aspects = Template.instance().aspects.get();
+  aspects.forEach((aspect) => {
+    total += aspect.mark;
+  });
+  const adjustment = parseInt($('input[name="adjustment"]').val(), 10) || 0;
+  Template.instance().marks.set(total + adjustment);
+}
+
+/**
+ * Create an object of all toggled re-usable comments.
+ * @return {Array} Active comments.
+ */
+function buildCommentsObject() {
+  const comments = [];
+  $('.preset-comments input[type="checkbox"]:checked')
+    .each((index, comment) => {
+      comments.push($(comment).siblings('label').text());
+    });
+  return comments;
+}
+
+// Export all functions.
 export {
   generateUUID,
   generateFunName,
@@ -125,4 +158,6 @@ export {
   calculateTotalMarks,
   generateCSV,
   generateJSON,
+  countMarks,
+  buildCommentsObject,
 };

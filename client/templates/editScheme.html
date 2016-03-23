@@ -1,4 +1,7 @@
 <template name="editScheme">
+  {{#if Template.subscriptionsReady}}
+    {{#if scheme}}
+    {{#with scheme}}
   <form id="marking-scheme-form">
     <div class="ui form">
       <h3 class="ui horizontal divider header"><i class="certificate icon"></i>Edit Marking Scheme</h3>
@@ -16,7 +19,7 @@
               <label for="scheme-name">Parent Unit</label>
               <select class="ui fluid search selection dropdown unit-select" name="scheme-unit">
                 <option value="">UNITCODE</option>
-                {{#each unit in units.units}}
+                {{#each unit in units}}
                   <option value="{{unit}}">{{unit}}</option>
                 {{/each}}
               </select>
@@ -68,4 +71,11 @@
       </div>
     </div>
   </form>
+  {{/with}}
+  {{else}}
+    {{> notFound}}
+  {{/if}}
+{{else}}
+  {{> loading}}
+{{/if}}
 </template>

@@ -1,4 +1,5 @@
 <template name="dashboard">
+  {{#if Template.subscriptionsReady}}
   <div class="ui two column stackable very padded grid">
     <div class="column">
       <h3 class="ui horizontal divider header"><i class="user icon"></i>Hi {{firstName}}!</h3>
@@ -29,4 +30,7 @@
     </div>
   </div>
   {{> viewSchemes}}
+  {{else}}
+    {{> loading}}
+  {{/if}}
 </template>

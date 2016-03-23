@@ -11,26 +11,54 @@ import { generateUUID,
 
 const newScheme = new ReactiveDict('newScheme');
 
+Template.insertScheme.onCreated(function created() {
+  const self = this;
+  self.autorun(() => {
+    self.subscribe('units');
+  });
+  self.autorun(() => {
+    if (self.subscriptionsReady()) {
+      // Give the DOM some time to be built, then configure Semantic.
+      Meteor.setTimeout(() => {
+        $('.ui.checkbox').checkbox();
+        $('.unit-select').dropdown({
+          allowAdditions: true,
+          maxSelections: false,
+          onChange: value => {
+            newScheme.set('unitCode', value);
+            $('textarea[name="scheme-desc"]').focus();
+          },
+        });
+        $('.tooltip-buttons button').popup({
+          inline: false,
+          position: 'top left',
+        });
+        $('.name-field').trigger('click');
+      }, 100);
+    }
+  });
+  newScheme.setDefault('rubricObject', [{
+    uuid: generateUUID(),
+    rows: [{
+      uuid: generateUUID(),
+    }],
+    maxMark: 0,
+  }]);
+  newScheme.setDefault('comments', [{
+    uuid: generateUUID(),
+  }]);
+  newScheme.setDefault('schemeName', generateFunName());
+  newScheme.setDefault('unitCode', '');
+  newScheme.setDefault('editingName', false);
+  newScheme.setDefault('commentHistory', []);
+  newScheme.setDefault('description', '');
+});
+
 /**
  * Called when template inserted into DOM.
  * Initialise Semantic UI components and Dragula listener.
  */
 Template.insertScheme.onRendered(() => {
-  // SEMANTIC UI
-  $('.ui.checkbox').checkbox();
-  $('.unit-select').dropdown({
-    allowAdditions: true,
-    maxSelections: false,
-    onChange: (value) => {
-      newScheme.set('unitCode', value);
-      $('textarea[name="scheme-desc"]').focus();
-    },
-  });
-  $('.tooltip-buttons button').popup({
-    inline: false,
-    position: 'top left',
-  });
-  $('.name-field').trigger('click');
   // DRAGULA
   const drake = dragula({
     isContainer(el) {
@@ -54,32 +82,16 @@ Template.insertScheme.onRendered(() => {
   }
 });
 
-/**
- * Define default variables the first time this template is rendered.
- */
-Template.insertScheme.onCreated(() => {
-  newScheme.setDefault('rubricObject', [{
-    uuid: generateUUID(),
-    rows: [{
-      uuid: generateUUID(),
-    }],
-    maxMark: 0,
-  }]);
-  newScheme.setDefault('comments', [{
-    uuid: generateUUID(),
-  }]);
-  newScheme.setDefault('schemeName', generateFunName());
-  newScheme.setDefault('unitCode', '');
-  newScheme.setDefault('editingName', false);
-  newScheme.setDefault('commentHistory', []);
-});
-
  /**
   * Helper functions.
   */
 Template.insertScheme.helpers({
   rubric() {
     return newScheme.get('rubricObject');
+  },
+  units() {
+    const unitCollection = Units.findOne({});
+    return unitCollection.units;
   },
   totalMarks() {
     return calculateTotalMarks(newScheme);
@@ -95,6 +107,9 @@ Template.insertScheme.helpers({
   },
   newScheme() {
     return newScheme;
+  },
+  description() {
+    return newScheme.get('description');
   },
 });
 
@@ -140,7 +155,7 @@ Template.insertScheme.events({
       resetSchemeData(newScheme);
       form.reset();
       // Send user to dashboard to use or share the new scheme.
-      Router.go('dashboard');
+      FlowRouter.go('dashboard');
     }
     // Semantic validation could be added here for additional user guidance.
   },
@@ -170,5 +185,8 @@ Template.insertScheme.events({
       event.preventDefault();
       $('textarea[name="scheme-desc"]').focus();
     }
+  },
+  'change textarea[name="scheme-desc"]'() {
+    newScheme.set('description', $('textarea[name="scheme-desc"]').val());
   },
 });

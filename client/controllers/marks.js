@@ -9,7 +9,12 @@ import { generateJSON, generateCSV } from '../lib/utils';
 const sessionSelect = new ReactiveDict('sessionSelect');
 
 Template.marks.onCreated(function created() {
-  this.filter = new ReactiveTable.Filter('filter-table');
+  const self = this;
+  self.filter = new ReactiveTable.Filter('filter-table');
+  self.autorun(() => {
+    self.subscribe('markingSchemes', FlowRouter.getParam('_id'));
+    self.subscribe('marks', null, FlowRouter.getParam('_id'));
+  });
 });
 
 /**
@@ -17,7 +22,7 @@ Template.marks.onCreated(function created() {
  * Attach a tracker to the marks data, to update the chart automatically.
  */
 Template.marks.onRendered(function render() {
-  const schemeId = this.data.markingScheme._id;
+  const schemeId = FlowRouter.getParam('_id');
   // Unique session variable to track selected rows across app navigation.
   // Using a shared one would cause delete operations to affect other tables.
   sessionSelect.setDefault(schemeId, []);
@@ -53,14 +58,16 @@ Template.marks.onRendered(function render() {
         },
         distributeSeries: true,
       };
-      // Create a Chartist bar chart.
-      new Chartist.Bar('.ct-chart', data, options).on('draw', chart => {
-        if (chart.type === 'bar') {
-          chart.element.attr({
-            style: 'stroke-width: 20px',
-          });
-        }
-      });
+      // Create a Chartist bar chart. Wait for DOM.
+      Meteor.setTimeout(() => {
+        new Chartist.Bar('.ct-chart', data, options).on('draw', chart => {
+          if (chart.type === 'bar') {
+            chart.element.attr({
+              style: 'stroke-width: 20px',
+            });
+          }
+        });
+      }, 100);
     }
   });
 });
@@ -82,7 +89,7 @@ Template.marks.helpers({
   // Configure ReactiveTable
   settings() {
     return {
-      collection: Template.instance().data.marks,
+      collection: Marks.find({}),
       rowsPerPage: 30,
       filters: ['filter-table'],
       class: 'ui table striped selectable',
@@ -123,22 +130,28 @@ Template.marks.helpers({
       }],
     };
   },
+  marks() {
+    return Marks.find({});
+  },
+  markingScheme() {
+    return MarkingSchemes.findOne({});
+  },
   marksExist() {
     return Marks.find().count();
   },
   filterVar() {
     return Template.instance().filter.get();
   },
-  jsonData() {
+  jsonData(markingScheme, marks) {
     return `data:text/json;charset=utf-8,
-    ${encodeURIComponent(JSON.stringify(generateJSON(Template.instance(), null, '  ')))}`;
+    ${encodeURIComponent(JSON.stringify(generateJSON(markingScheme, marks), null, '  '))}`;
   },
-  csvData() {
+  csvData(markingScheme, marks) {
     return `data:text/csv;charset=utf-8,
-    ${encodeURIComponent(generateCSV(Template.instance()))}`;
+    ${encodeURIComponent(generateCSV(markingScheme, marks))}`;
   },
   deleteDisabled() {
-    const selectedRows = sessionSelect.get(Template.instance().data.markingScheme._id);
+    const selectedRows = sessionSelect.get(FlowRouter.getParam('_id'));
     return selectedRows && !selectedRows.length;
   },
 });
@@ -147,22 +160,22 @@ Template.marks.helpers({
  * Event listeners.
  */
 Template.marks.events({
-  'click .reactive-table tbody tr'(event, templateInstance) {
+  'click .reactive-table tbody tr'(event) {
     if (event.target.className === 'select' || event.target.nodeName === 'DIV') {
       $(event.target).children('.ui .checkbox').checkbox('toggle');
     } else if (event.target.nodeName !== 'INPUT' &&
         event.target.nodeName !== 'LABEL') {
-      Router.go('markReport', {
+      FlowRouter.go('markReport', {
         _id: this._id,
-        _sid: templateInstance.data.markingScheme._id,
+        _sid: FlowRouter.getParam('_id'),
       });
     }
   },
   'keyup #filter-table'(event, templateInstance) {
     templateInstance.filter.set($(event.currentTarget).val());
   },
-  'change .ui .checkbox'(event, templateInstance) {
-    const selectedRows = sessionSelect.get(templateInstance.data.markingScheme._id);
+  'change .ui .checkbox'(event) {
+    const selectedRows = sessionSelect.get(FlowRouter.getParam('_id'));
     if ($(`#${event.currentTarget.id}`).checkbox('is checked')) {
       selectedRows.push(event.currentTarget.id);
     } else {
@@ -172,19 +185,19 @@ Template.marks.events({
         }
       }
     }
-    sessionSelect.set(templateInstance.data.markingScheme._id, selectedRows);
+    sessionSelect.set(FlowRouter.getParam('_id'), selectedRows);
   },
-  'click .delete-rows'(event, templateInstance) {
+  'click .delete-rows'() {
     $('.ui.basic.delete-check.modal')
       .modal({
         closable: false,
         onApprove() {
-          const selectedRows = sessionSelect.get(templateInstance.data.markingScheme._id);
+          const selectedRows = sessionSelect.get(FlowRouter.getParam('_id'));
           selectedRows.forEach(sID => {
             Meteor.call('deleteMark', sID);
           });
           // Reset the selected rows attribute after they have been deleted.
-          sessionSelect.set(templateInstance.data.markingScheme._id, []);
+          sessionSelect.set(FlowRouter.getParam('_id'), []);
         },
         detachable: false,
       }).modal('show');
