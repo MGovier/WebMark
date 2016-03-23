@@ -38,3 +38,4 @@ practicalmeteor:mocha
 kadira:flow-router
 kadira:blaze-layout
 zimme:active-route
+webtempest:animate

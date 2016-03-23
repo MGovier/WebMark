@@ -13,8 +13,9 @@
     <!-- Page Contents -->
     <div class="ui main container pusher">
       {{> sAlert}}
-
-		  {{> Template.dynamic template=content}}
+      {{#transition wrap="true" in="fadeIn:200" out="fadeOut:100"}}
+		    {{> Template.dynamic template=content}}
+      {{/transition}}
     </div>
     <div class="ui inverted vertical footer segment">
       <div class="ui container">
