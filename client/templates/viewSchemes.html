@@ -1,6 +1,6 @@
 <template name="viewSchemes">
   <h3 class="ui horizontal divider header"><i class="selected radio icon"></i>Available Schemes</h3>
-  {{#if Template.subscriptionsReady}}
+  {{#if connectionReady}}
   <div class="ui one column padded grid">
     <div class="column">
       {{#if markingSchemes.count}}
