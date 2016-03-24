@@ -4,7 +4,7 @@
 
 Template.dashboard.helpers({
   firstName() {
-    if (Meteor.userId()) {
+    if (Meteor.user() && Meteor.user().profile) {
       return Meteor.user().profile.name.split(' ')[0];
     }
     return '';
