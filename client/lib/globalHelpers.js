@@ -7,4 +7,4 @@
  * Otherwise we use local data.
  */
 Template.registerHelper('connectionReady', () =>
-  Template.instance().subscriptionsReady || !Meteor.status().connected);
+  Template.instance().subscriptionsReady() || !Meteor.status().connected);
