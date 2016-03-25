@@ -206,3 +206,11 @@ tr.highlighted {
   padding-top: 2em;
   margin-top: 1em;
 }
+.aspect-table td>.field.error {
+  background-color: rgb(255, 246, 246);
+  background-size: initial;
+  border-color: rgb(224, 180, 180);
+  color: rgb(159, 58, 56);
+  border-radius: 0.2em;
+  border: 1px solid rgb(159, 58, 56);
+}
