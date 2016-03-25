@@ -57,6 +57,7 @@ function resetSchemeData(dict) {
   dict.set('unitCode', '');
   dict.set('editingName', false);
   dict.set('commentHistory', []);
+  dict.set('description', '');
 }
 
 /**
@@ -150,6 +151,52 @@ function buildCommentsObject() {
   return comments;
 }
 
+const validationRules = {
+  schemeName: {
+    identifier: 'scheme-name',
+    rules: [
+      {
+        type: 'empty',
+        prompt: 'Please enter a name for this scheme',
+      },
+    ],
+  },
+  aspectName: {
+    identifier: 'rubric-aspect',
+    rules: [
+      {
+        type: 'empty',
+        prompt: 'Please enter an aspect for this rubric.',
+      },
+    ],
+  },
+  criterionValue: {
+    identifier: 'criteria-value',
+    rules: [
+      {
+        type: 'empty',
+        prompt: 'Please enter a mark value for this criterion.',
+      },
+      {
+        type: 'number',
+        prompt: 'Please use a number for criterion values.',
+      },
+    ],
+  },
+};
+
+function initValidation() {
+  $('#marking-scheme-form').form({
+    fields: validationRules,
+    inline: true,
+    keyboardShortcuts: false,
+    onFailure() {
+      sAlert.warning('Some errors were found. They\'ve been highlighted!',
+      { position: 'top-right', timeout: 5000 });
+    },
+  });
+}
+
 // Export all functions.
 export {
   generateUUID,
@@ -160,4 +207,5 @@ export {
   generateJSON,
   countMarks,
   buildCommentsObject,
+  initValidation,
 };

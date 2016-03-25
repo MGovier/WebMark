@@ -1,5 +1,5 @@
 import dragula from 'dragula';
-import { generateUUID, calculateTotalMarks } from '../lib/utils';
+import { generateUUID, calculateTotalMarks, initValidation } from '../lib/utils';
 
 const editScheme = new ReactiveDict('editScheme');
 
@@ -10,8 +10,60 @@ Template.editScheme.onCreated(function created() {
     self.subscribe('units');
   });
   self.autorun(() => {
+    if (!Meteor.userId()) {
+      FlowRouter.go('landing');
+    }
+  });
+  self.autorun(() => {
     if (self.subscriptionsReady()) {
-      // Give the DOM some time to be built, then configure Semantic.
+      let comments = [{
+        uuid: generateUUID(),
+      }];
+      let rubricAspects = [{
+        uuid: generateUUID(),
+        rows: [{
+          uuid: generateUUID(),
+        }],
+        maxMark: 0,
+      }];
+      const scheme = MarkingSchemes.findOne({ _id: FlowRouter.getParam('_id') });
+      // First, need to reassign UUIDs for tracking deletion and drag.
+      if (scheme.aspects) {
+        rubricAspects = scheme.aspects;
+        for (const i in rubricAspects) {
+          if (rubricAspects.hasOwnProperty(i)) {
+            const aspect = rubricAspects[i];
+            aspect.uuid = generateUUID();
+            for (const j in aspect.rows) {
+              if (aspect.rows.hasOwnProperty(j)) {
+                aspect.rows[j].uuid = generateUUID();
+              }
+            }
+          }
+        }
+      }
+      if (scheme.comments) {
+        comments = scheme.comments;
+        for (const i in comments) {
+          if (comments.hasOwnProperty(i)) {
+            comments[i].uuid = generateUUID();
+          }
+        }
+      }
+
+      editScheme.set('rubricObject', rubricAspects);
+      editScheme.set('comments', comments);
+      editScheme.set('schemeName', scheme.name);
+      editScheme.set('unitCode', scheme.unitCode);
+      editScheme.set('description', scheme.description);
+      editScheme.set('editingName', false);
+      editScheme.set('commentHistory', []);
+
+      $('input[name="adjustment-positive"]')
+        .val(scheme.adjustmentValuePositive);
+      $('input[name="adjustment-negative"]')
+        .val(scheme.adjustmentValueNegative);
+
       Meteor.setTimeout(() => {
         $('.ui.checkbox').checkbox();
         $('.unit-select').dropdown({
@@ -27,86 +79,26 @@ Template.editScheme.onCreated(function created() {
           position: 'top left',
         });
         $('.name-field').trigger('click');
+        // DRAGULA
+        const drake = dragula({
+          isContainer(el) {
+            return el.classList.contains('dragula-container');
+          },
+          invalid(el) {
+            return el.nodeName === 'INPUT';
+          },
+        });
+        drake.on('dragend', () => {
+          $('.rubric-table input:first').trigger('change');
+          const rObj = editScheme.get('rubricObject');
+          editScheme.set('rubricObject', []);
+          Meteor.setTimeout(() => {
+            editScheme.set('rubricObject', rObj);
+          }, 80);
+        });
+        initValidation();
       }, 100);
     }
-  });
-  self.autorun(() => {
-    if (!Meteor.userId()) {
-      FlowRouter.go('landing');
-    }
-  });
-});
-
-Template.editScheme.onRendered(() => {
-  const scheme = MarkingSchemes.findOne({ _id: FlowRouter.getParam('_id') });
-  // First, need to reassign UUIDs for tracking deletion and drag.
-  const rubricAspects = scheme.aspects;
-  for (const i in rubricAspects) {
-    if (rubricAspects.hasOwnProperty(i)) {
-      const aspect = rubricAspects[i];
-      aspect.uuid = generateUUID();
-      for (const j in aspect.rows) {
-        if (aspect.rows.hasOwnProperty(j)) {
-          aspect.rows[j].uuid = generateUUID();
-        }
-      }
-    }
-  }
-  const comments = scheme.comments;
-  for (const i in comments) {
-    if (comments.hasOwnProperty(i)) {
-      comments[i].uuid = generateUUID();
-    }
-  }
-
-  editScheme.set('rubricObject', rubricAspects);
-  editScheme.set('comments', comments);
-  editScheme.set('schemeName', scheme.name);
-  editScheme.set('unitCode', scheme.unitCode);
-  editScheme.set('description', scheme.description);
-  editScheme.set('editingName', false);
-  editScheme.set('commentHistory', []);
-
-  $('input[name="adjustment-positive"]')
-    .val(scheme.adjustmentValuePositive);
-  $('input[name="adjustment-negative"]')
-    .val(scheme.adjustmentValueNegative);
-
-  // SEMANTIC UI
-  $('.ui.checkbox').checkbox();
-  $('.unit-select').dropdown({
-    allowAdditions: true,
-    maxSelections: false,
-    onChange: (value) => {
-      editScheme.set('unitCode', value);
-      $('textarea[name="scheme-desc"]').focus();
-    },
-  });
-  $('.tooltip-buttons button').popup({
-    inline: false,
-    position: 'top left',
-  });
-  $('.name-field').trigger('click');
-  if (editScheme.get('unitCode') !== 'zzNO_UNIT') {
-    $('.unit-select').dropdown('set selected', editScheme.get('unitCode'));
-  }
-
-  // DRAGULA
-  const drake = dragula({
-    isContainer(el) {
-      return el.classList.contains('dragula-container');
-    },
-    invalid(el) {
-      return el.nodeName === 'INPUT';
-    },
-  });
-  drake.on('dragend', () => {
-    $('.rubric-table input:first').trigger('change');
-    const rObj = editScheme.get('rubricObject');
-    editScheme.set('rubricObject', []);
-    Meteor.setTimeout(() => {
-      editScheme.set('rubricObject', rObj);
-    }, 80);
   });
 });
 
@@ -146,11 +138,13 @@ Template.editScheme.helpers({
  */
 Template.editScheme.events({
   'click .submit-scheme'(event) {
-    const form = $('#marking-scheme-form')[0];
-    if (form.checkValidity()) {
+    initValidation();
+    event.preventDefault();
+    const form = $('#marking-scheme-form');
+    form.form('validate form');
+    if (form.form('is valid')) {
       // Change class to show request is being processed.
       $('.submit-scheme').removeClass('submit-scheme').addClass('loading');
-      event.preventDefault();
       // Serialize data.
       const schemaObject = {
         name: $('input[name="scheme-name"]').val(),
@@ -182,7 +176,6 @@ Template.editScheme.events({
 
       $('.scheme-submit-button').removeClass('loading')
         .addClass('submit-scheme');
-      form.reset();
       // Send user to dashboard to use or share the updated scheme.
       FlowRouter.go('dashboard');
     }
