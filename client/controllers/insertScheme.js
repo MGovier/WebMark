@@ -7,6 +7,7 @@ import { generateUUID,
   generateFunName,
   resetSchemeData,
   calculateTotalMarks,
+  checkFormValidity,
 } from '../lib/utils';
 
 const newScheme = new ReactiveDict('newScheme');
@@ -18,6 +19,22 @@ Template.insertScheme.onCreated(function created() {
   });
   self.autorun(() => {
     if (self.subscriptionsReady()) {
+      newScheme.setDefault('rubricObject', [{
+        uuid: generateUUID(),
+        rows: [{
+          uuid: generateUUID(),
+        }],
+        maxMark: 0,
+      }]);
+      newScheme.setDefault('comments', [{
+        uuid: generateUUID(),
+      }]);
+      newScheme.setDefault('schemeName', generateFunName());
+      newScheme.setDefault('unitCode', '');
+      newScheme.setDefault('editingName', false);
+      newScheme.setDefault('commentHistory', []);
+      newScheme.setDefault('description', '');
+
       // Give the DOM some time to be built, then configure Semantic.
       Meteor.setTimeout(() => {
         $('.ui.checkbox').checkbox();
@@ -34,52 +51,30 @@ Template.insertScheme.onCreated(function created() {
           position: 'top left',
         });
         $('.name-field').trigger('click');
+        // DRAGULA
+        const drake = dragula({
+          isContainer(el) {
+            return el.classList.contains('dragula-container');
+          },
+          invalid(el) {
+            return el.nodeName === 'INPUT';
+          },
+        });
+        drake.on('dragend', () => {
+          $('.rubric-table input:first').trigger('change');
+          const rObj = newScheme.get('rubricObject');
+          newScheme.set('rubricObject', []);
+          Meteor.setTimeout(() => {
+            newScheme.set('rubricObject', rObj);
+          }, 80);
+        });
+        // If session var is defined, use that for the option value.
+        if (newScheme.get('unitCode')) {
+          $('.unit-select').dropdown('set selected', newScheme.get('unitCode'));
+        }
       }, 100);
     }
   });
-  newScheme.setDefault('rubricObject', [{
-    uuid: generateUUID(),
-    rows: [{
-      uuid: generateUUID(),
-    }],
-    maxMark: 0,
-  }]);
-  newScheme.setDefault('comments', [{
-    uuid: generateUUID(),
-  }]);
-  newScheme.setDefault('schemeName', generateFunName());
-  newScheme.setDefault('unitCode', '');
-  newScheme.setDefault('editingName', false);
-  newScheme.setDefault('commentHistory', []);
-  newScheme.setDefault('description', '');
-});
-
-/**
- * Called when template inserted into DOM.
- * Initialise Semantic UI components and Dragula listener.
- */
-Template.insertScheme.onRendered(() => {
-  // DRAGULA
-  const drake = dragula({
-    isContainer(el) {
-      return el.classList.contains('dragula-container');
-    },
-    invalid(el) {
-      return el.nodeName === 'INPUT';
-    },
-  });
-  drake.on('dragend', () => {
-    $('.rubric-table input:first').trigger('change');
-    const rObj = newScheme.get('rubricObject');
-    newScheme.set('rubricObject', []);
-    Meteor.setTimeout(() => {
-      newScheme.set('rubricObject', rObj);
-    }, 80);
-  });
-  // If session var is defined, use that for the option value.
-  if (newScheme.get('unitCode')) {
-    $('.unit-select').dropdown('set selected', newScheme.get('unitCode'));
-  }
 });
 
  /**
@@ -118,11 +113,10 @@ Template.insertScheme.helpers({
  */
 Template.insertScheme.events({
   'click .submit-scheme'(event) {
-    const form = $('#marking-scheme-form')[0];
-    if (form.checkValidity()) {
+    event.preventDefault();
+    if (checkFormValidity($('#marking-scheme-form'))) {
       // Change class to show request is being processed.
       $('.submit-scheme').removeClass('submit-scheme').addClass('loading');
-      event.preventDefault();
       // Serialize data.
       const schemaObject = {
         name: $('input[name="scheme-name"]').val(),
@@ -153,11 +147,15 @@ Template.insertScheme.events({
       $('.scheme-submit-button').removeClass('loading')
         .addClass('submit-scheme');
       resetSchemeData(newScheme);
-      form.reset();
       // Send user to dashboard to use or share the new scheme.
       FlowRouter.go('dashboard');
+    } else {
+      $('html, body').animate({
+        scrollTop: ($('.error').first().offset().top - 150),
+      }, 200);
+      sAlert.warning('Some errors were found - they\'ve been highlighted.',
+      { position: 'top-right', timeout: 7000 });
     }
-    // Semantic validation could be added here for additional user guidance.
   },
   'click .scheme-submit-button .loading'(event) {
     event.preventDefault();
