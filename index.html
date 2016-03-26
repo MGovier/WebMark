@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>WebMark by MGovier</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">WebMark</h1>
+      <h2 class="project-tagline">Offline-first efficient and responsive online marking</h2>
+      <a href="https://github.com/MGovier/WebMark" class="btn">View on GitHub</a>
+      <a href="https://github.com/MGovier/WebMark/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/MGovier/WebMark/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="webmark" class="anchor" href="#webmark" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>WebMark</h1>
+
+<p>A Meteor powered Web Application to enable efficient and flexible marking of assignments.</p>
+
+<h2>
+<a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Table of Contents</h2>
+
+<ul>
+<li><a href="#about">About</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#technologies">Technologies</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+
+<h2>
+<a id="about" class="anchor" href="#about" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>About</h2>
+
+<p>Final year project for BSc Computer Science by Merlin Govier (UP663652) at the University of Portsmouth.</p>
+
+<p>Based on requirements learned through meeting experienced lecturers and analyzing current tools.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<h3>
+<a id="developer" class="anchor" href="#developer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Developer</h3>
+
+<ul>
+<li>Install <a href="https://www.meteor.com/">Meteor</a>
+</li>
+<li>Clone this repo, in your terminal <code>cd</code> into the root folder, and run <code>meteor</code>!</li>
+</ul>
+
+<h3>
+<a id="production" class="anchor" href="#production" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Production</h3>
+
+<p>A deployment guide is available in the project document.</p>
+
+<ul>
+<li>Running <code>meteor build</code> will generate a node server package. Currently requires the Node 0.10.x branch.</li>
+<li>To enable TLS support, a terminator such as HAProxy or nginx should be configured as a reverse proxy.</li>
+<li>Startup MongoDB.</li>
+<li>Configure Meteor environment variables for root url, proxy, and Mongo.</li>
+</ul>
+
+<h2>
+<a id="technologies" class="anchor" href="#technologies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Technologies</h2>
+
+<ul>
+<li><a href="https://www.meteor.com/">Meteor</a></li>
+<li><a href="http://semantic-ui.com/">Semantic UI</a></li>
+</ul>
+
+<h2>
+<a id="project-structure" class="anchor" href="#project-structure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Project Structure</h2>
+
+<table>
+<thead>
+<tr>
+<th>Directory</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lib/</td>
+<td>Client and server shared functions, such as application routes and data schemas.</td>
+</tr>
+<tr>
+<td>public/</td>
+<td>Files to serve directly to client, such as favicon.ico or robots.txt.</td>
+</tr>
+<tr>
+<td>server/</td>
+<td>Code to only execute on the server only. This holds security configurations.</td>
+</tr>
+<tr>
+<td>client/</td>
+<td>Client side code; including interface functions and CSS. Contains:</td>
+</tr>
+<tr>
+<td></td>
+<td>
+<strong>templates/</strong>    : Contains HTML partials for use in the interface.</td>
+</tr>
+<tr>
+<td></td>
+<td>
+<strong>compatibility/</strong>  : Modules that rely on exporting global objects.</td>
+</tr>
+<tr>
+<td></td>
+<td>
+<strong>lib/</strong>         : SCSS components and reused JS functions.</td>
+</tr>
+<tr>
+<td></td>
+<td>
+<strong>controllers/</strong> : JS functionality.</td>
+</tr>
+<tr>
+<td>builds/</td>
+<td>Self-contained application bundles for production testing and deployment.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p>MIT</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/MGovier/WebMark">WebMark</a> is maintained by <a href="https://github.com/MGovier">MGovier</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
