@@ -8,7 +8,7 @@ Meteor.startup(() => {
   });
 });
 
-Template.main.onRendered(() => {
+Template.navigation.onRendered(() => {
   $('.ui.menu .ui.dropdown').dropdown({
     on: 'hover',
   });

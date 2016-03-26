@@ -28,7 +28,7 @@
 }
 .ui.inverted.blue.menu {
   background-color: #1B4D80 !important;
-  z-index: 20;
+  z-index: 30;
 }
 .adjustment-row {
   padding-bottom: 2em !important;
@@ -69,14 +69,14 @@ input[name="scheme-name"] {
   height: 30em;
   color: white;
   perspective: 1000px;
-  background-color: #777777;
+  background-color: #585555;
   transform-style: preserve-3d;
   z-index: 10;
   transform: translate3d(0, 0, 0);
   overflow: hidden;
   margin-top: -1em;
   position: relative;
-  background-image: radial-gradient(farthest-corner, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.9));
+  background-image: radial-gradient(farthest-corner, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8));
 }
 #masthead:after {
   position: absolute;
@@ -85,11 +85,11 @@ input[name="scheme-name"] {
   top: 52%;
   left: 0px;
   content: '';
-  background: url(/img/webmark-bg-3-1.png);
+  background: url(/img/webmark-bg-w2.png);
   transform-origin: 50% 50%;
   transform-style: preserve-3d;
   animation-name: masthead;
-  opacity: 0.3;
+  opacity: 0.1;
   animation-duration: 15s;
   animation-fill-mode: both;
   animation-timing-function: linear;
@@ -169,7 +169,7 @@ tr.highlighted {
   margin-right: 5em;
   position: absolute !important;
   z-index: 100;
-  top: 18%;
+  top: 16%;
   left: -22%;
   box-shadow: 5px 8px 6px -8px grey;
   transition: all 1s;
@@ -191,8 +191,8 @@ tr.highlighted {
   margin-bottom: 5em;
   position: absolute !important;
   z-index: 100;
-  top: 18%;
-  left: 82%;
+  top: 16%;
+  left: 88%;
   box-shadow: -5px 8px 6px -8px grey;
   transition: all 1s;
   max-width: 35% !important;
