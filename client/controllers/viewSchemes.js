@@ -34,7 +34,13 @@ Template.viewSchemesListItem.onRendered(() => {
     inline: false,
     position: 'top left',
   });
-  new Clipboard('.copy-scheme-url');
+  const clipboard = new Clipboard('.copy-scheme-url');
+  clipboard.on('error', () => {
+    $('.ui.popup div.content').text('Browser error, copy the link from the mark page!');
+  });
+  clipboard.on('success', () => {
+    $('.ui.popup div.content').text('Copied to clipboard!');
+  });
 });
 
 Template.viewSchemesListItem.helpers({
@@ -81,6 +87,5 @@ Template.viewSchemesListItem.events({
   },
   'click .copy-scheme-url'(event) {
     event.preventDefault();
-    $('.ui.popup div.content').text('Copied to clipboard!');
   },
 });
