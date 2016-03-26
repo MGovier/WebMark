@@ -18,6 +18,11 @@ Template.insertScheme.onCreated(function created() {
     self.subscribe('units');
   });
   self.autorun(() => {
+    if (!Meteor.userId()) {
+      FlowRouter.go('landing');
+    }
+  });
+  self.autorun(() => {
     if (self.subscriptionsReady()) {
       newScheme.setDefault('rubricObject', [{
         uuid: generateUUID(),
