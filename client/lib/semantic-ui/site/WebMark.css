@@ -69,14 +69,14 @@ input[name="scheme-name"] {
   height: 30em;
   color: white;
   perspective: 1000px;
-  background-color: #585555;
+  background-color: #414141;
   transform-style: preserve-3d;
   z-index: 10;
   transform: translate3d(0, 0, 0);
   overflow: hidden;
   margin-top: -1em;
   position: relative;
-  background-image: radial-gradient(farthest-corner, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8));
+  background-image: radial-gradient(farthest-corner, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.9));
 }
 #masthead:after {
   position: absolute;
@@ -90,7 +90,7 @@ input[name="scheme-name"] {
   transform-style: preserve-3d;
   animation-name: masthead;
   opacity: 0.1;
-  animation-duration: 15s;
+  animation-duration: 12s;
   animation-fill-mode: both;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
