@@ -1,14 +1,9 @@
-<template name="main">
+<template name="landing">
     <!-- Top Menu -->
     {{> navigation}}
-
-    <!-- Page Contents -->
-    <div class="ui main container pusher">
-      {{> sAlert}}
-      {{#transition wrap="true" in="fadeIn:100"}}
-		    {{> Template.dynamic template=content}}
-      {{/transition}}
-    </div>
+    {{#transition wrap="true" in="fadeIn:100"}}
+	    {{> Template.dynamic template=content}}
+    {{/transition}}
     <div class="ui inverted vertical footer segment">
       <div class="ui container">
         <div class="ui stackable inverted divided equal height stackable grid">

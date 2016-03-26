@@ -28,6 +28,7 @@
 }
 .ui.inverted.blue.menu {
   background-color: #1B4D80 !important;
+  z-index: 30;
 }
 .adjustment-row {
   padding-bottom: 2em !important;
@@ -63,34 +64,37 @@ input[name="scheme-name"] {
 .loading-frame {
   min-height: 15em;
 }
+/* Credit to: http://learnsemantic.com */
 #masthead {
   height: 30em;
-  z-index: 10;
   color: white;
+  perspective: 1000px;
+  background-color: #414141;
+  transform-style: preserve-3d;
+  z-index: 10;
+  transform: translate3d(0, 0, 0);
+  overflow: hidden;
+  margin-top: -1em;
+  position: relative;
+  background-image: radial-gradient(farthest-corner, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.9));
 }
 #masthead:after {
   position: absolute;
-  z-index: -10;
-  width: 300%;
-  height: 125%;
-  left: -100%;
-  top: -9.8em;
+  width: 140%;
+  height: 140%;
+  top: 52%;
+  left: 0px;
   content: '';
-  background-color: black;
-  background: url(/img/webmark-bg-3-1.png);
+  background: url(/img/webmark-bg-w2.png);
+  transform-origin: 50% 50%;
   transform-style: preserve-3d;
   animation-name: masthead;
-  opacity: 0.9;
-  transition: all 0.3s ease;
-  box-shadow: inset 0 30px 52px 5px black;
-  animation-duration: 10s;
+  opacity: 0.1;
+  animation-duration: 12s;
   animation-fill-mode: both;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-  transform-origin: 50% 50%;
-  perspective-origin: 50% 50%;
-  transform: translate3d(0, 0, 0);
-  transform: perspective(800px) rotateX(30deg) translateZ(-100px);
+  transform: rotateX(50deg) rotateZ(0deg) rotateY(0deg) translateY(-14%) translateX(-14%) translateZ(380px);
 }
 @keyframes masthead {
   0% {
@@ -127,10 +131,18 @@ tr.highlighted {
 .pusher > .footer {
   flex: 1;
 }
+.white-headers {
+  transform-style: preserve-3d;
+  perspective: 500px;
+  z-index: 30;
+  clear: both;
+  text-align: center;
+  position: relative;
+}
 .white-headers h2 {
   color: white !important;
   opacity: 1;
-  z-index: 20;
+  z-index: 40;
 }
 .form-control {
   border-radius: 0.2em;
@@ -157,7 +169,7 @@ tr.highlighted {
   margin-right: 5em;
   position: absolute !important;
   z-index: 100;
-  top: 18%;
+  top: 16%;
   left: -22%;
   box-shadow: 5px 8px 6px -8px grey;
   transition: all 1s;
@@ -179,8 +191,8 @@ tr.highlighted {
   margin-bottom: 5em;
   position: absolute !important;
   z-index: 100;
-  top: 18%;
-  left: 82%;
+  top: 16%;
+  left: 88%;
   box-shadow: -5px 8px 6px -8px grey;
   transition: all 1s;
   max-width: 35% !important;
@@ -192,10 +204,25 @@ tr.highlighted {
   border-radius: 0.4em;
   box-shadow: 0px 0px 4px grey;
 }
+.s-alert-warning.s-alert-top-right.s-alert-effect-stackslide {
+  width: 30em;
+  background-color: rgb(238, 193, 56);
+  opacity: 0.9;
+  border-radius: 0.4em;
+  box-shadow: 0px 0px 4px grey;
+}
 .table-heading {
   margin-top: 1em !important;
 }
 .marks-graph {
   padding-top: 2em;
   margin-top: 1em;
+}
+.aspect-table td>.field.error {
+  background-color: rgb(255, 246, 246);
+  background-size: initial;
+  border-color: rgb(224, 180, 180);
+  color: rgb(159, 58, 56);
+  border-radius: 0.2em;
+  border: 1px solid rgb(159, 58, 56);
 }

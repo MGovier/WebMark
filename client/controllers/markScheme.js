@@ -1,4 +1,4 @@
-import { countMarks, buildCommentsObject } from '../lib/utils';
+import { countMarks, buildCommentsObject, checkFormValidity } from '../lib/utils';
 
 Template.markScheme.onCreated(function created() {
   this.aspects = new ReactiveVar([]);
@@ -105,9 +105,9 @@ Template.markScheme.events({
     $(event.currentTarget).closest('tr').removeClass('highlighted');
   },
   'submit form'(event, templateInstance) {
+    event.preventDefault();
     const form = event.currentTarget;
-    if (form.checkValidity()) {
-      event.preventDefault();
+    if (checkFormValidity($('#marking-form'))) {
       $('.submit-scheme').removeClass('submit-marks').addClass('loading');
       const markObject = {
         marker: $('input[name="marker-name"]').val(),
@@ -142,6 +142,12 @@ Template.markScheme.events({
       $('input[name="student-no"]').focus();
       $('.marks-submitted').transition('pulse');
       $('body').scrollTop(0);
+    } else {
+      $('html, body').animate({
+        scrollTop: ($('.error').first().offset().top - 150),
+      }, 200);
+      sAlert.warning('Hold up; some errors were found. They\'ve been highlighted.',
+      { position: 'top-right', timeout: 7000 });
     }
   },
   'click'() {

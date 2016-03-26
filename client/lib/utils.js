@@ -57,6 +57,7 @@ function resetSchemeData(dict) {
   dict.set('unitCode', '');
   dict.set('editingName', false);
   dict.set('commentHistory', []);
+  dict.set('description', '');
 }
 
 /**
@@ -150,6 +151,17 @@ function buildCommentsObject() {
   return comments;
 }
 
+function checkFormValidity(form) {
+  let result = true;
+  form.find('input, textarea').each((index, el) => {
+    $(el).parents('div .field').removeClass('error');
+    if (!el.checkValidity()) {
+      result = false;
+      $(el).parents('div .field').addClass('error');
+    }
+  });
+  return result;
+}
 // Export all functions.
 export {
   generateUUID,
@@ -160,4 +172,5 @@ export {
   generateJSON,
   countMarks,
   buildCommentsObject,
+  checkFormValidity,
 };

@@ -19,7 +19,6 @@ flemay:less-autoprefixer
 aldeed:simple-schema
 aldeed:collection2
 accounts-google
-accounts-ui
 appcache
 reactive-var
 aslagle:reactive-table
@@ -39,3 +38,4 @@ kadira:flow-router
 kadira:blaze-layout
 zimme:active-route
 webtempest:animate
+accounts-ui

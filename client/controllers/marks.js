@@ -46,7 +46,7 @@ Template.marks.onRendered(function render() {
       for (let i = 0; i < 6; ++i) {
         const lowerInterval = interval * i;
         const upperInterval = (interval * (i + 1)) - (i === 5 ? 0 : 1);
-        const label = `${lowerInterval.toFixed(0)} - ${upperInterval.toFixed(0)}`;
+        const label = `${Math.round(lowerInterval)} - ${Math.round(upperInterval)}`;
         let count = 0;
         labels.push(label);
         for (let m = 0; m < markArray.length; ++m) {
