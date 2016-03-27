@@ -97,7 +97,7 @@ function generateCSV(markingScheme, marks) {
     output += `,${report.marks}`;
     output += `,${report.maxMarks}`;
     output += `,"${report.presetComments}"`;
-    output += `,"${report.freeComment}"`;
+    output += `,"${report.freeComment ? report.freeComment : ''}"`;
     report.aspects.forEach(aspect => {
       output += `,"${aspect.selected}"`;
       output += `,${aspect.mark}`;
