@@ -1,7 +1,7 @@
 /**
  * JS for new marking scheme functionality.
  */
-
+import uuid from 'node-uuid';
 
 import { resetSchemeData,
   calculateTotalMarks,
@@ -75,6 +75,7 @@ Template.insertScheme.events({
       $('.submit-scheme').removeClass('submit-scheme').addClass('loading');
       // Serialize data.
       const schemaObject = {
+        _id: uuid.v4(),
         name: $('input[name="scheme-name"]').val(),
         description: $('textarea[name="scheme-desc"]').val(),
         createdAt: new Date(),
