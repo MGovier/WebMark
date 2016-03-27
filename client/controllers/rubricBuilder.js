@@ -1,7 +1,7 @@
 /**
  * JS for Rubric builder in scheme designer.
  */
-import { generateUUID } from '../lib/utils';
+import uuid from 'node-uuid';
 
 Template.rubricBuilder.helpers({
   rubricObject() {
@@ -27,7 +27,7 @@ Template.rubricBuilder.events({
     rObjs.forEach(rubric => {
       if (rubric.uuid === id) {
         rubric.rows.push({
-          uuid: generateUUID(),
+          uuid: uuid.v4(),
         });
       }
     });
@@ -37,9 +37,9 @@ Template.rubricBuilder.events({
     event.preventDefault();
     const rObj = templateInstance.data.scheme.get('rubricObject');
     rObj.push({
-      uuid: generateUUID(),
+      uuid: uuid.v4(),
       rows: [{
-        uuid: generateUUID(),
+        uuid: uuid.v4(),
       }],
       maxMark: 0,
     });
@@ -56,9 +56,7 @@ Template.rubricBuilder.events({
         const rubric = rObjs[i];
         if (rubric.uuid === tableId) {
           let maxMark = 0;
-          rubric.rows = rubric.rows.filter(row => {
-            return row.uuid !== rowId;
-          });
+          rubric.rows = rubric.rows.filter(row => row.uuid !== rowId);
           rubric.rows.forEach((row) => {
             if (row.criteriaValue > maxMark) {
               maxMark = row.criteriaValue;
@@ -74,9 +72,7 @@ Template.rubricBuilder.events({
     event.preventDefault();
     let rObjs = templateInstance.data.scheme.get('rubricObject');
     const id = $(event.currentTarget).closest('.rubric-table').attr('data-uuid');
-    rObjs = rObjs.filter((rubric) => {
-      return rubric.uuid !== id;
-    });
+    rObjs = rObjs.filter((rubric) => rubric.uuid !== id);
     templateInstance.data.scheme.set('rubricObject', rObjs);
   },
   'change input'(event, templateInstance) {
@@ -145,14 +141,14 @@ Template.rubricBuilder.events({
         const newRows = [];
         rubric.rows.forEach((row) => {
           newRows.push({
-            uuid: generateUUID(),
+            uuid: uuid.v4(),
             criteria: row.criteria,
             criteriaValue: row.criteriaValue,
           });
         });
         rObj.push({
           aspect: rubric.aspect,
-          uuid: generateUUID(),
+          uuid: uuid.v4(),
           rows: newRows,
           maxMark: rubric.maxMark,
         });

@@ -2,7 +2,7 @@
  * Controller for adding comments to new scheme.
  */
 
-import { generateUUID } from '../lib/utils';
+import uuid from 'node-uuid';
 
 /**
  * Helper functions.
@@ -38,7 +38,7 @@ Template.commentBuilder.events({
     event.preventDefault();
     const comments = templateInstance.data.scheme.get('comments');
     comments.push({
-      uuid: generateUUID(),
+      uuid: uuid.v4(),
     });
     templateInstance.data.scheme.set('comments', comments);
   },
