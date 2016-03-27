@@ -67,16 +67,14 @@ input[name="scheme-name"] {
 /* Credit to: http://learnsemantic.com */
 #masthead {
   height: 30em;
-  color: white;
   perspective: 1000px;
-  background-color: #414141;
+  background-color: rgb(105, 105, 105);
   transform-style: preserve-3d;
   z-index: 10;
-  transform: translate3d(0, 0, 0);
   overflow: hidden;
   margin-top: -1em;
   position: relative;
-  background-image: radial-gradient(farthest-corner, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.9));
+  background-image: radial-gradient(farthest-corner, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.9));
 }
 #masthead:after {
   position: absolute;
@@ -94,7 +92,7 @@ input[name="scheme-name"] {
   animation-fill-mode: both;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-  transform: rotateX(50deg) rotateZ(0deg) rotateY(0deg) translateY(-14%) translateX(-14%) translateZ(380px);
+  transform: rotateX(50deg) translateY(-14%) translateX(-14%) translateZ(380px);
 }
 @keyframes masthead {
   0% {
