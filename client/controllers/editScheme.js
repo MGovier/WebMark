@@ -1,6 +1,6 @@
 import dragula from 'dragula';
 import uuid from 'node-uuid';
-import { calculateTotalMarks, checkFormValidity } from '../lib/utils';
+import { calculateTotalMarks, checkFormValidity, initializeEditScheme } from '../lib/utils';
 
 const editScheme = new ReactiveDict('editScheme');
 
@@ -66,41 +66,14 @@ Template.editScheme.onCreated(function created() {
         .val(scheme.adjustmentValueNegative);
 
       Meteor.setTimeout(() => {
-        $('.ui.checkbox').checkbox();
-        $('.unit-select').dropdown({
-          allowAdditions: true,
-          maxSelections: false,
-          onChange: value => {
-            editScheme.set('unitCode', value);
-            $('textarea[name="scheme-desc"]').focus();
-          },
-        });
-        $('.tooltip-buttons button').popup({
-          inline: false,
-          position: 'top left',
-        });
-        $('.name-field').trigger('click');
-        // DRAGULA
-        const drake = dragula({
-          isContainer(el) {
-            return el.classList.contains('dragula-container');
-          },
-          invalid(el) {
-            return el.nodeName === 'INPUT';
-          },
-        });
-        drake.on('dragend', () => {
-          $('.rubric-table input:first').trigger('change');
-          const rObj = editScheme.get('rubricObject');
-          editScheme.set('rubricObject', []);
-          Meteor.setTimeout(() => {
-            editScheme.set('rubricObject', rObj);
-          }, 80);
-        });
+        initializeEditScheme(editScheme);
       }, 100);
     }
   });
 });
+
+// Call this in case we're offline.
+Template.insertScheme.onRendered(() => initializeEditScheme(editScheme));
 
 /**
  * Helper functions.

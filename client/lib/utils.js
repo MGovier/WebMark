@@ -204,6 +204,40 @@ function initializeNewScheme(newScheme) {
   }
 }
 
+function initializeEditScheme(editScheme) {
+  $('.ui.checkbox').checkbox();
+  $('.unit-select').dropdown({
+    allowAdditions: true,
+    maxSelections: false,
+    onChange: value => {
+      editScheme.set('unitCode', value);
+      $('textarea[name="scheme-desc"]').focus();
+    },
+  });
+  $('.tooltip-buttons button').popup({
+    inline: false,
+    position: 'top left',
+  });
+  $('.name-field').trigger('click');
+  // DRAGULA
+  const drake = dragula({
+    isContainer(el) {
+      return el.classList.contains('dragula-container');
+    },
+    invalid(el) {
+      return el.nodeName === 'INPUT';
+    },
+  });
+  drake.on('dragend', () => {
+    $('.rubric-table input:first').trigger('change');
+    const rObj = editScheme.get('rubricObject');
+    editScheme.set('rubricObject', []);
+    Meteor.setTimeout(() => {
+      editScheme.set('rubricObject', rObj);
+    }, 80);
+  });
+}
+
 // Export all functions.
 export {
   generateFunName,
@@ -215,4 +249,5 @@ export {
   buildCommentsObject,
   checkFormValidity,
   initializeNewScheme,
+  initializeEditScheme,
 };
