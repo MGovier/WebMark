@@ -4,6 +4,7 @@
  */
 
 import moment from 'moment';
+
 import { generateJSON, generateCSV } from '../lib/utils';
 
 const sessionSelect = new ReactiveDict('sessionSelect');

@@ -2,22 +2,10 @@
  * Utilities package.
  * Exports all functions for use by specific module imports.
  */
+import uuid from 'node-uuid';
+import dragula from 'dragula';
 
 import { adjectives, scientists } from './naming.js';
-
-/**
- * Create a unique ID string according to standard.
- * Source: User 'broofa' at StackOverflow:
- * https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
- * @return {String} UUID
- */
-function generateUUID() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-    const r = crypto.getRandomValues(new Uint8Array(1))[0] % 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
 
 /**
  * Calculate total marks for this scheme using the max mark for each rubric.
@@ -44,14 +32,14 @@ function generateFunName() {
  */
 function resetSchemeData(dict) {
   dict.set('rubricObject', [{
-    uuid: generateUUID(),
+    uuid: uuid.v4(),
     rows: [{
-      uuid: generateUUID(),
+      uuid: uuid.v4(),
     }],
     maxMark: 0,
   }]);
   dict.set('comments', [{
-    uuid: generateUUID(),
+    uuid: uuid.v4(),
   }]);
   dict.set('schemeName', generateFunName());
   dict.set('unitCode', '');
@@ -109,7 +97,7 @@ function generateCSV(markingScheme, marks) {
     output += `,${report.marks}`;
     output += `,${report.maxMarks}`;
     output += `,"${report.presetComments}"`;
-    output += `,"${report.freeComment}"`;
+    output += `,"${report.freeComment ? report.freeComment : ''}"`;
     report.aspects.forEach(aspect => {
       output += `,"${aspect.selected}"`;
       output += `,${aspect.mark}`;
@@ -162,9 +150,96 @@ function checkFormValidity(form) {
   });
   return result;
 }
+
+function initializeNewScheme(newScheme) {
+  newScheme.setDefault('rubricObject', [{
+    uuid: uuid.v4(),
+    rows: [{
+      uuid: uuid.v4(),
+    }],
+    maxMark: 0,
+  }]);
+  newScheme.setDefault('comments', [{
+    uuid: uuid.v4(),
+  }]);
+  newScheme.setDefault('schemeName', generateFunName());
+  newScheme.setDefault('unitCode', '');
+  newScheme.setDefault('editingName', false);
+  newScheme.setDefault('commentHistory', []);
+  newScheme.setDefault('description', '');
+  $('.ui.checkbox').checkbox();
+  $('.unit-select').dropdown({
+    allowAdditions: true,
+    maxSelections: false,
+    onChange: value => {
+      newScheme.set('unitCode', value);
+      $('textarea[name="scheme-desc"]').focus();
+    },
+  });
+  $('.tooltip-buttons button').popup({
+    inline: false,
+    position: 'top left',
+  });
+  $('.name-field').trigger('click');
+  // DRAGULA
+  const drake = dragula({
+    isContainer(el) {
+      return el.classList.contains('dragula-container');
+    },
+    invalid(el) {
+      return el.nodeName === 'INPUT';
+    },
+  });
+  drake.on('dragend', () => {
+    $('.rubric-table input:first').trigger('change');
+    const rObj = newScheme.get('rubricObject');
+    newScheme.set('rubricObject', []);
+    Meteor.setTimeout(() => {
+      newScheme.set('rubricObject', rObj);
+    }, 80);
+  });
+  // If session var is defined, use that for the option value.
+  if (newScheme.get('unitCode')) {
+    $('.unit-select').dropdown('set selected', newScheme.get('unitCode'));
+  }
+}
+
+function initializeEditScheme(editScheme) {
+  $('.ui.checkbox').checkbox();
+  $('.unit-select').dropdown({
+    allowAdditions: true,
+    maxSelections: false,
+    onChange: value => {
+      editScheme.set('unitCode', value);
+      $('textarea[name="scheme-desc"]').focus();
+    },
+  });
+  $('.tooltip-buttons button').popup({
+    inline: false,
+    position: 'top left',
+  });
+  $('.name-field').trigger('click');
+  // DRAGULA
+  const drake = dragula({
+    isContainer(el) {
+      return el.classList.contains('dragula-container');
+    },
+    invalid(el) {
+      return el.nodeName === 'INPUT';
+    },
+  });
+  drake.on('dragend', () => {
+    $('.rubric-table input:first').trigger('change');
+    const rObj = editScheme.get('rubricObject');
+    editScheme.set('rubricObject', []);
+    Meteor.setTimeout(() => {
+      editScheme.set('rubricObject', rObj);
+    }, 80);
+  });
+}
+
 // Export all functions.
 export {
-  generateUUID,
   generateFunName,
   resetSchemeData,
   calculateTotalMarks,
@@ -173,4 +248,6 @@ export {
   countMarks,
   buildCommentsObject,
   checkFormValidity,
+  initializeNewScheme,
+  initializeEditScheme,
 };

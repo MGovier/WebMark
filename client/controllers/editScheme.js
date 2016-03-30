@@ -1,5 +1,6 @@
 import dragula from 'dragula';
-import { generateUUID, calculateTotalMarks, checkFormValidity } from '../lib/utils';
+import uuid from 'node-uuid';
+import { calculateTotalMarks, checkFormValidity, initializeEditScheme } from '../lib/utils';
 
 const editScheme = new ReactiveDict('editScheme');
 
@@ -17,12 +18,12 @@ Template.editScheme.onCreated(function created() {
   self.autorun(() => {
     if (self.subscriptionsReady()) {
       let comments = [{
-        uuid: generateUUID(),
+        uuid: uuid.v4(),
       }];
       let rubricAspects = [{
-        uuid: generateUUID(),
+        uuid: uuid.v4(),
         rows: [{
-          uuid: generateUUID(),
+          uuid: uuid.v4(),
         }],
         maxMark: 0,
       }];
@@ -33,10 +34,10 @@ Template.editScheme.onCreated(function created() {
         for (const i in rubricAspects) {
           if (rubricAspects.hasOwnProperty(i)) {
             const aspect = rubricAspects[i];
-            aspect.uuid = generateUUID();
+            aspect.uuid = uuid.v4();
             for (const j in aspect.rows) {
               if (aspect.rows.hasOwnProperty(j)) {
-                aspect.rows[j].uuid = generateUUID();
+                aspect.rows[j].uuid = uuid.v4();
               }
             }
           }
@@ -46,7 +47,7 @@ Template.editScheme.onCreated(function created() {
         comments = scheme.comments;
         for (const i in comments) {
           if (comments.hasOwnProperty(i)) {
-            comments[i].uuid = generateUUID();
+            comments[i].uuid = uuid.v4();
           }
         }
       }
@@ -65,41 +66,14 @@ Template.editScheme.onCreated(function created() {
         .val(scheme.adjustmentValueNegative);
 
       Meteor.setTimeout(() => {
-        $('.ui.checkbox').checkbox();
-        $('.unit-select').dropdown({
-          allowAdditions: true,
-          maxSelections: false,
-          onChange: value => {
-            editScheme.set('unitCode', value);
-            $('textarea[name="scheme-desc"]').focus();
-          },
-        });
-        $('.tooltip-buttons button').popup({
-          inline: false,
-          position: 'top left',
-        });
-        $('.name-field').trigger('click');
-        // DRAGULA
-        const drake = dragula({
-          isContainer(el) {
-            return el.classList.contains('dragula-container');
-          },
-          invalid(el) {
-            return el.nodeName === 'INPUT';
-          },
-        });
-        drake.on('dragend', () => {
-          $('.rubric-table input:first').trigger('change');
-          const rObj = editScheme.get('rubricObject');
-          editScheme.set('rubricObject', []);
-          Meteor.setTimeout(() => {
-            editScheme.set('rubricObject', rObj);
-          }, 80);
-        });
+        initializeEditScheme(editScheme);
       }, 100);
     }
   });
 });
+
+// Call this in case we're offline.
+Template.insertScheme.onRendered(() => initializeEditScheme(editScheme));
 
 /**
  * Helper functions.

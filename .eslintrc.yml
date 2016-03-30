@@ -10,6 +10,9 @@ extends:
   - airbnb/base
   - plugin:meteor/recommended
 
+rules:
+  meteor/audit-argument-checks: 0 # Collection2 package verifies schemas
+
 parserOptions:
   ecmaVersion: 6
   sourceType: "module"

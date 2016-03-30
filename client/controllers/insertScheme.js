@@ -1,13 +1,12 @@
 /**
  * JS for new marking scheme functionality.
  */
+import uuid from 'node-uuid';
 
-import dragula from 'dragula';
-import { generateUUID,
-  generateFunName,
-  resetSchemeData,
+import { resetSchemeData,
   calculateTotalMarks,
   checkFormValidity,
+  initializeNewScheme,
 } from '../lib/utils';
 
 const newScheme = new ReactiveDict('newScheme');
@@ -18,64 +17,21 @@ Template.insertScheme.onCreated(function created() {
     self.subscribe('units');
   });
   self.autorun(() => {
+    if (!Meteor.userId()) {
+      FlowRouter.go('landing');
+    }
+  });
+  self.autorun(() => {
     if (self.subscriptionsReady()) {
-      newScheme.setDefault('rubricObject', [{
-        uuid: generateUUID(),
-        rows: [{
-          uuid: generateUUID(),
-        }],
-        maxMark: 0,
-      }]);
-      newScheme.setDefault('comments', [{
-        uuid: generateUUID(),
-      }]);
-      newScheme.setDefault('schemeName', generateFunName());
-      newScheme.setDefault('unitCode', '');
-      newScheme.setDefault('editingName', false);
-      newScheme.setDefault('commentHistory', []);
-      newScheme.setDefault('description', '');
-
-      // Give the DOM some time to be built, then configure Semantic.
       Meteor.setTimeout(() => {
-        $('.ui.checkbox').checkbox();
-        $('.unit-select').dropdown({
-          allowAdditions: true,
-          maxSelections: false,
-          onChange: value => {
-            newScheme.set('unitCode', value);
-            $('textarea[name="scheme-desc"]').focus();
-          },
-        });
-        $('.tooltip-buttons button').popup({
-          inline: false,
-          position: 'top left',
-        });
-        $('.name-field').trigger('click');
-        // DRAGULA
-        const drake = dragula({
-          isContainer(el) {
-            return el.classList.contains('dragula-container');
-          },
-          invalid(el) {
-            return el.nodeName === 'INPUT';
-          },
-        });
-        drake.on('dragend', () => {
-          $('.rubric-table input:first').trigger('change');
-          const rObj = newScheme.get('rubricObject');
-          newScheme.set('rubricObject', []);
-          Meteor.setTimeout(() => {
-            newScheme.set('rubricObject', rObj);
-          }, 80);
-        });
-        // If session var is defined, use that for the option value.
-        if (newScheme.get('unitCode')) {
-          $('.unit-select').dropdown('set selected', newScheme.get('unitCode'));
-        }
+        initializeNewScheme(newScheme);
       }, 100);
     }
   });
 });
+
+// Call this in case we're offline.
+Template.insertScheme.onRendered(() => initializeNewScheme(newScheme));
 
  /**
   * Helper functions.
@@ -119,6 +75,7 @@ Template.insertScheme.events({
       $('.submit-scheme').removeClass('submit-scheme').addClass('loading');
       // Serialize data.
       const schemaObject = {
+        _id: uuid.v4(),
         name: $('input[name="scheme-name"]').val(),
         description: $('textarea[name="scheme-desc"]').val(),
         createdAt: new Date(),
