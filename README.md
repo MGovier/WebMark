@@ -1,19 +1,12 @@
 # WebMark
-A Meteor powered Web Application to enable efficient and flexible marking of assignments.
+A Meteor powered offline-first Web Application to enable efficient and flexible marking of assignments. Developed as a final year project for BSc Computer Science by Merlin Govier (UP663652) at the University of Portsmouth, UK.
 
 ## Table of Contents
 
-- [About](#about)
 - [User Guide](#user)
 - [Developer Guide](#developer)
-- [Deployment](#installation)
-- [Technologies](#technologies)
+- [Deployment Guide](#deployment)
 - [License](#license)
-
-## About
-Final year project for BSc Computer Science by Merlin Govier (UP663652) at the University of Portsmouth.
-
-Based on requirements learned through meeting experienced lecturers and analyzing current tools.
 
 ## User Guide
 The [user guide](https://mgovier.github.io/WebMark/user/) details how to use the application as an end-user.
