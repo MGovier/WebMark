@@ -246,5 +246,6 @@ a {
 
 .med-img-text-wrap {
   float: right;
-  max-height: 10em;
+  max-height: 15em;
+  max-width: 15em;
 }
