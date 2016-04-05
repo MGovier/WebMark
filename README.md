@@ -15,7 +15,7 @@ Final year project for BSc Computer Science by Merlin Govier (UP663652) at the U
 Based on requirements learned through meeting experienced lecturers and analyzing current tools.
 
 ## User Guide
-The [user guide](https://mgovier.github.io/WebMark/user/) details the steps to use the application as an end-user.
+The [user guide](https://mgovier.github.io/WebMark/user/) details how to use the application as an end-user.
 
 ## Installation
 
