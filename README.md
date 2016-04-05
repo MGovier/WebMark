@@ -44,11 +44,13 @@ builds/   | Self-contained application bundles for production testing and deploy
 The application utilizes a Node.JS powered server, connected to MongoDB and running behind a reverse proxy TLS terminator.
 
 The most recent versions tested successfully are shown below:
+
 Requirement | Version
 ------------|-----------------------------
 [Node.JS](https://nodejs.org/en/)   | 0.10.44
 [MongoDB](https://www.mongodb.com/) | 3.2
 [Nginx](http://nginx.org/en/)       | 1.9.14
+
 As of 1.3.1, Meteor requires the 0.10 Node.JS branch, but this may change in future releases. The most recent versions of other technologies should be compatible.
 
 
@@ -57,7 +59,7 @@ Meteor can produce a self-contained NodeJS bundle. To generate this, use `meteor
 
 Environment variables are required for the Meteor application:
 Variable                | Setting
-------------------------|------------
+------------------------|-----------------------------------
 ROOT_URL                | The domain path for the application, such as `https://example.com/marking`.
 HTTP_FORWARDED_COUNT    | Number of reverse proxies deployed in from of Node.JS - i.e. `1`.
 PORT                    | Port to run on. This should match the reverse proxy's expected local address, such as 3000.
