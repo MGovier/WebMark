@@ -55,7 +55,7 @@ Environment variables are required for the Meteor application:
 Variable                | Setting
 ------------------------|-----------------------------------
 ROOT_URL                | The domain path for the application, such as `https://example.com/marking`.
-HTTP_FORWARDED_COUNT    | Number of reverse proxies deployed in from of Node.JS - i.e. `1`.
+HTTP_FORWARDED_COUNT    | Number of reverse proxies deployed in front of Node.JS - i.e. `1`.
 PORT                    | Port to listen to. This should match the reverse proxy's expected local address, such as 3000.
 NODE_ENV                | Set for npm modules. Use `production` for running in production.
 MONGO_URL               | Address for the MongoDB server. Follows pattern `mongodb://user:password@host:port/databasename`.
