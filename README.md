@@ -63,8 +63,8 @@ Variable                | Setting
 ------------------------|-----------------------------------
 ROOT_URL                | The domain path for the application, such as `https://example.com/marking`.
 HTTP_FORWARDED_COUNT    | Number of reverse proxies deployed in from of Node.JS - i.e. `1`.
-PORT                    | Port to run on. This should match the reverse proxy's expected local address, such as 3000.
-NODE_ENV                | `production` for running in production.
+PORT                    | Port to listen to. This should match the reverse proxy's expected local address, such as 3000.
+NODE_ENV                | Set for npm modules. Use `production` for running in production.
 MONGO_URL               | Address for the MongoDB server. Follows pattern `mongodb://user:password@host:port/databasename`.
 
 
@@ -76,6 +76,16 @@ A good configuration for the TLS terminator can be sourced from the [Mozilla SSL
 ```
 cd /etc/ssl/certs
 openssl dhparam -out dhparam.pem 4096
+```
+The reverse proxy needs to provide some HTTP headers for the Node.JS server. These are:
+```
+proxy_set_header X-Real-IP $remote_addr;  # http://wiki.nginx.org/HttpProxyModule
+proxy_set_header Host $host;  # pass the host header - http://wiki.nginx.org/HttpProxyModule#proxy_pass
+proxy_http_version 1.1;  # recommended with keepalive connections - http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_http_version
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+# WebSocket proxying - from http://nginx.org/en/docs/http/websocket.html
+proxy_set_header Upgrade $http_upgrade;
+proxy_set_header Connection 'upgrade';
 ```
 [This Gist](https://gist.github.com/MGovier/5112025ec482012163c6d563dd75ca32) shows the configuration used for production testing, and features redirects from both `http` and `www.` to `https` and `non-www`.
 
