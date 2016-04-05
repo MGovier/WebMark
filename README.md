@@ -58,6 +58,7 @@ As of 1.3.1, Meteor requires the 0.10 Node.JS branch, but this may change in fut
 Meteor can produce a self-contained NodeJS bundle. To generate this, use `meteor build` from inside the project directory. If you will be deploying onto a different platform than that which you are currently on, specify which with the `--architecture` flag.
 
 Environment variables are required for the Meteor application:
+
 Variable                | Setting
 ------------------------|-----------------------------------
 ROOT_URL                | The domain path for the application, such as `https://example.com/marking`.
