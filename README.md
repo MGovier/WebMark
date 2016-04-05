@@ -4,6 +4,7 @@ A Meteor powered Web Application to enable efficient and flexible marking of ass
 ## Table of Contents
 
 - [About](#about)
+- [User Guide](#user)
 - [Installation](#installation)
 - [Technologies](#technologies)
 - [License](#license)
@@ -12,6 +13,10 @@ A Meteor powered Web Application to enable efficient and flexible marking of ass
 Final year project for BSc Computer Science by Merlin Govier (UP663652) at the University of Portsmouth.
 
 Based on requirements learned through meeting experienced lecturers and analyzing current tools.
+
+## User Guide
+This details the steps to use the application as an end-user.
+
 
 ## Installation
 

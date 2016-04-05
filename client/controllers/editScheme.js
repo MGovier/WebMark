@@ -1,4 +1,3 @@
-import dragula from 'dragula';
 import uuid from 'node-uuid';
 import { calculateTotalMarks, checkFormValidity, initializeEditScheme } from '../lib/utils';
 
