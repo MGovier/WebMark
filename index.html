@@ -22,59 +22,39 @@
       <h1>
 <a id="webmark" class="anchor" href="#webmark" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>WebMark</h1>
 
-<p>A Meteor powered Web Application to enable efficient and flexible marking of assignments.</p>
+<p>A Meteor powered offline-first Web Application to enable efficient and flexible marking of assignments. Developed as a final year project for BSc Computer Science by Merlin Govier (UP663652) at the University of Portsmouth, UK.</p>
 
 <h2>
 <a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Table of Contents</h2>
 
 <ul>
-<li><a href="#about">About</a></li>
-<li><a href="#installation">Installation</a></li>
-<li><a href="#technologies">Technologies</a></li>
+<li><a href="#user">User Guide</a></li>
+<li><a href="#developer">Developer Guide</a></li>
+<li><a href="#deployment">Deployment Guide</a></li>
 <li><a href="#license">License</a></li>
 </ul>
 
 <h2>
-<a id="about" class="anchor" href="#about" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>About</h2>
+<a id="user-guide" class="anchor" href="#user-guide" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>User Guide</h2>
 
-<p>Final year project for BSc Computer Science by Merlin Govier (UP663652) at the University of Portsmouth.</p>
-
-<p>Based on requirements learned through meeting experienced lecturers and analyzing current tools.</p>
+<p>The <a href="https://mgovier.github.io/WebMark/user/">user guide</a> details how to use the application as an end-user.</p>
 
 <h2>
-<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
-
-<h3>
-<a id="developer" class="anchor" href="#developer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Developer</h3>
+<a id="developer-guide" class="anchor" href="#developer-guide" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Developer Guide</h2>
 
 <ul>
-<li>Install <a href="https://www.meteor.com/">Meteor</a>
-</li>
-<li>Clone this repo, in your terminal <code>cd</code> into the root folder, and run <code>meteor</code>!</li>
+<li>Install <a href="https://www.meteor.com/">Meteor</a>. Requires v1.3+.</li>
+<li>Clone this repo, in your terminal <code>cd</code> into the root folder.</li>
+<li>Run <code>meteor npm install</code> to install node dependencies, then <code>meteor</code> to locally serve the application.</li>
 </ul>
 
 <h3>
-<a id="production" class="anchor" href="#production" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Production</h3>
+<a id="code-style--linting" class="anchor" href="#code-style--linting" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Code Style &amp; Linting</h3>
 
-<p>A deployment guide is available in the project document.</p>
+<p>This project aims to follow the <a href="http://guide.meteor.com/code-style.html">Meteor Guide Code Style</a>. Linting uses ESLint, with Airbnb's configuration. Run <code>meteor npm run lint</code> to check.</p>
 
-<ul>
-<li>Running <code>meteor build</code> will generate a node server package. Currently requires the Node 0.10.x branch.</li>
-<li>To enable TLS support, a terminator such as HAProxy or nginx should be configured as a reverse proxy.</li>
-<li>Startup MongoDB.</li>
-<li>Configure Meteor environment variables for root url, proxy, and Mongo.</li>
-</ul>
-
-<h2>
-<a id="technologies" class="anchor" href="#technologies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Technologies</h2>
-
-<ul>
-<li><a href="https://www.meteor.com/">Meteor</a></li>
-<li><a href="http://semantic-ui.com/">Semantic UI</a></li>
-</ul>
-
-<h2>
-<a id="project-structure" class="anchor" href="#project-structure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Project Structure</h2>
+<h3>
+<a id="project-structure" class="anchor" href="#project-structure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Project Structure</h3>
 
 <table>
 <thead>
@@ -126,6 +106,132 @@
 </tr>
 </tbody>
 </table>
+
+<h2>
+<a id="deployment" class="anchor" href="#deployment" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Deployment</h2>
+
+<p>The application utilizes a Node.JS powered server, connected to MongoDB and running behind a reverse proxy TLS terminator.</p>
+
+<p>The most recent versions tested successfully are shown below:</p>
+
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://nodejs.org/en/">Node.JS</a></td>
+<td>0.10.44</td>
+</tr>
+<tr>
+<td><a href="https://www.mongodb.com/">MongoDB</a></td>
+<td>3.2</td>
+</tr>
+<tr>
+<td><a href="http://nginx.org/en/">Nginx</a></td>
+<td>1.9.14</td>
+</tr>
+</tbody>
+</table>
+
+<p>As of 1.3.1, Meteor requires the 0.10 Node.JS branch, but this may change in future releases. The most recent versions of other technologies should be compatible. Other reverse proxies can be used in place of Nginx, such as HAProxy.</p>
+
+<h3>
+<a id="nodejs-server" class="anchor" href="#nodejs-server" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Node.JS Server</h3>
+
+<p>Meteor can produce a self-contained NodeJS bundle. To generate this, use <code>meteor build</code> from inside the project directory. If you will be deploying onto a different platform than that which you are currently on, specify which with the <code>--architecture</code> flag.</p>
+
+<p>Environment variables are required for the Meteor application:</p>
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Setting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ROOT_URL</td>
+<td>The domain path for the application, such as <code>https://example.com/marking</code>.</td>
+</tr>
+<tr>
+<td>HTTP_FORWARDED_COUNT</td>
+<td>Number of reverse proxies deployed in front of Node.JS - i.e. <code>1</code>.</td>
+</tr>
+<tr>
+<td>PORT</td>
+<td>Port to listen to. This should match the reverse proxy's expected local address, such as 3000.</td>
+</tr>
+<tr>
+<td>NODE_ENV</td>
+<td>Set for npm modules. Use <code>production</code> for running in production.</td>
+</tr>
+<tr>
+<td>MONGO_URL</td>
+<td>Address for the MongoDB server. Follows pattern <code>mongodb://user:password@host:port/databasename</code>.</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="mongodb" class="anchor" href="#mongodb" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>MongoDB</h3>
+
+<p>Ensure MongoDB can only be accessed locally, and set suitable users with restricted roles.</p>
+
+<h3>
+<a id="reverse-proxy--security" class="anchor" href="#reverse-proxy--security" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reverse Proxy &amp; Security</h3>
+
+<p>If using Nginx, a good configuration for the TLS terminator can be sourced from the <a href="https://mozilla.github.io/server-side-tls/ssl-config-generator/">Mozilla SSL Configuration Generator</a> and following <a href="https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html">Remy van Elst's Nginx Security Advice</a>. This requires a stronger Diffie-Hellman parameter than the default, which can be generated using</p>
+
+<pre><code>cd /etc/ssl/certs
+openssl dhparam -out dhparam.pem 4096
+</code></pre>
+
+<p>The reverse proxy needs to provide some HTTP headers for the Node.JS server. These are:</p>
+
+<pre><code>proxy_set_header X-Real-IP $remote_addr;  # http://wiki.nginx.org/HttpProxyModule
+proxy_set_header Host $host;  # pass the host header - http://wiki.nginx.org/HttpProxyModule#proxy_pass
+proxy_http_version 1.1;  # recommended with keepalive connections - http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_http_version
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+# WebSocket proxying - from http://nginx.org/en/docs/http/websocket.html
+proxy_set_header Upgrade $http_upgrade;
+proxy_set_header Connection 'upgrade';
+</code></pre>
+
+<p><a href="https://gist.github.com/MGovier/5112025ec482012163c6d563dd75ca32">This Gist</a> shows the configuration used for production testing, and features redirects from both <code>http</code> and <code>www.</code> to <code>https</code> and <code>non-www.</code>.</p>
+
+<p>Direct internet/public access to the Node.JS or MongoDB services should be prevented, potentially through firewall configuration.</p>
+
+<h3>
+<a id="docker" class="anchor" href="#docker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Docker</h3>
+
+<p>The services can be managed using Docker and Docker Compose. Nginx can be configured as above, and an example configuration for the Node.JS server is:</p>
+
+<h4>
+<a id="dockerfile" class="anchor" href="#dockerfile" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dockerfile</h4>
+
+<pre><code>FROM node:0.10
+ENV ROOT_URL="https://example.me"
+ENV HTTP_FORWARDED_COUNT=1
+ENV PORT=3000
+ENV NODE_ENV=production
+ENV MONGO_URL="mongodb://user:pass@mongo:27017/WebMark"
+EXPOSE 3000
+ADD WebMark.tar.gz /WebMark/
+RUN (cd WebMark/bundle/programs/server &amp;&amp; npm install)
+</code></pre>
+
+<h4>
+<a id="start-script-run-sh-start" class="anchor" href="#start-script-run-sh-start" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Start script (run <code>sh start</code>)</h4>
+
+<pre><code>docker rm -f webmark-host
+docker build -t webmark-image .
+docker run --name webmark-host --link mongo-host:mongo -p 127.0.0.1:3000:3000 --restart=always -d webmark-image node /WebMark/bundle/main.js
+</code></pre>
 
 <h2>
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
