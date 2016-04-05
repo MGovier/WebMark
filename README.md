@@ -44,7 +44,7 @@ Requirement | Version
 [MongoDB](https://www.mongodb.com/) | 3.2
 [Nginx](http://nginx.org/en/)       | 1.9.14
 
-As of 1.3.1, Meteor requires the 0.10 Node.JS branch, but this may change in future releases. The most recent versions of other technologies should be compatible.
+As of 1.3.1, Meteor requires the 0.10 Node.JS branch, but this may change in future releases. The most recent versions of other technologies should be compatible. Other reverse proxies can be used in place of Nginx, such as HAProxy.
 
 
 ### Node.JS Server
@@ -65,7 +65,7 @@ MONGO_URL               | Address for the MongoDB server. Follows pattern `mongo
 Ensure MongoDB can only be accessed locally, and set suitable users with restricted roles.
 
 ### Reverse Proxy & Security
-A good configuration for the TLS terminator can be sourced from the [Mozilla SSL Configuration Generator](https://mozilla.github.io/server-side-tls/ssl-config-generator/) and following [Remy van Elst's Nginx Security Advice](https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html). This requires a stronger Diffie-Hellman parameter than the default, which can be generated using
+If using Nginx, a good configuration for the TLS terminator can be sourced from the [Mozilla SSL Configuration Generator](https://mozilla.github.io/server-side-tls/ssl-config-generator/) and following [Remy van Elst's Nginx Security Advice](https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html). This requires a stronger Diffie-Hellman parameter than the default, which can be generated using
 ```
 cd /etc/ssl/certs
 openssl dhparam -out dhparam.pem 4096
@@ -80,7 +80,7 @@ proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 proxy_set_header Upgrade $http_upgrade;
 proxy_set_header Connection 'upgrade';
 ```
-[This Gist](https://gist.github.com/MGovier/5112025ec482012163c6d563dd75ca32) shows the configuration used for production testing, and features redirects from both `http` and `www.` to `https` and `non-www`.
+[This Gist](https://gist.github.com/MGovier/5112025ec482012163c6d563dd75ca32) shows the configuration used for production testing, and features redirects from both `http` and `www.` to `https` and `non-www.`.
 
 Direct internet/public access to the Node.JS or MongoDB services should be prevented, potentially through firewall configuration.
 
