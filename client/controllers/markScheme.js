@@ -1,15 +1,23 @@
+/**
+ * Marking Scheme Controllers
+ */
+
 import { countMarks, buildCommentsObject, checkFormValidity } from '../lib/utils';
 
 Template.markScheme.onCreated(function created() {
+  const self = this;
   this.aspects = new ReactiveVar([]);
   this.marks = new ReactiveVar(0);
   this.markerName = new ReactiveVar(false);
   this.lastStudent = new ReactiveVar('');
   this.adjustmentValue = 0;
-  const self = this;
-  self.autorun(() => {
-    self.subscribe('markingSchemes', FlowRouter.getParam('_id'));
-  });
+  // Only set the autorun if we're online.
+  // Otherwise, we re-render the scheme on re-connect and lose data.
+  if (Meteor.status().connected) {
+    self.autorun(() => {
+      self.subscribe('markingSchemes', FlowRouter.getParam('_id'));
+    });
+  }
 });
 
 Template.markScheme.onRendered(() => {
@@ -124,7 +132,7 @@ Template.markScheme.events({
       };
       templateInstance.lastStudent.set(markObject.studentNo);
       templateInstance.markerName.set($('input[name="marker-name"]').val());
-      Meteor.call('addMark', markObject, (error) => {
+      Meteor.call('addMark', markObject, error => {
         if (error) {
           sAlert.error(`Error: ${error.message} Please check your submission.`);
         }
@@ -151,7 +159,7 @@ Template.markScheme.events({
     }
   },
   'click'() {
-    // @todo: Do something less stupid to activate semantic ui...
+    // @todo: Do something less stupid to activate Semantic UI Components...
     $('.ui.checkbox').checkbox();
   },
 });
