@@ -14,11 +14,9 @@ Template.markScheme.onCreated(function created() {
   this.adjustmentValue = 0;
   // Only set the autorun if we're online.
   // Otherwise, we re-render the scheme on re-connect and lose data.
-  if (Meteor.status().connected) {
-    self.autorun(() => {
-      self.subscribe('markingSchemes', FlowRouter.getParam('_id'));
-    });
-  }
+  self.autorun(() => {
+    self.subscribe('markingSchemes', FlowRouter.getParam('_id'));
+  });
 });
 
 Template.markScheme.onRendered(() => {
