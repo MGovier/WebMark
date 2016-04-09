@@ -34,7 +34,7 @@ builds/   | Self-contained application bundles for production testing and deploy
 
 
 ## Deployment
-The application utilizes a Node.JS powered server, connected to MongoDB and running behind a reverse proxy TLS terminator.
+The application utilizes a Node.JS powered server, connected to MongoDB and running behind a reverse proxy TLS terminator. OAuth configuration will be required, and this will be handled by the application on first run, by using the log-in menu link.
 
 The most recent versions tested successfully are shown below:
 
