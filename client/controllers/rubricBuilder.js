@@ -1,8 +1,13 @@
 /**
  * JS for Rubric builder in scheme designer.
  */
+
+// Using UUIDs to track rubric rows through re-arrangement or deletion.
 import uuid from 'node-uuid';
 
+/**
+ * Template helpers.
+ */
 Template.rubricBuilder.helpers({
   rubricObject() {
     return Template.instance().data.scheme.get('rubricObject');
@@ -19,6 +24,9 @@ Template.rubricBuilder.helpers({
   },
 });
 
+/**
+ * Event listeners.
+ */
 Template.rubricBuilder.events({
   'click .add-criterion'(event, templateInstance) {
     event.preventDefault();
@@ -50,7 +58,7 @@ Template.rubricBuilder.events({
     const rObjs = templateInstance.data.scheme.get('rubricObject');
     const rowId = $(event.currentTarget).closest('tr').attr('data-uuid');
     const tableId = $(event.currentTarget).closest('table').attr('data-uuid');
-    // Most efficient loop through array elements https://jsperf.com/loops
+    // Most efficient(?) loop through array elements https://jsperf.com/loops
     for (const i in rObjs) {
       if (rObjs.hasOwnProperty(i)) {
         const rubric = rObjs[i];
@@ -75,6 +83,7 @@ Template.rubricBuilder.events({
     rObjs = rObjs.filter((rubric) => rubric.uuid !== id);
     templateInstance.data.scheme.set('rubricObject', rObjs);
   },
+  // Keep persistent data object up to date at all times in case the user navigates.
   'change input'(event, templateInstance) {
     const rObj = [];
     const $tables = $('.rubric-table');
@@ -132,6 +141,7 @@ Template.rubricBuilder.events({
       $(event.currentTarget).trigger(e);
     }
   },
+  // Clone a rubric object, but assign new unique references.
   'click .duplicate-aspect'(event, templateInstance) {
     event.preventDefault();
     const rObj = templateInstance.data.scheme.get('rubricObject');

@@ -1,3 +1,12 @@
+/**
+ * Marking Report controller.
+ */
+
+/**
+ * Called when built.
+ * Autorun tied to data source,
+ * to keep marking report up to date if it or the scheme changes.
+ */
 Template.markingReport.onCreated(function created() {
   const self = this;
   self.autorun(() => {
@@ -6,6 +15,9 @@ Template.markingReport.onCreated(function created() {
   });
 });
 
+/**
+ * Helper functions used in template.
+ */
 Template.markingReport.helpers({
   report() {
     return Marks.findOne({ _id: FlowRouter.getParam('_id') });
@@ -16,6 +28,7 @@ Template.markingReport.helpers({
   percentage(mark, total) {
     return Math.round((mark / total) * 100);
   },
+  // Tell the user if an adjustment was applied.
   showAdj(value) {
     if (value > 0) {
       return `+ ${value}`;

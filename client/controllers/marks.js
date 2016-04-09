@@ -1,14 +1,20 @@
 /**
- * Create a filter object the first time this template is instantiated.
- * Careful with arrow functions due to `this` context.
+ * Controllers for mark viewing template.
  */
 
+// To display user friendly times.
 import moment from 'moment';
 
 import { generateJSON, generateCSV } from '../lib/utils';
 
+// This persistent dictionary is used to track the table rows the user has selected.
+// It keeps them isolated from other scheme's tables.
 const sessionSelect = new ReactiveDict('sessionSelect');
 
+/**
+ * Create a filter object the first time this template is instantiated.
+ * Careful with arrow functions due to `this` context.
+ */
 Template.marks.onCreated(function created() {
   const self = this;
   self.filter = new ReactiveTable.Filter('filter-table');
@@ -38,6 +44,7 @@ Template.marks.onRendered(function render() {
       schemeOwner: Meteor.userId(),
     });
     const markingScheme = MarkingSchemes.findOne({ _id: FlowRouter.getParam('_id') });
+    // Check there are marks to display, and that the scheme exists still.
     if (marks.count() > 0 && markingScheme) {
       const markArray = marks.fetch();
       const maxMarks = markingScheme.maxMarks;
@@ -62,6 +69,7 @@ Template.marks.onRendered(function render() {
         labels,
         series,
       };
+      // Chartist configuration.
       const options = {
         axisY: {
           onlyInteger: true,
@@ -97,7 +105,7 @@ Template.marks.onDestroyed(function destroy() {
  * Helper functions.
  */
 Template.marks.helpers({
-  // Configure ReactiveTable
+  // Configure ReactiveTable.
   settings() {
     return {
       collection: Marks.find({
@@ -159,6 +167,7 @@ Template.marks.helpers({
   filterVar() {
     return Template.instance().filter.get();
   },
+  // Encode data as a link in the UI. Saves the server having to convert data.
   jsonData(markingScheme, marks) {
     return `data:text/json;charset=utf-8,
     ${encodeURIComponent(JSON.stringify(generateJSON(markingScheme, marks), null, '  '))}`;
@@ -167,6 +176,7 @@ Template.marks.helpers({
     return `data:text/csv;charset=utf-8,
     ${encodeURIComponent(generateCSV(markingScheme, marks))}`;
   },
+  // Disable the delete button if nothing is selected.
   deleteDisabled() {
     const selectedRows = sessionSelect.get(FlowRouter.getParam('_id'));
     return selectedRows && !selectedRows.length;
@@ -191,6 +201,7 @@ Template.marks.events({
   'keyup #filter-table'(event, templateInstance) {
     templateInstance.filter.set($(event.currentTarget).val());
   },
+  // Keep tracker up to date with state of table row checkboxes.
   'change .ui .checkbox'(event) {
     const selectedRows = sessionSelect.get(FlowRouter.getParam('_id'));
     if ($(`#${event.currentTarget.id}`).checkbox('is checked')) {

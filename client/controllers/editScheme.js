@@ -1,14 +1,26 @@
+/**
+ * Controller for the edit scheme template.
+ */
+
+// UUIDs are used for tracking elements that can be dragged and dropped.
 import uuid from 'node-uuid';
 import { calculateTotalMarks, checkFormValidity, initializeEditScheme } from '../lib/utils';
 
+// A named reactive dict is persistent through hot code pushes.
 const editScheme = new ReactiveDict('editScheme');
 
+/**
+ * Called when template created.
+ * This sets up autorun functions tied to the data sources, so the interface can
+ * update reactively.
+ */
 Template.editScheme.onCreated(function created() {
   const self = this;
   self.autorun(() => {
     self.subscribe('markingSchemes', FlowRouter.getParam('_id'));
     self.subscribe('units');
   });
+  // Redirect a user to landing if they are (or become) logged out.
   self.autorun(() => {
     if (!Meteor.userId()) {
       FlowRouter.go('landing');
@@ -27,7 +39,7 @@ Template.editScheme.onCreated(function created() {
         maxMark: 0,
       }];
       const scheme = MarkingSchemes.findOne({ _id: FlowRouter.getParam('_id') });
-      // First, need to reassign UUIDs for tracking deletion and drag.
+      // First, need to reassign UUIDs for tracking deletion and drag 'n' drop.
       if (scheme.aspects) {
         rubricAspects = scheme.aspects;
         for (const i in rubricAspects) {
@@ -51,6 +63,7 @@ Template.editScheme.onCreated(function created() {
         }
       }
 
+      // Attach scheme information to persistent object.
       editScheme.set('rubricObject', rubricAspects);
       editScheme.set('comments', comments);
       editScheme.set('schemeName', scheme.name);
@@ -59,11 +72,13 @@ Template.editScheme.onCreated(function created() {
       editScheme.set('editingName', false);
       editScheme.set('commentHistory', []);
 
+      // Set the adjustment options to the scheme's adjustment ranges.
       $('input[name="adjustment-positive"]')
         .val(scheme.adjustmentValuePositive);
       $('input[name="adjustment-negative"]')
         .val(scheme.adjustmentValueNegative);
 
+      // Give the DOM some time to be built, then initialize UI components.
       Meteor.setTimeout(() => {
         initializeEditScheme(editScheme);
       }, 100);
@@ -75,7 +90,7 @@ Template.editScheme.onCreated(function created() {
 Template.insertScheme.onRendered(() => initializeEditScheme(editScheme));
 
 /**
- * Helper functions.
+ * Helper functions, used by the template.
  */
 Template.editScheme.helpers({
   scheme() {
@@ -128,7 +143,7 @@ Template.editScheme.events({
       };
       // Call Meteor function to add data to DB. This will run offline first.
       Meteor.call('updateScheme', FlowRouter.getParam('_id'), schemaObject,
-        (error) => {
+        error => {
           if (error) {
             // Alert user to error.
             sAlert.error(error.message, error.details);
@@ -147,6 +162,7 @@ Template.editScheme.events({
       // Send user to dashboard to use or share the updated scheme.
       FlowRouter.go('dashboard');
     } else {
+      // Scroll to highest error if all the fields could not be validated.
       $('html, body').animate({
         scrollTop: ($('.error').first().offset().top - 150),
       }, 200);
@@ -154,6 +170,7 @@ Template.editScheme.events({
       { position: 'top-right', timeout: 7000 });
     }
   },
+  // Stop multi-clicks causing multi-submission.
   'click .scheme-submit-button .loading'(event) {
     event.preventDefault();
   },

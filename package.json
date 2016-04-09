@@ -1,9 +1,8 @@
 {
   "name": "WebMark",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "A Meteor powered Web Application to enable efficient and flexible marking of assignments.",
   "author": "Merlin Govier <merlin.govier@myport.ac.uk>",
-  "main": "index.js",
   "scripts": {
     "lint": "eslint -c .eslintrc.yml .",
     "pretest": "npm run lint --silent",

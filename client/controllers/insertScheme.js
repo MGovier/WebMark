@@ -1,6 +1,11 @@
 /**
  * JS for new marking scheme functionality.
  */
+
+// UUIDs are used to keep track of elements as they are deleted or re-arranged.
+// Also, as an id for the marking scheme. This is set in the client to allow
+// offline submission - but the server checks it is not a duplicate and re-assigns
+// if so.
 import uuid from 'node-uuid';
 
 import { resetSchemeData,
@@ -9,6 +14,7 @@ import { resetSchemeData,
   initializeNewScheme,
 } from '../lib/utils';
 
+// Named reactive dictionaries persist through navigation and hot code pushes.
 const newScheme = new ReactiveDict('newScheme');
 
 Template.insertScheme.onCreated(function created() {
@@ -16,6 +22,7 @@ Template.insertScheme.onCreated(function created() {
   self.autorun(() => {
     self.subscribe('units');
   });
+  // Redirect a user home if they log out / are logged out.
   self.autorun(() => {
     if (!Meteor.userId()) {
       FlowRouter.go('landing');
@@ -23,6 +30,8 @@ Template.insertScheme.onCreated(function created() {
   });
   self.autorun(() => {
     if (self.subscriptionsReady()) {
+      // Initialize UI components after giving the DOM some time to be built.
+      // @todo Initialize components based on an event.
       Meteor.setTimeout(() => {
         initializeNewScheme(newScheme);
       }, 100);
@@ -30,12 +39,12 @@ Template.insertScheme.onCreated(function created() {
   });
 });
 
-// Call this in case we're offline.
+// Call this in case we're offline and subs ready will not fire.
 Template.insertScheme.onRendered(() => initializeNewScheme(newScheme));
 
- /**
-  * Helper functions.
-  */
+/**
+* Helper functions used by the template.
+*/
 Template.insertScheme.helpers({
   rubric() {
     return newScheme.get('rubricObject');
@@ -70,6 +79,7 @@ Template.insertScheme.helpers({
 Template.insertScheme.events({
   'click .submit-scheme'(event) {
     event.preventDefault();
+    // Check the form is valid, and highlight any errors if not.
     if (checkFormValidity($('#marking-scheme-form'))) {
       // Change class to show request is being processed.
       $('.submit-scheme').removeClass('submit-scheme').addClass('loading');
@@ -87,7 +97,7 @@ Template.insertScheme.events({
         maxMarks: calculateTotalMarks(newScheme),
       };
       // Call Meteor function to add data to DB. This will run offline first.
-      Meteor.call('addScheme', schemaObject, (error) => {
+      Meteor.call('addScheme', schemaObject, error => {
         if (error) {
           // Alert user to error.
           sAlert.error(error.message, error.details);
@@ -95,7 +105,7 @@ Template.insertScheme.events({
             .addClass('submit-scheme');
         }
       });
-      // If no error, show success notification.
+      // If no error, show success notification and reset form for next time.
       sAlert.success(`${schemaObject.name} added!`, {
         position: 'top-right',
         onRouteClose: false,
@@ -107,6 +117,7 @@ Template.insertScheme.events({
       // Send user to dashboard to use or share the new scheme.
       FlowRouter.go('dashboard');
     } else {
+      // Scroll user to top error, if there was one.
       $('html, body').animate({
         scrollTop: ($('.error').first().offset().top - 150),
       }, 200);
@@ -129,7 +140,7 @@ Template.insertScheme.events({
     newScheme.set('editingName', false);
     newScheme.set('schemeName', $('input[name="scheme-name"]').val());
   },
-  // Allow return to move between initial inputs
+  // Allow return to move between initial inputs.
   'keydown'(event) {
     if (event.keyCode === 13 &&
       $(event.currentTarget).attr('name') === 'scheme-name') {

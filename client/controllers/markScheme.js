@@ -9,6 +9,7 @@ Template.markScheme.onCreated(function created() {
   this.aspects = new ReactiveVar([]);
   this.marks = new ReactiveVar(0);
   this.markerName = new ReactiveVar(false);
+  // Last student is used to show user alert and help them keep track.
   this.lastStudent = new ReactiveVar('');
   this.adjustmentValue = 0;
   // Only set the autorun if we're online.
@@ -21,6 +22,7 @@ Template.markScheme.onCreated(function created() {
 });
 
 Template.markScheme.onRendered(() => {
+  // Initialize Semantic UI component.
   $('.ui.checkbox').checkbox();
   // If they are logged in, we already know their name - skip to the next box!
   // Similiarly, if they have already filled this in once, we'll use that again.
@@ -31,6 +33,9 @@ Template.markScheme.onRendered(() => {
   }
 });
 
+/**
+ * Template helpers.
+ */
 Template.markScheme.helpers({
   scheme() {
     const scheme = MarkingSchemes.findOne({ _id: FlowRouter.getParam('_id') });
@@ -60,7 +65,12 @@ Template.markScheme.helpers({
   },
 });
 
+/**
+ * Template event listeners.
+ */
 Template.markScheme.events({
+  // Let users click the entire row to select a criterion.
+  // Makes things much more mobile friendly.
   'click tr:not(.header-row)'(event) {
     $(event.currentTarget).find('input').prop('checked', true);
     $('tr:last input:first').trigger('change');
@@ -69,6 +79,7 @@ Template.markScheme.events({
         .closest('table').height(),
     }, 200);
   },
+  // Keep track of mark data when any input is changed.
   'change tr input'(event, templateInstance) {
     const aspects = [];
     $('.aspect-table').each((index, table) => {
@@ -106,6 +117,7 @@ Template.markScheme.events({
     }
     $('input[name="adjustment"]').trigger('change');
   },
+  // Add highlighting to rows with input focus.
   'focus input[type="radio"]'(event) {
     $(event.currentTarget).closest('tr').addClass('highlighted');
   },
@@ -115,8 +127,10 @@ Template.markScheme.events({
   'submit form'(event, templateInstance) {
     event.preventDefault();
     const form = event.currentTarget;
+    // Check the form is valid, or highlight any missed required sections.
     if (checkFormValidity($('#marking-form'))) {
       $('.submit-scheme').removeClass('submit-marks').addClass('loading');
+      // Serialize data.
       const markObject = {
         marker: $('input[name="marker-name"]').val(),
         studentNo: $('input[name="student-no"]').val(),
@@ -151,6 +165,7 @@ Template.markScheme.events({
       $('.marks-submitted').transition('pulse');
       $('body').scrollTop(0);
     } else {
+      // Scroll to topmost error.
       $('html, body').animate({
         scrollTop: ($('.error').first().offset().top - 150),
       }, 200);
