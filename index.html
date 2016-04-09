@@ -110,7 +110,7 @@
 <h2>
 <a id="deployment" class="anchor" href="#deployment" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Deployment</h2>
 
-<p>The application utilizes a Node.JS powered server, connected to MongoDB and running behind a reverse proxy TLS terminator.</p>
+<p>The application utilizes a Node.JS powered server, connected to MongoDB and running behind a reverse proxy TLS terminator. OAuth configuration will be required, and this will be handled by the application on first run, by using the log-in menu link.</p>
 
 <p>The most recent versions tested successfully are shown below:</p>
 
@@ -202,7 +202,7 @@ proxy_set_header Upgrade $http_upgrade;
 proxy_set_header Connection 'upgrade';
 </code></pre>
 
-<p><a href="https://gist.github.com/MGovier/5112025ec482012163c6d563dd75ca32">This Gist</a> shows the configuration used for production testing, and features redirects from both <code>http</code> and <code>www.</code> to <code>https</code> and <code>non-www.</code>.</p>
+<p><a href="https://gist.github.com/MGovier/5112025ec482012163c6d563dd75ca32">This Gist</a> shows the configuration used for production testing, and features redirects from both <code>http</code> and <code>www.</code> to <code>https</code> and <code>non-www</code>.</p>
 
 <p>Direct internet/public access to the Node.JS or MongoDB services should be prevented, potentially through firewall configuration.</p>
 
@@ -232,6 +232,8 @@ RUN (cd WebMark/bundle/programs/server &amp;&amp; npm install)
 docker build -t webmark-image .
 docker run --name webmark-host --link mongo-host:mongo -p 127.0.0.1:3000:3000 --restart=always -d webmark-image node /WebMark/bundle/main.js
 </code></pre>
+
+<p>This could enable a scalable design with Nginx load balancing between the available Node.JS servers, with Mongo also deployed across hosts.</p>
 
 <h2>
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
