@@ -1,0 +1,5 @@
+# These files are excluded from the linter.
+# Node modules are ignored by default.
+
+# Ignore Semantic UI files.
+client/lib/semantic-ui

@@ -1,18 +1,28 @@
+/**
+ * Marking Scheme Controllers
+ */
+
 import { countMarks, buildCommentsObject, checkFormValidity } from '../lib/utils';
 
 Template.markScheme.onCreated(function created() {
+  const self = this;
   this.aspects = new ReactiveVar([]);
   this.marks = new ReactiveVar(0);
   this.markerName = new ReactiveVar(false);
+  // Last student is used to show user alert and help them keep track.
   this.lastStudent = new ReactiveVar('');
   this.adjustmentValue = 0;
-  const self = this;
-  self.autorun(() => {
-    self.subscribe('markingSchemes', FlowRouter.getParam('_id'));
-  });
+  // Only set the autorun if we're online.
+  // Otherwise, we re-render the scheme on re-connect and lose data.
+  if (Meteor.status().connected) {
+    self.autorun(() => {
+      self.subscribe('markingSchemes', FlowRouter.getParam('_id'));
+    });
+  }
 });
 
 Template.markScheme.onRendered(() => {
+  // Initialize Semantic UI component.
   $('.ui.checkbox').checkbox();
   // If they are logged in, we already know their name - skip to the next box!
   // Similiarly, if they have already filled this in once, we'll use that again.
@@ -23,6 +33,9 @@ Template.markScheme.onRendered(() => {
   }
 });
 
+/**
+ * Template helpers.
+ */
 Template.markScheme.helpers({
   scheme() {
     const scheme = MarkingSchemes.findOne({ _id: FlowRouter.getParam('_id') });
@@ -52,15 +65,26 @@ Template.markScheme.helpers({
   },
 });
 
+/**
+ * Template event listeners.
+ */
 Template.markScheme.events({
+  // Let users click the entire row to select a criterion.
+  // Makes things much more mobile friendly.
   'click tr:not(.header-row)'(event) {
     $(event.currentTarget).find('input').prop('checked', true);
     $('tr:last input:first').trigger('change');
-    $('body').animate({
-      scrollTop: $(window).scrollTop() + $(event.currentTarget)
-        .closest('table').height(),
-    }, 200);
+    // Check the event wasn't fired from the hidden input element.
+    // This would happen if they're using keyboard navigation.
+    // We don't want to repeated scroll the page as they're cycling through.
+    if (!$(event.toElement).hasClass('hidden')) {
+      $('body').animate({
+        scrollTop: $(window).scrollTop() + $(event.currentTarget)
+          .closest('table').height(),
+      }, 200);
+    }
   },
+  // Keep track of mark data when any input is changed.
   'change tr input'(event, templateInstance) {
     const aspects = [];
     $('.aspect-table').each((index, table) => {
@@ -98,6 +122,7 @@ Template.markScheme.events({
     }
     $('input[name="adjustment"]').trigger('change');
   },
+  // Add highlighting to rows with input focus.
   'focus input[type="radio"]'(event) {
     $(event.currentTarget).closest('tr').addClass('highlighted');
   },
@@ -107,8 +132,10 @@ Template.markScheme.events({
   'submit form'(event, templateInstance) {
     event.preventDefault();
     const form = event.currentTarget;
+    // Check the form is valid, or highlight any missed required sections.
     if (checkFormValidity($('#marking-form'))) {
       $('.submit-scheme').removeClass('submit-marks').addClass('loading');
+      // Serialize data.
       const markObject = {
         marker: $('input[name="marker-name"]').val(),
         studentNo: $('input[name="student-no"]').val(),
@@ -124,7 +151,7 @@ Template.markScheme.events({
       };
       templateInstance.lastStudent.set(markObject.studentNo);
       templateInstance.markerName.set($('input[name="marker-name"]').val());
-      Meteor.call('addMark', markObject, (error) => {
+      Meteor.call('addMark', markObject, error => {
         if (error) {
           sAlert.error(`Error: ${error.message} Please check your submission.`);
         }
@@ -143,6 +170,7 @@ Template.markScheme.events({
       $('.marks-submitted').transition('pulse');
       $('body').scrollTop(0);
     } else {
+      // Scroll to topmost error.
       $('html, body').animate({
         scrollTop: ($('.error').first().offset().top - 150),
       }, 200);
@@ -151,7 +179,7 @@ Template.markScheme.events({
     }
   },
   'click'() {
-    // @todo: Do something less stupid to activate semantic ui...
+    // @todo: Do something less stupid to activate Semantic UI Components...
     $('.ui.checkbox').checkbox();
   },
 });

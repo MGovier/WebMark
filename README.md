@@ -80,7 +80,7 @@ proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 proxy_set_header Upgrade $http_upgrade;
 proxy_set_header Connection 'upgrade';
 ```
-[This Gist](https://gist.github.com/MGovier/5112025ec482012163c6d563dd75ca32) shows the configuration used for production testing, and features redirects from both `http` and `www.` to `https` and `non-www.`.
+[This Gist](https://gist.github.com/MGovier/5112025ec482012163c6d563dd75ca32) shows the configuration used for production testing, and features redirects from both `http` and `www.` to `https` and `non-www`.
 
 Direct internet/public access to the Node.JS or MongoDB services should be prevented, potentially through firewall configuration.
 
@@ -105,6 +105,7 @@ docker rm -f webmark-host
 docker build -t webmark-image .
 docker run --name webmark-host --link mongo-host:mongo -p 127.0.0.1:3000:3000 --restart=always -d webmark-image node /WebMark/bundle/main.js
 ```
+This could enable a scalable design with Nginx load balancing between the available Node.JS servers, with Mongo also deployed across hosts.
 
 ## License
 MIT

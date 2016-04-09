@@ -21,6 +21,10 @@ function calculateTotalMarks(scheme) {
   return totalMarks;
 }
 
+/**
+ * Generate a random name, used for schemes.
+ * @return {String} Random Docker-style name.
+ */
 function generateFunName() {
   return `${adjectives[Math.floor(Math.random() * adjectives.length)]}
  ${scientists[Math.floor(Math.random() * scientists.length)]}`;
@@ -79,8 +83,9 @@ function generateJSON(markingScheme, marks) {
 
 /**
  * Generate a CSV file from template data.
- * @param  {Object} template  Data used to render this instance.
- * @return {String}           CSV formatted data.
+ * @param  {Object} markingScheme   Marking scheme.
+ * @param  {Object} Marks           Array of marks for this scheme.
+ * @return {String}                 CSV formatted data.
  */
 function generateCSV(markingScheme, marks) {
   // Create CSV header first.
@@ -97,6 +102,7 @@ function generateCSV(markingScheme, marks) {
     output += `,${report.marks}`;
     output += `,${report.maxMarks}`;
     output += `,"${report.presetComments}"`;
+    // Add empty sting if freeComment is blank, instead of undefined:
     output += `,"${report.freeComment ? report.freeComment : ''}"`;
     report.aspects.forEach(aspect => {
       output += `,"${aspect.selected}"`;
@@ -113,8 +119,8 @@ function generateCSV(markingScheme, marks) {
 
 /**
  * Count marks from rubric selections and adjustment.
- * @todo Abstract this.
- * @return {Number} Total marks.
+ * @todo This should use a passed template instance instead.
+ * @return {Number} Total marks for the template instance.
  */
 function countMarks() {
   let total = 0;
@@ -139,6 +145,14 @@ function buildCommentsObject() {
   return comments;
 }
 
+/**
+ * Loop through each input or textarea in the form, and check if it is valid.
+ * Used because Safari (9.1) currently doesn't support checkValidity on forms,
+ * only individual elements.
+ * This uses HTML input types, max, min, and required attributes.
+ * @param  {HTMLElement}   form   Form to check.
+ * @return {Boolean}              Form validity.
+ */
 function checkFormValidity(form) {
   let result = true;
   form.find('input, textarea').each((index, el) => {
@@ -151,6 +165,11 @@ function checkFormValidity(form) {
   return result;
 }
 
+/**
+ * Configure the reactive dictionary for a new scheme with defaults.
+ * Initialize Dragula and Semantic UI components in the template.
+ * @param  {ReactiveDict}   newScheme   Dictionary to initialize.
+ */
 function initializeNewScheme(newScheme) {
   newScheme.setDefault('rubricObject', [{
     uuid: uuid.v4(),
@@ -204,6 +223,10 @@ function initializeNewScheme(newScheme) {
   }
 }
 
+/**
+ * Initialize Dragula and Semantic UI components for the edit scheme template.
+ * @param  {ReactiveDict}   editScheme  Dictionary used in Dragula event.
+ */
 function initializeEditScheme(editScheme) {
   $('.ui.checkbox').checkbox();
   $('.unit-select').dropdown({
