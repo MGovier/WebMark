@@ -74,10 +74,15 @@ Template.markScheme.events({
   'click tr:not(.header-row)'(event) {
     $(event.currentTarget).find('input').prop('checked', true);
     $('tr:last input:first').trigger('change');
-    $('body').animate({
-      scrollTop: $(window).scrollTop() + $(event.currentTarget)
-        .closest('table').height(),
-    }, 200);
+    // Check the event wasn't fired from the hidden input element.
+    // This would happen if they're using keyboard navigation.
+    // We don't want to repeated scroll the page as they're cycling through.
+    if (!$(event.toElement).hasClass('hidden')) {
+      $('body').animate({
+        scrollTop: $(window).scrollTop() + $(event.currentTarget)
+          .closest('table').height(),
+      }, 200);
+    }
   },
   // Keep track of mark data when any input is changed.
   'change tr input'(event, templateInstance) {
