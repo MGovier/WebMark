@@ -42,7 +42,7 @@ ecmascript-runtime@0.2.9
 ejson@1.0.10
 fastclick@1.0.10
 flemay:less-autoprefixer@1.2.0
-fourseven:scss@3.4.1
+fourseven:scss@3.4.2
 geojson-utils@1.0.7
 glasser:reactive-fromnow@0.0.1
 google@1.1.10
@@ -91,7 +91,7 @@ okgrow:router-autoscroll@0.1.8
 ordered-dict@1.0.6
 practicalmeteor:chai@2.1.0_1
 practicalmeteor:loglevel@1.2.0_2
-practicalmeteor:mocha@2.1.0_8
+practicalmeteor:mocha@2.4.5_1
 practicalmeteor:mocha-core@0.1.4
 practicalmeteor:sinon@1.14.1_2
 promise@0.6.6
