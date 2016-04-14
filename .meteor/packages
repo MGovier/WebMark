@@ -39,3 +39,4 @@ kadira:blaze-layout
 zimme:active-route
 webtempest:animate
 accounts-ui
+dispatch:mocha-phantomjs
