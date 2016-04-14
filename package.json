@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint -c .eslintrc.yml .",
     "pretest": "npm run lint --silent",
-    "test": "meteor test --once --driver-package dispatch:mocha-phantomjs"
+    "test": "meteor test --once --full-app --driver-package dispatch:mocha-phantomjs"
   },
   "repository": {
     "type": "git",
