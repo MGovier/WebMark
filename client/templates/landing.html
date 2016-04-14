@@ -4,28 +4,5 @@
     {{#transition wrap="true" in="fadeIn:100"}}
 	    {{> Template.dynamic template=content}}
     {{/transition}}
-    <div class="ui inverted vertical footer segment">
-      <div class="ui container">
-        <div class="ui stackable inverted divided equal height stackable grid">
-          <div class="three wide column">
-            <h4 class="ui inverted header">About</h4>
-            <div class="ui inverted link list">
-              <a href="https://github.com/MGovier/WebMark" class="item">GitHub Repo</a>
-              <a href="#" class="item">Contact me for project document</a>
-            </div>
-          </div>
-          <div class="three wide column">
-            <h4 class="ui inverted header">Documentation</h4>
-            <div class="ui inverted link list">
-              <a href="https://mgovier.github.io/WebMark/user/" class="item">User Guide</a>
-              <a href="https://mgovier.github.io/WebMark/" class="item">Technical Information</a>
-            </div>
-          </div>
-          <div class="seven wide column">
-            <h4 class="ui inverted header">Something gone wrong?</h4>
-            <p>Sorry about that! You can contact me through email at <a href="mailto:merlin.govier@myport.ac.uk">merlin.govier@myport.ac.uk</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
+    {{> footer}}
 </template>
