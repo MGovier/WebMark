@@ -4,7 +4,7 @@
 
 // Using UUIDs to track rubric rows through re-arrangement or deletion.
 import uuid from 'node-uuid';
-
+import { Meteor } from 'meteor/meteor';
 import { jQuery } from 'meteor/jquery';
 
 /**

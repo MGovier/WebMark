@@ -2,6 +2,7 @@
  * Dashboard
  */
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { Meteor } from 'meteor/meteor';
 /**
  * Called when template added to the DOM.
 * Redirects users to the landing page if they are not logged in.

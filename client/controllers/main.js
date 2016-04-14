@@ -8,6 +8,7 @@
 import { RouterAutoscroll } from 'meteor/okgrow:router-autoscroll';
 // sAlert is used to provide user feedback and alert to errors.
 import { sAlert } from 'meteor/juliancwirko:s-alert';
+import { Meteor } from 'meteor/meteor';
 
 Meteor.startup(() => {
   // Set html language attribute;

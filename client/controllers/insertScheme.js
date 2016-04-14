@@ -7,6 +7,7 @@
 // offline submission - but the server checks it is not a duplicate and re-assigns
 // if so.
 import uuid from 'node-uuid';
+import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { sAlert } from 'meteor/juliancwirko:s-alert';
 

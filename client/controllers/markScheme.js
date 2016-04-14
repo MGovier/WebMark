@@ -3,6 +3,7 @@
  */
 
 import { countMarks, buildCommentsObject, checkFormValidity } from '../lib/utils';
+import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { sAlert } from 'meteor/juliancwirko:s-alert';
 import { MarkingSchemes } from '../../lib/data.js';

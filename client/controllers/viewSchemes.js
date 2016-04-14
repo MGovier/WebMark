@@ -8,6 +8,7 @@
 
 import moment from 'moment';
 import Clipboard from 'clipboard';
+import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { MarkingSchemes, Marks } from '../../lib/data.js';
 

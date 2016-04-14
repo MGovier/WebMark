@@ -4,6 +4,7 @@
 
 // UUIDs are used for tracking elements that can be dragged and dropped.
 import uuid from 'node-uuid';
+import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { sAlert } from 'meteor/juliancwirko:s-alert';
 
