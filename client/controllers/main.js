@@ -4,6 +4,11 @@
  * layouts not specific templates.
  */
 
+// Router Autoscroll moves the viewport back up when routes change.
+import { RouterAutoscroll } from 'meteor/okgrow:router-autoscroll';
+// sAlert is used to provide user feedback and alert to errors.
+import { sAlert } from 'meteor/juliancwirko:s-alert';
+
 Meteor.startup(() => {
   // Set html language attribute;
   $('html').attr('lang', 'en');

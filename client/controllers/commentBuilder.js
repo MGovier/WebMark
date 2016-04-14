@@ -3,6 +3,7 @@
  */
 
 import uuid from 'node-uuid';
+import { jQuery } from 'meteor/jquery';
 
 /**
  * Helper functions.

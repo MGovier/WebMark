@@ -16,23 +16,3 @@ rules:
 parserOptions:
   ecmaVersion: 6
   sourceType: "module"
-
-globals:
-  # Collections
-  MarkingSchemes: true
-  Marks: true
-  Activities: true
-  Units: true
-
-  # Packages
-  sAlert: true
-  RouterAutoscroll: true
-  jQuery: true
-  ReactiveFromNow: true
-  ReactiveTable: true
-  Ground: true
-  SimpleSchema: true
-  Chartist: true
-  BrowserPolicy: true
-  FlowRouter: true
-  BlazeLayout: true

@@ -6,6 +6,10 @@
 import moment from 'moment';
 
 import { generateJSON, generateCSV } from '../lib/utils';
+import { Chartist } from 'meteor/mfpierre:chartist-js';
+import { ReactiveTable } from 'meteor/aslagle:reactive-table';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { MarkingSchemes, Marks } from '../../lib/data.js';
 
 // This persistent dictionary is used to track the table rows the user has selected.
 // It keeps them isolated from other scheme's tables.

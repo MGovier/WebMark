@@ -7,12 +7,15 @@
 // offline submission - but the server checks it is not a duplicate and re-assigns
 // if so.
 import uuid from 'node-uuid';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { sAlert } from 'meteor/juliancwirko:s-alert';
 
 import { resetSchemeData,
   calculateTotalMarks,
   checkFormValidity,
   initializeNewScheme,
 } from '../lib/utils';
+import { Units } from '../../lib/data.js';
 
 // Named reactive dictionaries persist through navigation and hot code pushes.
 const newScheme = new ReactiveDict('newScheme');

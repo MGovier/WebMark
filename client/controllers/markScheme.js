@@ -3,7 +3,14 @@
  */
 
 import { countMarks, buildCommentsObject, checkFormValidity } from '../lib/utils';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { sAlert } from 'meteor/juliancwirko:s-alert';
+import { MarkingSchemes } from '../../lib/data.js';
 
+/**
+ * Called when template created.
+ * Creates variables to store entered data, which will survive a hot code push.
+ */
 Template.markScheme.onCreated(function created() {
   const self = this;
   this.aspects = new ReactiveVar([]);
@@ -19,6 +26,9 @@ Template.markScheme.onCreated(function created() {
   });
 });
 
+/**
+ * Initialize Semantic UI components when rendered, and control focus.
+ */
 Template.markScheme.onRendered(() => {
   // Initialize Semantic UI component.
   $('.ui.checkbox').checkbox();

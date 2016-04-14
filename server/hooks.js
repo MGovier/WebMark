@@ -6,6 +6,8 @@
 import exampleScheme from './lib/exampleScheme.json';
 import exampleMarks from './lib/exampleMarks.json';
 
+import { Activities, MarkingSchemes, Marks } from '../lib/data.js';
+
 /**
  * Remove older activity entries when a new one is added.
  */
