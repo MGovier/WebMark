@@ -4,6 +4,7 @@
 
 import { countMarks, buildCommentsObject, checkFormValidity } from '../lib/utils';
 import { Meteor } from 'meteor/meteor';
+import { Blaze } from 'meteor/blaze';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { sAlert } from 'meteor/juliancwirko:s-alert';
 import { MarkingSchemes } from '../../lib/data.js';
