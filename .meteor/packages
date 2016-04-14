@@ -33,9 +33,9 @@ standard-minifier-css
 standard-minifier-js
 browser-policy-content
 mfpierre:chartist-js
-practicalmeteor:mocha
 kadira:flow-router
 kadira:blaze-layout
 zimme:active-route
 webtempest:animate
 accounts-ui
+dispatch:mocha-phantomjs

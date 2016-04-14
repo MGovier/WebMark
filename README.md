@@ -1,4 +1,5 @@
 # WebMark
+[![Circle CI](https://circleci.com/gh/MGovier/WebMark.svg?style=svg)](https://circleci.com/gh/MGovier/WebMark)
 A Meteor powered offline-first Web Application to enable efficient and flexible marking of assignments. Developed as a final year project for BSc Computer Science by Merlin Govier (UP663652) at the University of Portsmouth, UK.
 
 ## Table of Contents

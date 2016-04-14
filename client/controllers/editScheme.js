@@ -4,7 +4,12 @@
 
 // UUIDs are used for tracking elements that can be dragged and dropped.
 import uuid from 'node-uuid';
+import { Meteor } from 'meteor/meteor';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { sAlert } from 'meteor/juliancwirko:s-alert';
+
 import { calculateTotalMarks, checkFormValidity, initializeEditScheme } from '../lib/utils';
+import { MarkingSchemes, Units } from '../../lib/data.js';
 
 // A named reactive dict is persistent through hot code pushes.
 const editScheme = new ReactiveDict('editScheme');

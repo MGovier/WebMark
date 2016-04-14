@@ -5,6 +5,9 @@
 
 /* eslint new-cap: 0 */
 
+import { ReactiveFromNow } from 'meteor/glasser:reactive-fromnow';
+import { Activities } from '../../lib/data.js';
+
 Template.activityView.onCreated(function created() {
   const self = this;
   self.autorun(() => {

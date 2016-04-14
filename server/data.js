@@ -2,7 +2,7 @@
  * Data publications.
  * No arrow functions here, need access to 'this' context!
  */
-
+import { Activities, Marks, MarkingSchemes, Units } from '../lib/data.js';
 /**
  * Publish data relevant to this user.
  * Return a specific scheme if an ID was given.
