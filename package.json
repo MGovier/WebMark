@@ -24,16 +24,16 @@
   },
   "homepage": "https://github.com/MGovier/WebMark#readme",
   "dependencies": {
-    "chartist": "^0.9.7",
-    "clipboard": "^1.5.9",
-    "dragula": "^3.6.8",
-    "moment": "^2.12.0",
+    "chartist": "^0.9.8",
+    "clipboard": "^1.5.12",
+    "dragula": "^3.7.1",
+    "moment": "^2.14.1",
     "node-uuid": "^1.4.7"
   },
   "devDependencies": {
-    "eslint": "^2.4.0",
+    "eslint": "^2.13.1",
     "eslint-config-airbnb": "^6.1.0",
-    "eslint-plugin-meteor": "^3.5.0",
-    "eslint-plugin-react": "^4.2.3"
+    "eslint-plugin-meteor": "^3.6.0",
+    "eslint-plugin-react": "^4.3.0"
   }
 }
