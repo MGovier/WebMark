@@ -4,23 +4,23 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-base             # Packages every Meteor app needs to have
-mobile-experience       # Packages for a great mobile UX
-mongo                   # The database Meteor supports right now
-blaze-html-templates    # Compile .html files into Meteor Blaze views
-session                 # Client-side reactive dictionary for your app
-jquery                  # Helpful client-side library
-tracker                 # Meteor's client-side reactive programming library
+meteor-base@1.0.4             # Packages every Meteor app needs to have
+mobile-experience@1.0.4       # Packages for a great mobile UX
+mongo@1.1.12                   # The database Meteor supports right now
+blaze-html-templates@1.0.4    # Compile .html files into Meteor Blaze views
+session@1.1.6                 # Client-side reactive dictionary for your app
+jquery@1.11.9                  # Helpful client-side library
+tracker@1.1.0                 # Meteor's client-side reactive programming library
 
-ecmascript              # Enable ECMAScript2015+ syntax in app code
+ecmascript@0.5.8              # Enable ECMAScript2015+ syntax in app code
 
 semantic:ui
 flemay:less-autoprefixer
 aldeed:simple-schema
 aldeed:collection2
-accounts-google
-appcache
-reactive-var
+accounts-google@1.0.10
+appcache@1.0.11
+reactive-var@1.0.10
 aslagle:reactive-table
 ground:db
 okgrow:router-autoscroll
@@ -28,14 +28,15 @@ glasser:reactive-fromnow
 juliancwirko:s-alert
 juliancwirko:s-alert-stackslide
 matb33:collection-hooks
-reactive-dict
-standard-minifier-css
-standard-minifier-js
-browser-policy-content
+reactive-dict@1.1.8
+standard-minifier-css@1.2.0
+standard-minifier-js@1.2.0
+browser-policy-content@1.0.11
 mfpierre:chartist-js
 kadira:flow-router
 kadira:blaze-layout
 zimme:active-route
 webtempest:animate
-accounts-ui
+accounts-ui@1.1.9
 dispatch:mocha-phantomjs
+shell-server
